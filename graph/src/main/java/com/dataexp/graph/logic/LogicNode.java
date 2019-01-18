@@ -1,5 +1,6 @@
-package com.dataexp.graph.logic.component;
+package com.dataexp.graph.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,9 +15,9 @@ public abstract class LogicNode {
     private int xcoordinate,ycoordinate;
 
     //节点输入端口
-    private List<InputPort> inputPorts;
+    private List<InputPort> inputPorts = new ArrayList<>();
     //节点输出端口
-    private List<OutputPort> outputPorts;
+    private List<OutputPort> outputPorts = new ArrayList<>();
 
 
     public LogicNode(int id, int xcoordinate, int ycoordinate) {
@@ -24,7 +25,6 @@ public abstract class LogicNode {
         this.xcoordinate = xcoordinate;
         this.ycoordinate = ycoordinate;
     }
-
     //移动节点
     public void moveNode(int xcoordinate, int ycoordinate) {
         setXcoordinate(xcoordinate);

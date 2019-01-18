@@ -1,4 +1,4 @@
-package com.dataexp.graph.logic.component;
+package com.dataexp.graph.logic;
 
 public class SinkNode extends LogicNode {
 

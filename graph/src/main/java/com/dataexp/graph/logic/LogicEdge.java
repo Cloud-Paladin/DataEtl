@@ -1,18 +1,19 @@
-package com.dataexp.graph.logic.component;
+package com.dataexp.graph.logic;
 
-import java.util.List;
 import java.util.Objects;
 
 public class LogicEdge {
 
-    private final String edgeId;
+    private final int id;
+    private final String name;
     private final LogicPort sourcePort;
     private final LogicPort targetPort;
 
-    public LogicEdge(LogicPort sourcePort, LogicPort targetPort) {
+    public LogicEdge(LogicPort sourcePort, LogicPort targetPort, int id) {
         this.sourcePort = sourcePort;
         this.targetPort = targetPort;
-        this.edgeId = sourcePort + "_" + targetPort;
+        this.id = id;
+        this.name = sourcePort + "_" + targetPort;
     }
 
     @Override
