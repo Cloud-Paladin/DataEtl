@@ -5,11 +5,10 @@ import java.util.Objects;
 public class LogicEdge {
 
     private final int id;
-    private final String name;
-    private final LogicPort sourcePort;
-    private final LogicPort targetPort;
-
-    public LogicEdge(LogicPort sourcePort, LogicPort targetPort, int id) {
+    private String name;
+    private final OutputPort sourcePort;
+    private final InputPort targetPort;
+    public LogicEdge(OutputPort sourcePort, InputPort targetPort, int id) {
         this.sourcePort = sourcePort;
         this.targetPort = targetPort;
         this.id = id;
@@ -28,5 +27,21 @@ public class LogicEdge {
     @Override
     public int hashCode() {
         return Objects.hash(sourcePort, targetPort);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public OutputPort getSourcePort() {
+        return sourcePort;
+    }
+
+    public InputPort getTargetPort() {
+        return targetPort;
     }
 }

@@ -1,8 +1,8 @@
 package com.dataexp.graph.logic;
 
+import com.dataexp.graph.logic.component.LogicNodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.*;
 
 /**
@@ -15,48 +15,83 @@ public class LogicGraph {
     private boolean chaining = true;
     //逻辑图包含的节点,key为节点id
     private Map<Integer, LogicNode> logicNodes = new HashMap<>();
-    //逻辑图包含的数据源节点id
-    private Set<Integer> sources = new HashSet<>();
-    //逻辑图包含的目的节点id
-    private Set<Integer> sinks = new HashSet<>();
 
     //节点,边,端口的当前最大id
-    private int maxNodeId = 0;
-    private int maxEdgeId = 0;
-    private int maxPortId = 0;
+    private int maxNodeId = 1;
+    private int maxPortId = 1;
+    private int maxEdgeId = 1;
 
     public LogicGraph() {
     }
 
-    public LogicGraph(List<LogicNode> nodes) {
+    public LogicGraph(List<LogicNode> nodes, List<LogicPort> ports, List<LogicEdge> edges) {
         for (LogicNode node : nodes) {
             addNode(node);
         }
     }
 
+    private int getNextNodeId() {
+        return maxNodeId++;
+    }
+
+    private int getNextEdgeId() {
+        return maxEdgeId++;
+    }
+
+    private int getNextPortId(){
+        return maxPortId++;
+    }
+
+    public boolean createNode(String type, String name, int xcoordinate, int ycoordinate) {
+        LogicNode node = LogicNodeFactory.createNode(getNextNodeId(), type, name, xcoordinate, ycoordinate);
+        return node == null ? false : addNode(node);
+    }
+
     public boolean addNode(LogicNode node) {
-        if (node instanceof SourceNode) {
-            sources.add(node.getId());
-        } else if (node instanceof SinkNode) {
-            sinks.add(node.getId());
-        }
+        //TODO:添加节点的端点
+        //TODO:添加节点的边
         return (logicNodes.put(node.getId(), node) == null);
     }
 
     public boolean removeNode(LogicNode node) {
-        if (node instanceof SourceNode) {
-            sources.remove(node.getId());
-        } else if (node instanceof SinkNode) {
-            sinks.remove(node.getId());
-        }
+        //TODO:删除节点的端点
+        //TODO：删除节点的边
         return (logicNodes.remove(node.getId()) != null);
     }
 
     //TODO:配置节点属性
 
     //TODO:添加节点端口，删除节点端口，修改端口名称
+    public boolean createInputPort(int nodeId){
+        return false;
+    }
+
+    public boolean createOutputPort(int nodeId){
+        return false;
+    }
 
     //TODO：添加端口连线，删除端口连线
+
+    /**
+     * 从输出端口添加一条到另一个组件的输入端口的连线
+     * @param ：
+     * @return 是否成功添加了连线
+     */
+    public boolean createEdge(OutputPort OP, InputPort IP) {
+        //TODO:回环校验,组件内回环和多组件回环
+        if(IP.can) {
+            return false;
+        }
+
+        LogicEdge edge = new LogicEdge(OP,IP,);
+        OP.addEdge(edge);
+        IP.addEdge(edge);
+        return true;
+    }
+
+    public boolean removeEdge(LogicEdge edge) {
+        return false;
+    }
 
     public boolean isChaining() {
         return chaining;
@@ -70,17 +105,7 @@ public class LogicGraph {
         return logicNodes;
     }
 
-    public Set<Integer> getSources() {
-        return sources;
-    }
-
-    public Set<Integer> getSinks() {
-        return sinks;
-    }
-
-
     public static void main(String[] args) {
         LogicGraph a = new LogicGraph();
-        System.out.println(a.getSources().size());
     }
 }
