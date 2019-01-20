@@ -1,23 +1,24 @@
 package com.dataexp.graph.logic;
 
-public class SinkNode extends LogicNode {
+public abstract class SinkNode extends LogicNode {
 
-    public SinkNode(int id, String name, int xcoordinate, int ycoordinate) {
-        super(id, name, xcoordinate, ycoordinate);
+    public SinkNode(int id, int x, int y) {
+        super(id, x, y);
+    }
+
+    public SinkNode(int id, String name, int x, int y) {
+        super(id, name, x, y);
     }
 
 
-    public InputPort createInputPort(int id, String name) {
-        //输出节点默认只能有一个输入
-        if (getInputPorts().size() > 0) {
-            return null;
-        }
-        return super.createInputPort(id, name);
+    @Override
+    public int defaultInputPortNumber() {
+        return 1;
     }
 
-    //输出节点默认没有输出端口
-    public OutputPort createOutputPort(int id, String name) {
-        return null;
+    @Override
+    public int defaultOutputPorNumber() {
+        return 0;
     }
 
 }

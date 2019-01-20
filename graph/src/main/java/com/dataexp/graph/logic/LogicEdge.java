@@ -6,13 +6,13 @@ public class LogicEdge {
 
     private final int id;
     private String name;
-    private final OutputPort sourcePort;
-    private final InputPort targetPort;
-    public LogicEdge(OutputPort sourcePort, InputPort targetPort, int id) {
-        this.sourcePort = sourcePort;
-        this.targetPort = targetPort;
+    private final OutputPort outputPort;
+    private final InputPort inputPort;
+    public LogicEdge(OutputPort outputPort, InputPort inputPort, int id) {
+        this.outputPort = outputPort;
+        this.inputPort = inputPort;
         this.id = id;
-        this.name = sourcePort + "_" + targetPort;
+        this.name = outputPort + "_" + inputPort;
     }
 
     @Override
@@ -20,13 +20,13 @@ public class LogicEdge {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LogicEdge logicEdge = (LogicEdge) o;
-        return sourcePort.equals(logicEdge.sourcePort) &&
-                targetPort.equals(logicEdge.targetPort);
+        return outputPort.equals(logicEdge.outputPort) &&
+                inputPort.equals(logicEdge.inputPort);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sourcePort, targetPort);
+        return Objects.hash(outputPort, inputPort);
     }
 
     public int getId() {
@@ -37,11 +37,11 @@ public class LogicEdge {
         return name;
     }
 
-    public OutputPort getSourcePort() {
-        return sourcePort;
+    public OutputPort getOutputPort() {
+        return outputPort;
     }
 
-    public InputPort getTargetPort() {
-        return targetPort;
+    public InputPort getInputPort() {
+        return inputPort;
     }
 }

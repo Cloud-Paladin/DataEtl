@@ -17,23 +17,26 @@ public class LogicEnviroment {
     private static final Map<String, LogicGraph> graphMap = new ConcurrentHashMap<>();
 
 
-
+    public static String genSessionId(int jobId) {
+        return jobId + "-" + LocalDateTime.now().toEpochSecond(ZoneOffset.ofHours(8));
+    }
 
     /**
      * //TODO:初始化一个流程编辑,如果流程未初始化则初始化一个，如果
      * 是已有流程从数据库反序列化流程并将结构返回，同时生成
      * 会话id
+     *
      * @return
      */
     public static String initSession(int jobId) {
         String content = getJobSerialContent(jobId);
         LogicGraph lg;
-        if(content.equals("")) {
+        if (content.equals("")) {
             lg = createGraph();
         } else {
             lg = deSerializeGraph(content);
         }
-        String sessionId = jobId + "-" + LocalDateTime.now().toEpochSecond(ZoneOffset.ofHours(8));
+
         for (int nodeId : lg.getLogicNodes().keySet()) {
             LogicNode node = lg.getLogicNodes().get(nodeId);
             //TODO：递归遍历节点，端口，连线，并构造为新生成格式提交给前台
@@ -41,14 +44,24 @@ public class LogicEnviroment {
             node.getOutputPorts();
 
         }
+        String sessionId = genSessionId(jobId);
+        graphMap.put(sessionId, lg);
+        return sessionId;
+    }
 
+    //TODO:系统初始化时读取所有job图生成graphMap
+
+    //TODO:初始化数据字典传递给前端
+    public static String getDictionary() {
         return "";
     }
 
 
     //TODO:初始化生成一个只带初始入口节点的逻辑流程
     public static LogicGraph createGraph() {
-        return new LogicGraph();
+        LogicGraph lg = new LogicGraph();
+        lg.createNode("FileSink", 50, 50);
+        return lg;
     }
 
     //TODO:序列化当前LogicGraph
@@ -57,7 +70,7 @@ public class LogicEnviroment {
     }
 
     //TODO:反序列化生成LogicGraph
-    public static LogicGraph  deSerializeGraph(String content) {
+    public static LogicGraph deSerializeGraph(String content) {
         LogicGraph lg = new LogicGraph();
         return lg;
     }
@@ -67,5 +80,81 @@ public class LogicEnviroment {
         return "";
     }
 
+
+    public static String createNode(String sessionId, String type, int sourceNodeId, int x, int y) {
+        LogicGraph lg = graphMap.get(sessionId);
+        if (lg != null) {
+            LogicNode node = lg.createNode(type, x, y);
+            //TODO:获取添加节点涉及的节点和端口
+            return node.toString();
+        }
+
+        //TODO:sourceNOdeId参数的使用
+        return "";
+    }
+
+    public static String removeNode(String sessionId, int nodeId) {
+        LogicGraph lg = graphMap.get(sessionId);
+        if (lg != null) {
+            if (lg.removeNode(nodeId) != null) {
+                return "节点删除成功";
+            }
+            //TODO:遍历节点的端口和边，构造输出
+            return "没有该节点";
+        }
+        return "";
+    }
+
+    //TODO:更新节点配置
+    public static String updateNode(String sessionId, int nodeId, String config) {
+        return "";
+    }
+
+    //TODO:添加输入端口
+    public static String createInputPort(String sessionId, int nodeId) {
+        return "";
+    }
+
+    //TODO:添加输出端口
+    public static String createOutputPort(String sessionId, int nodeId) {
+        return "";
+    }
+
+    //TODO:删除输入端口
+    public static String removeInputPort(String sessionId, int nodeId) {
+        return "";
+    }
+
+    //TODO:删除输出端口
+    public static String removeOutputPort(String sessionId, int nodeId) {
+        return "";
+    }
+
+    //TODO:端口重命名
+    public static String renamePort(String sessionId, int nodId, String name) {
+        return "";
+    }
+
+    //TODO:添加连线
+    public static String addEdge(String sessionId, int OutputPortId, int inputPortid) {
+        return "";
+    }
+
+    //TODO:删除连线
+    public static String removeEdge(String sessionId, int edgeId) {
+        return "";
+    }
+
+    public static void main(String[] args) {
+        int jobId = 1;
+        String sessionId = initSession(jobId);
+        createNode(sessionId, "FileSource", -1, 5, 5);
+        createNode(sessionId, "FilterNode", -1, 5, 5);
+        createNode(sessionId, "FormatterNode", -1, 5, 5);
+        createNode(sessionId, "SplitNode", -1, 5, 5);
+        createNode(sessionId, "UnionNode", -1, 5, 5);
+        createNode(sessionId, "WashNode", -1, 5, 5);
+        System.out.println(graphMap);
+    }
 
 }

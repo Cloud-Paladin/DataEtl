@@ -10,6 +10,7 @@ import java.util.Map;
  */
 public abstract class LogicNode {
 
+
     //逻辑流程图中的节点id
     private final int id;
 
@@ -17,7 +18,7 @@ public abstract class LogicNode {
     private String name;
 
     //节点坐标
-    private int xcoordinate, ycoordinate;
+    private int x, y;
 
     //节点输入端口
     private Map<Integer, InputPort> inputPorts = new HashMap<>();
@@ -26,25 +27,44 @@ public abstract class LogicNode {
 
     protected final int maxInput = 1;
 
-    public LogicNode(int id, String name, int xcoordinate, int ycoordinate) {
+    public LogicNode(int id, int x, int y) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.name = getDefaultName();
+    }
+
+    public LogicNode(int id, String name, int x, int y) {
         this.id = id;
         this.name = name;
-        this.xcoordinate = xcoordinate;
-        this.ycoordinate = ycoordinate;
+        this.x = x;
+        this.y = y;
     }
+
+    public abstract int defaultInputPortNumber();
+    public abstract int defaultOutputPorNumber();
+
+    //返回节点的默认名称
+    public abstract String getDefaultName();
+
+    //返回节点当前异常
+    public abstract List<String> getExceptions();
+
+    //返回节点警告
+    public abstract List<String> getWarnings();
 
     //移动节点
-    public void moveNode(int xcoordinate, int ycoordinate) {
-        setXcoordinate(xcoordinate);
-        setYcoordinate(ycoordinate);
+    public void moveNode(int x, int y) {
+        setX(x);
+        setY(y);
     }
 
-    public void setXcoordinate(int xcoordinate) {
-        this.xcoordinate = xcoordinate;
+    public void setX(int x) {
+        this.x = x;
     }
 
-    public void setYcoordinate(int ycoordinate) {
-        this.ycoordinate = ycoordinate;
+    public void setY(int y) {
+        this.y = y;
     }
 
     public String getName() {
@@ -67,24 +87,19 @@ public abstract class LogicNode {
         this.inputPorts = inputPorts;
     }
 
-    public InputPort createInputPort(int id, String name) {
-        InputPort port = new InputPort(this, id, name);
+    public InputPort createInputPort(int id) {
+        String portName = "输入端口" + (inputPorts.size() + 1);
+        InputPort port = new InputPort(this, id, portName);
         inputPorts.put(port.getId(), port);
         return port;
     }
 
-    public boolean removeInputPort(int id) {
-        return inputPorts.remove(id) == null ? false : true;
-    }
 
-    public OutputPort createOutputPort(int id ,String name) {
-        OutputPort port = new OutputPort(this, id, name);
+    public OutputPort createOutputPort(int id) {
+        String portName = "输出端口" + (outputPorts.size() + 1);
+        OutputPort port = new OutputPort(this, id, portName);
         outputPorts.put(port.getId(), port);
         return port;
-    }
-
-    public boolean removeOutputPort(int id) {
-        return outputPorts.remove(id) == null ? false : true;
     }
 
     public Map<Integer, OutputPort> getOutputPorts() {
@@ -95,12 +110,12 @@ public abstract class LogicNode {
         this.outputPorts = outputPorts;
     }
 
-    public int getXcoordinate() {
-        return xcoordinate;
+    public int getX() {
+        return x;
     }
 
-    public int getYcoordinate() {
-        return ycoordinate;
+    public int getY() {
+        return y;
     }
 }
 

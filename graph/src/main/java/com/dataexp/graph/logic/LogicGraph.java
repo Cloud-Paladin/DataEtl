@@ -1,8 +1,8 @@
 package com.dataexp.graph.logic;
 
-import com.dataexp.graph.logic.component.LogicNodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 /**
@@ -24,12 +24,6 @@ public class LogicGraph {
     public LogicGraph() {
     }
 
-    public LogicGraph(List<LogicNode> nodes, List<LogicPort> ports, List<LogicEdge> edges) {
-        for (LogicNode node : nodes) {
-            addNode(node);
-        }
-    }
-
     private int getNextNodeId() {
         return maxNodeId++;
     }
@@ -38,60 +32,69 @@ public class LogicGraph {
         return maxEdgeId++;
     }
 
-    private int getNextPortId(){
+    private int getNextPortId() {
         return maxPortId++;
     }
 
-    public boolean createNode(String type, String name, int xcoordinate, int ycoordinate) {
-        LogicNode node = LogicNodeFactory.createNode(getNextNodeId(), type, name, xcoordinate, ycoordinate);
-        return node == null ? false : addNode(node);
+    public LogicNode createNode(String type, int x, int y) {
+        LogicNode node = ComponentFactory.createNode(getNextNodeId(), type, x, y);
+        initNodePorts(node);
+        addNode(node);
+        return node;
+    }
+
+    public LogicNode createNode(String type, String name, int x, int y) {
+        LogicNode node = ComponentFactory.createNode(getNextNodeId(), type, name, x, y);
+        initNodePorts(node);
+        addNode(node);
+        return node;
+    }
+
+    public void initNodePorts(LogicNode node) {
+        for (int i = 1; i <= node.defaultInputPortNumber(); i++) {
+            InputPort port = node.createInputPort(getNextPortId());
+        }
+        for (int i = 1; i <= node.defaultOutputPorNumber(); i++) {
+            OutputPort port = node.createOutputPort(getNextPortId());
+        }
     }
 
     public boolean addNode(LogicNode node) {
-        //TODO:添加节点的端点
-        //TODO:添加节点的边
         return (logicNodes.put(node.getId(), node) == null);
     }
 
-    public boolean removeNode(LogicNode node) {
-        //TODO:删除节点的端点
-        //TODO：删除节点的边
-        return (logicNodes.remove(node.getId()) != null);
+    public LogicNode findNode(int nodeId) {
+        return logicNodes.get(nodeId);
+    }
+
+    public LogicNode removeNode(int nodeId) {
+        return logicNodes.remove(nodeId);
     }
 
     //TODO:配置节点属性
 
     //TODO:添加节点端口，删除节点端口，修改端口名称
-    public boolean createInputPort(int nodeId){
-        return false;
-    }
-
-    public boolean createOutputPort(int nodeId){
-        return false;
-    }
 
     //TODO：添加端口连线，删除端口连线
 
     /**
      * 从输出端口添加一条到另一个组件的输入端口的连线
+     *
      * @param ：
      * @return 是否成功添加了连线
      */
-    public boolean createEdge(OutputPort OP, InputPort IP) {
-        //TODO:回环校验,组件内回环和多组件回环
-        if(IP.can) {
-            return false;
-        }
+//    public boolean createEdge(OutputPort OP, InputPort IP) {
+//        //TODO:回环校验,组件内回环和多组件回环
+//        if (IP.can) {
+//            return false;
+//        }
+//
+//        LogicEdge edge = new LogicEdge(OP, IP, );
+//        OP.addEdge(edge);
+//        IP.addEdge(edge);
+//        return true;
+//    }
 
-        LogicEdge edge = new LogicEdge(OP,IP,);
-        OP.addEdge(edge);
-        IP.addEdge(edge);
-        return true;
-    }
-
-    public boolean removeEdge(LogicEdge edge) {
-        return false;
-    }
 
     public boolean isChaining() {
         return chaining;
@@ -106,6 +109,8 @@ public class LogicGraph {
     }
 
     public static void main(String[] args) {
-        LogicGraph a = new LogicGraph();
+        LogicGraph lg = new LogicGraph();
+        lg.createNode("FileSink", 0, 20);
+        System.out.println(lg.logicNodes.get(1));
     }
 }
