@@ -1,9 +1,6 @@
 package com.dataexp.graph.logic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 通用的流程组件接口，定义组件的通用操作
@@ -21,9 +18,9 @@ public abstract class LogicNode {
     private int x, y;
 
     //节点输入端口
-    private Map<Integer, InputPort> inputPorts = new HashMap<>();
+    private Map<Integer, InputPort> inputPortMap = new TreeMap<>();
     //节点输出端口
-    private Map<Integer, OutputPort> outputPorts = new HashMap<>();
+    private Map<Integer, OutputPort> outputPortMap = new TreeMap<>();
 
     protected final int maxInput = 1;
 
@@ -41,8 +38,18 @@ public abstract class LogicNode {
         this.y = y;
     }
 
+    //初始化的输入输出端口数量
     public abstract int defaultInputPortNumber();
     public abstract int defaultOutputPorNumber();
+
+    //最大输入输出端口数量
+    public abstract int maxInputPortNumber();
+    public abstract int maxOutputPortNumber();
+
+    //有需要时继承，返回节点不能删除的端口号
+    public List<Integer> getForcedPortId() {
+        return new ArrayList<Integer>();
+    }
 
     //返回节点的默认名称
     public abstract String getDefaultName();
@@ -79,35 +86,58 @@ public abstract class LogicNode {
         return id;
     }
 
-    public Map<Integer, InputPort> getInputPorts() {
-        return inputPorts;
+    public Map<Integer, InputPort> getInputPortMap() {
+        return inputPortMap;
     }
 
-    public void setInputPorts(Map<Integer, InputPort> inputPorts) {
-        this.inputPorts = inputPorts;
+    public InputPort getInputPortById(int portId) {
+        return getInputPortMap().get(portId);
+    }
+
+    public Map<Integer, OutputPort> getOutputPortMap() {
+        return outputPortMap;
+    }
+
+    public OutputPort getOutputPortById(int portId) {
+        return getOutputPortMap().get(portId);
     }
 
     public InputPort createInputPort(int id) {
-        String portName = "输入端口" + (inputPorts.size() + 1);
+        if (getInputPortMap().size() >= maxInputPortNumber()) {
+            return null;
+        }
+        String portName = "输入端口" + (inputPortMap.size() + 1);
         InputPort port = new InputPort(this, id, portName);
-        inputPorts.put(port.getId(), port);
+        inputPortMap.put(port.getId(), port);
         return port;
     }
 
 
     public OutputPort createOutputPort(int id) {
-        String portName = "输出端口" + (outputPorts.size() + 1);
+        if (getOutputPortMap().size() >= maxOutputPortNumber()) {
+            return null;
+        }
+        String portName = "输出端口" + (outputPortMap.size() + 1);
         OutputPort port = new OutputPort(this, id, portName);
-        outputPorts.put(port.getId(), port);
+        outputPortMap.put(port.getId(), port);
         return port;
     }
 
-    public Map<Integer, OutputPort> getOutputPorts() {
-        return outputPorts;
+    //删除输入端口
+    public boolean removeInputPort(int portId) {
+        InputPort ip = getInputPortById(portId);
+        if (ip != null & !getForcedPortId().contains(portId) & getInputPortMap().size() > defaultInputPortNumber()) {
+            for (LogicEdge ed : ip.getEdges().values()) {
+                //TODO:删除端口连线
+            }
+            getInputPortMap().remove(portId);
+        }
+        return false;
     }
 
-    public void setOutputPorts(Map<Integer, OutputPort> outputPorts) {
-        this.outputPorts = outputPorts;
+    //TODO:删除输出端口
+    public boolean removeOutputPort(int portId) {
+        return false;
     }
 
     public int getX() {

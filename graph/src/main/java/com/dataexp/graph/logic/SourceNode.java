@@ -22,4 +22,13 @@ public abstract class SourceNode extends LogicNode {
         return 1;
     }
 
+    @Override
+    public int maxInputPortNumber() {
+        return 0;
+    }
+
+    @Override
+    public int maxOutputPortNumber() {
+        return 1;
+    }
 }

@@ -24,6 +24,16 @@ public class FormatterNode extends LogicNode {
     }
 
     @Override
+    public int maxInputPortNumber() {
+        return 1;
+    }
+
+    @Override
+    public int maxOutputPortNumber() {
+        return 1;
+    }
+
+    @Override
     public String getDefaultName() {
         return "格式转换";
     }

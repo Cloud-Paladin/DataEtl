@@ -21,4 +21,13 @@ public abstract class SinkNode extends LogicNode {
         return 0;
     }
 
+    @Override
+    public int maxInputPortNumber() {
+        return 1;
+    }
+
+    @Override
+    public int maxOutputPortNumber() {
+        return 0;
+    }
 }

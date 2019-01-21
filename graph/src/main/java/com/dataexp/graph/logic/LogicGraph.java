@@ -14,7 +14,9 @@ public class LogicGraph {
     //Chain策略
     private boolean chaining = true;
     //逻辑图包含的节点,key为节点id
-    private Map<Integer, LogicNode> logicNodes = new HashMap<>();
+    private Map<Integer, LogicNode> nodeMap = new HashMap<>();
+
+    private Map<Integer, LogicEdge> edgeMap = new HashMap<>();
 
     //节点,边,端口的当前最大id
     private int maxNodeId = 1;
@@ -60,23 +62,66 @@ public class LogicGraph {
     }
 
     public boolean addNode(LogicNode node) {
-        return (logicNodes.put(node.getId(), node) == null);
+        return (nodeMap.put(node.getId(), node) == null);
     }
 
     public LogicNode findNode(int nodeId) {
-        return logicNodes.get(nodeId);
+        return nodeMap.get(nodeId);
     }
 
     public LogicNode removeNode(int nodeId) {
-        return logicNodes.remove(nodeId);
+        return nodeMap.remove(nodeId);
     }
 
     //TODO:配置节点属性
 
     //TODO:添加节点端口，删除节点端口，修改端口名称
+    public InputPort createInputPort(int nodeId) {
+        LogicNode ln = nodeMap.get(nodeId);
+        if (ln != null) {
+            return ln.createInputPort(getNextPortId());
+        }
+        return null;
+    }
+
+    public OutputPort createOutputPort(int nodeId) {
+        LogicNode ln = nodeMap.get(nodeId);
+        if (ln != null) {
+            return ln.createOutputPort(getNextPortId());
+        }
+        return null;
+    }
+
+    public boolean removeInputPort(int nodeId, int portId) {
+        LogicNode ln = nodeMap.get(nodeId);
+        if (ln != null) {
+            return ln.removeInputPort(portId);
+        }
+        return false;
+    }
+
+    public boolean removeOutputPort(int nodeId, int portId) {
+        LogicNode ln = nodeMap.get(nodeId);
+        if (ln != null) {
+            return ln.removeOutputPort(portId);
+        }
+        return false;
+    }
 
     //TODO：添加端口连线，删除端口连线
+    public boolean createEdge(int OutputPortId, int InputPortId) {
+        //判断连接添加后是否会出现回环现象，出现回环现象返回错误
+        //获取输出端口数据格式，获取输入端口数据格式
+        //如果输入端口无格式，则向输入端口询问是否可以接收连接，连接成功过后将输入端口的格式赋给输入端口
+        //如果输入端口有格式，则判断两个格式是否一致，如果不一致提示错误
 
+        return false;
+    }
+
+    public boolean removeEdge(int OutputPortId, int InputPortId) {
+
+        return false;
+    }
     /**
      * 从输出端口添加一条到另一个组件的输入端口的连线
      *
@@ -104,13 +149,13 @@ public class LogicGraph {
         this.chaining = chaining;
     }
 
-    public Map<Integer, LogicNode> getLogicNodes() {
-        return logicNodes;
+    public Map<Integer, LogicNode> getNodeMap() {
+        return nodeMap;
     }
 
     public static void main(String[] args) {
         LogicGraph lg = new LogicGraph();
         lg.createNode("FileSink", 0, 20);
-        System.out.println(lg.logicNodes.get(1));
+        System.out.println(lg.nodeMap.get(1));
     }
 }

@@ -24,6 +24,16 @@ public class SplitNode extends LogicNode {
     }
 
     @Override
+    public int maxInputPortNumber() {
+        return 1;
+    }
+
+    @Override
+    public int maxOutputPortNumber() {
+        return 8;
+    }
+
+    @Override
     public String getDefaultName() {
         return "分支";
     }

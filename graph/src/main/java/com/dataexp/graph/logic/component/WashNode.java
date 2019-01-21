@@ -24,6 +24,17 @@ public class WashNode extends LogicNode {
     }
 
     @Override
+    public int maxInputPortNumber() {
+        return 1;
+    }
+
+    @Override
+    public int maxOutputPortNumber() {
+        //标准输出一个,格式异常、处理异常，校验异常各一个
+        return 4;
+    }
+
+    @Override
     public String getDefaultName() {
         return "清洗";
     }

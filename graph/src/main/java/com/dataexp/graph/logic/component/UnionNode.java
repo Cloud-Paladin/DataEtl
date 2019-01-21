@@ -24,6 +24,16 @@ public class UnionNode extends LogicNode {
     }
 
     @Override
+    public int maxInputPortNumber() {
+        return 8;
+    }
+
+    @Override
+    public int maxOutputPortNumber() {
+        return 1;
+    }
+
+    @Override
     public String getDefaultName() {
         return "合并转换";
     }
