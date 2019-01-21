@@ -1,5 +1,7 @@
 package com.dataexp.graph.logic;
 
+import com.dataexp.common.metadata.FieldType;
+import javafx.scene.input.DataFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +18,9 @@ public class LogicGraph {
     //逻辑图包含的节点,key为节点id
     private Map<Integer, LogicNode> nodeMap = new HashMap<>();
 
+    /**
+     * 逻辑图的边Map
+     */
     private Map<Integer, LogicEdge> edgeMap = new HashMap<>();
 
     //节点,边,端口的当前最大id
@@ -37,6 +42,8 @@ public class LogicGraph {
     private int getNextPortId() {
         return maxPortId++;
     }
+
+
 
     public LogicNode createNode(String type, int x, int y) {
         LogicNode node = ComponentFactory.createNode(getNextNodeId(), type, x, y);
@@ -108,38 +115,111 @@ public class LogicGraph {
         return false;
     }
 
-    //TODO：添加端口连线，删除端口连线
-    public boolean createEdge(int OutputPortId, int InputPortId) {
-        //判断连接添加后是否会出现回环现象，出现回环现象返回错误
-        //获取输出端口数据格式，获取输入端口数据格式
-        //如果输入端口无格式，则向输入端口询问是否可以接收连接，连接成功过后将输入端口的格式赋给输入端口
-        //如果输入端口有格式，则判断两个格式是否一致，如果不一致提示错误
-
-        return false;
+    public LogicNode getNodeFromPortId(int portId) {
+        for (LogicNode node : getNodeMap().values()) {
+            if (null != node.getInputPortById(portId)) {
+                return node;
+            }
+            if (null != node.getOutputPortById(portId)) {
+                return node;
+            }
+        }
+        return null;
     }
 
-    public boolean removeEdge(int OutputPortId, int InputPortId) {
-
-        return false;
-    }
     /**
-     * 从输出端口添加一条到另一个组件的输入端口的连线
-     *
-     * @param ：
-     * @return 是否成功添加了连线
+     * 检查两个端口的数据格式是否一致s
+     * @param p1
+     * @param p2
+     * @return
      */
-//    public boolean createEdge(OutputPort OP, InputPort IP) {
-//        //TODO:回环校验,组件内回环和多组件回环
-//        if (IP.can) {
-//            return false;
-//        }
-//
-//        LogicEdge edge = new LogicEdge(OP, IP, );
-//        OP.addEdge(edge);
-//        IP.addEdge(edge);
-//        return true;
-//    }
+    public static boolean isDataFormatEqual(LogicPort p1, LogicPort p2) {
+        List<FieldType> format1 = p1.getPortDataFormat();
+        List<FieldType> format2 = p2.getPortDataFormat();
+        if (format1.size() != format2.size()) {
+            return false;
+        }
+        for (int i=0; i<format1.size(); i++) {
+            FieldType ft1 = format1.get(i);
+            FieldType ft2 = format2.get(i);
+            //目前仅仅判断基本类型，扩展类型和字段名称未判断
+            if (ft1.getBaseType() != ft2.getBaseType() ) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    //TODO：添加端口连线，删除端口连线
+    public LogicEdge createEdge(int outputPortId, int inputPortId) {
+        //判断连接添加后是否会出现回环现象，出现回环现象返回错误
+        if (loopBackCheck(outputPortId, inputPortId)) {
+            return null;
+        }
+
+        //输出端口没有格式则返回错误
+        LogicNode sourceNode = getNodeFromPortId(outputPortId);
+        LogicNode targetNode = getNodeFromPortId(inputPortId);
+
+        if (null != sourceNode && null != targetNode && sourceNode != targetNode) {
+
+            OutputPort op = sourceNode.getOutputPortById(outputPortId);
+            InputPort ip = targetNode.getInputPortById(inputPortId);
+
+            //判断两个端口是否已经存在连线
+            for (LogicEdge eg : op.getEdges().values()) {
+                if (outputPortId == eg.getOutputPort().getId() && inputPortId == eg.getInputPort().getId()) {
+                    return null;
+                }
+            }
+
+            //输出端口没格式不允许添加连线
+            if ( op.getPortDataFormat().size() == 0) {
+                return null;
+            }
+            //如果输入端口有格式，则判断两个格式是否一致，如果不一致提示错误,只要格式一致，允许一个输入端口从多个输出端口连线
+            if (ip.getPortDataFormat().size() > 0 && !isDataFormatEqual(op, ip)) {
+                return null;
+            }
+            //如果输入端口无格式，将输入端口的格式赋给输入端口
+            if (0 == ip.getPortDataFormat().size()){
+                ip.setPortDataFormat(op.getPortDataFormat());
+                //TODO:测试代码，默认将ip的所有出口的格式也设置为入口格式，以后删除！
+                for (OutputPort p : targetNode.getOutputPortMap().values()) {
+                    p.setPortDataFormat(op.getPortDataFormat());
+                }
+            }
+            //生成连线
+            LogicEdge eg = new LogicEdge(op, ip, getNextEdgeId());
+            op.addEdge(eg);
+            ip.addEdge(eg);
+            edgeMap.put(eg.getId(), eg);
+            return eg;
+        }
+        return null;
+    }
+
+    /**
+     * 检查在两个端口间添加一条边后，逻辑图是否会出现回环
+     * @param outputPortId：待添加边的出端口
+     * @param inputPortId：待添加边的入端口
+     * @return 添加该边后逻辑图是否会出现回环
+     */
+    public boolean loopBackCheck(int outputPortId, int inputPortId) {
+        //TODO:回环检查
+        return false;
+    }
+
+    //TODO:删除边
+    public boolean removeEdge(int edgeId) {
+        LogicEdge eg = edgeMap.get(edgeId);
+        if (null == eg) {
+            return false;
+        }
+        eg.getOutputPort().getEdges().remove(edgeId);
+        eg.getInputPort().getEdges().remove(edgeId);
+        return false;
+    }
 
     public boolean isChaining() {
         return chaining;
@@ -153,9 +233,8 @@ public class LogicGraph {
         return nodeMap;
     }
 
-    public static void main(String[] args) {
-        LogicGraph lg = new LogicGraph();
-        lg.createNode("FileSink", 0, 20);
-        System.out.println(lg.nodeMap.get(1));
+    public Map<Integer, LogicEdge> getEdgeMap() {
+        return edgeMap;
     }
+
 }

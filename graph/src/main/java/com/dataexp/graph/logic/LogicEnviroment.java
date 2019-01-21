@@ -1,10 +1,14 @@
 package com.dataexp.graph.logic;
 
+import com.dataexp.common.metadata.BaseType;
+import com.dataexp.common.metadata.FieldType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,7 +18,7 @@ public class LogicEnviroment {
     private static final Logger LOG = LoggerFactory.getLogger(LogicEnviroment.class);
 
     //所有正在编辑的逻辑图，key为会话id
-    private static final Map<String, LogicGraph> graphMap = new ConcurrentHashMap<>();
+    private static final Map<String, LogicGraph> GRAPH_MAP = new ConcurrentHashMap<>();
 
 
     public static String genSessionId(int jobId) {
@@ -31,7 +35,7 @@ public class LogicEnviroment {
     public static String initSession(int jobId) {
         String content = getJobSerialContent(jobId);
         LogicGraph lg;
-        if (content.equals("")) {
+        if ("".equals(content)) {
             lg = createGraph();
         } else {
             lg = deSerializeGraph(content);
@@ -45,12 +49,12 @@ public class LogicEnviroment {
 
         }
         String sessionId = genSessionId(jobId);
-        graphMap.put(sessionId, lg);
+        GRAPH_MAP.put(sessionId, lg);
         return sessionId;
     }
 
     public static LogicGraph getSessionLogicGraph(String sessionId) {
-        return graphMap.get(sessionId);
+        return GRAPH_MAP.get(sessionId);
     }
 
     //TODO:系统初始化时读取所有job图生成graphMap
@@ -64,7 +68,7 @@ public class LogicEnviroment {
     //TODO:初始化生成一个只带初始入口节点的逻辑流程
     public static LogicGraph createGraph() {
         LogicGraph lg = new LogicGraph();
-        lg.createNode("FileSource", 50, 50);
+//        lg.createNode("FileSource", 50, 50);
         return lg;
     }
 
@@ -98,7 +102,7 @@ public class LogicEnviroment {
             return node.toString();
         }
 
-        //TODO:sourceNOdeId参数的使用
+        //TODO:sourceNodeId的使用
         return "";
     }
 
@@ -166,10 +170,10 @@ public class LogicEnviroment {
     }
 
     //TODO:添加连线
-    public static String createEdge(String sessionId, int OutputPortId, int inputPortId) {
+    public static String createEdge(String sessionId, int outputPortId, int inputPortId) {
         LogicGraph lg = getSessionLogicGraph(sessionId);
         if (lg != null) {
-            lg.createEdge(OutputPortId, inputPortId);
+            lg.createEdge(outputPortId, inputPortId);
         }
         return "";
     }
@@ -182,12 +186,24 @@ public class LogicEnviroment {
     public static void main(String[] args) {
         int jobId = 1;
         String sessionId = initSession(jobId);
+        createNode(sessionId, "FileSource",-1, 50, 50);
         createNode(sessionId, "FileSink", -1, 5, 5);
-//        createNode(sessionId, "FilterNode", -1, 5, 5);
-//        createNode(sessionId, "FormatterNode", -1, 5, 5);
-//        createNode(sessionId, "SplitNode", -1, 5, 5);
-//        createNode(sessionId, "UnionNode", -1, 5, 5);
-//        createNode(sessionId, "WashNode", -1, 5, 5);
+        createNode(sessionId, "WashNode", -1, 5, 5);
+//      createNode(sessionId, "FilterNode", -1, 5, 5);
+//      createNode(sessionId, "FormatterNode", -1, 5, 5);
+//      createNode(sessionId, "SplitNode", -1, 5, 5);
+//      createNode(sessionId, "UnionNode", -1, 5, 5);
+        LogicGraph lg = createGraph();
+        LogicNode n1 = lg.createNode("FileSource", 10,10);
+        LogicNode n2 = lg.createNode("FileSink", 10,10);
+        LogicNode n3 = lg.createNode("WashNode", 10,10);
+        lg.createOutputPort(n3.getId());
+        List<FieldType> ls = new ArrayList<>();
+        ls.add(new FieldType(BaseType.NUMBER, "String", "age"));
+        n1.getOutputPortMap().values().iterator().next().setPortDataFormat(ls);
+        lg.createEdge(n1.getOutputPortMap().keySet().iterator().next(), n3.getInputPortMap().keySet().iterator().next());
+        lg.createEdge(n3.getOutputPortMap().keySet().iterator().next(), n2.getInputPortMap().keySet().iterator().next());
+        System.out.println("Well donw!");
 
     }
 }

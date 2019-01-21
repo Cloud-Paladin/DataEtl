@@ -17,8 +17,12 @@ public class LogicEdge {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         LogicEdge logicEdge = (LogicEdge) o;
         return outputPort.equals(logicEdge.outputPort) &&
                 inputPort.equals(logicEdge.inputPort);

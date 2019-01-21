@@ -40,10 +40,12 @@ public abstract class LogicNode {
 
     //初始化的输入输出端口数量
     public abstract int defaultInputPortNumber();
+
     public abstract int defaultOutputPorNumber();
 
     //最大输入输出端口数量
     public abstract int maxInputPortNumber();
+
     public abstract int maxOutputPortNumber();
 
     //有需要时继承，返回节点不能删除的端口号
@@ -123,10 +125,10 @@ public abstract class LogicNode {
         return port;
     }
 
-    //删除输入端口
+    //TODO: 删除输入端口
     public boolean removeInputPort(int portId) {
         InputPort ip = getInputPortById(portId);
-        if (ip != null & !getForcedPortId().contains(portId) & getInputPortMap().size() > defaultInputPortNumber()) {
+        if (ip != null && !getForcedPortId().contains(portId) && getInputPortMap().size() > defaultInputPortNumber()) {
             for (LogicEdge ed : ip.getEdges().values()) {
                 //TODO:删除端口连线
             }
@@ -137,6 +139,14 @@ public abstract class LogicNode {
 
     //TODO:删除输出端口
     public boolean removeOutputPort(int portId) {
+        OutputPort op = getOutputPortById(portId);
+        if (op != null && !getForcedPortId().contains(portId) && getOutputPortMap().size() > defaultOutputPorNumber()) {
+            for (LogicEdge ed : op.getEdges().values()) {
+                //TODO:删除端口连线
+            }
+            getOutputPortMap().remove(portId);
+            return false;
+        }
         return false;
     }
 

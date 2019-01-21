@@ -2,10 +2,10 @@ package com.dataexp.common.json;
 
 public abstract class  TestPS {
 
-    public static final int maxnum = 1;
+    public static final int MAXNUM = 1;
 
    public int getMs() {
-           return maxnum;
+           return MAXNUM;
    }
 
     public int getMa() {
@@ -13,7 +13,7 @@ public abstract class  TestPS {
     }
 
     public static void main(String[] args) {
-        System.out.println(new TestSon().maxnum);
+        System.out.println(TestSon.MAXNUM);
         System.out.println(new TestSon().getMa());
         System.out.println(new TestSon().getMs());
         TestPS ps = (TestPS)(new TestSon());
@@ -22,7 +22,7 @@ public abstract class  TestPS {
 }
 
 class TestSon extends TestPS {
-    public static final int maxnum = 2;
+    public static final int MAXNUM = 2;
 
 //    @Override
 //    public int getMs() {
