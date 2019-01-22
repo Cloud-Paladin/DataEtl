@@ -1,4 +1,4 @@
-package com.dataexp.tasknode.Task;
+package com.dataexp.tasknode.task;
 
 /**
  * 任务引擎内部Source任务，把清洗节点的异常数据队列数据导入回清洗节点

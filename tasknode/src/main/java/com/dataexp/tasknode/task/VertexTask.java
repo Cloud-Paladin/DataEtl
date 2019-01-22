@@ -1,9 +1,9 @@
-package com.dataexp.tasknode.Task;
+package com.dataexp.tasknode.task;
 
 import com.dataexp.common.metadata.InnerMsg;
-import com.dataexp.tasknode.Task.operation.BaseOperation;
-import com.dataexp.tasknode.Task.operation.FilterOperation;
-import com.dataexp.tasknode.Task.operation.SinkOpration;
+import com.dataexp.tasknode.task.operation.BaseOperation;
+import com.dataexp.tasknode.task.operation.FilterOperation;
+import com.dataexp.tasknode.task.operation.SinkOpration;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 

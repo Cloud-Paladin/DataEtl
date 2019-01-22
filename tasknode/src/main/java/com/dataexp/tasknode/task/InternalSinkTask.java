@@ -1,4 +1,4 @@
-package com.dataexp.tasknode.Task;
+package com.dataexp.tasknode.task;
 
 /**
  * 任务引擎内部Sink任务，将清洗节点的异常数据导出到异常队列

@@ -1,4 +1,4 @@
-package com.dataexp.tasknode.Task;
+package com.dataexp.tasknode.task;
 
 import com.dataexp.common.metadata.InnerMsg;
 import org.slf4j.Logger;

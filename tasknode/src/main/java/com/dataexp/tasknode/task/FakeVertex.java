@@ -1,8 +1,8 @@
-package com.dataexp.tasknode.Task;
+package com.dataexp.tasknode.task;
 
 
-import com.dataexp.tasknode.Task.operation.BaseOperation;
-import com.dataexp.tasknode.Task.operation.SourceOperation;
+import com.dataexp.tasknode.task.operation.BaseOperation;
+import com.dataexp.tasknode.task.operation.SourceOperation;
 
 import java.util.ArrayList;
 import java.util.List;

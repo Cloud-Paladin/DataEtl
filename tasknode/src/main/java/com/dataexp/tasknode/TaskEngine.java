@@ -1,8 +1,8 @@
 package com.dataexp.tasknode;
 
-import com.dataexp.tasknode.Task.SinkTask;
-import com.dataexp.tasknode.Task.SourceTask;
-import com.dataexp.tasknode.Task.VertexTask;
+import com.dataexp.tasknode.task.SinkTask;
+import com.dataexp.tasknode.task.SourceTask;
+import com.dataexp.tasknode.task.VertexTask;
 
 import java.util.HashMap;
 import java.util.List;
