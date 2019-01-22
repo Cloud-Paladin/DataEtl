@@ -7,7 +7,6 @@ import java.util.*;
  */
 public abstract class LogicNode {
 
-
     //逻辑流程图中的节点id
     private final int id;
 

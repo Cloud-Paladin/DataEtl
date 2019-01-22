@@ -2,8 +2,8 @@ package com.dataexp.common.metadata;
 
 import java.time.LocalDateTime;
 
-//清洗流程流转的基础消息格式
-public class MsgFormat {
+//清洗流程内部流转的基础消息格式
+public class InnerMsg {
 
     //任务id
     private int taskId;
@@ -20,13 +20,23 @@ public class MsgFormat {
     //清洗流经路线组件掩码
     private int flowMask;
 
+    /**
+     * 当出现split-select操作时，记录split操作产生的分支name
+     * 用于后续的select选择
+     */
+    private String selectName;
+
     //异常定义
     private ExceptionContent exceptionContent;
 
     //消息体
     private String msgContent;
 
-    public MsgFormat(int taskId, LocalDateTime produceTime, int sourceNodeId, int currentNodeId, int flowMask, String msgContent) {
+    public InnerMsg(){
+
+    }
+
+    public InnerMsg(int taskId, LocalDateTime produceTime, int sourceNodeId, int currentNodeId, int flowMask, String msgContent) {
         this.taskId = taskId;
         this.produceTime = produceTime;
         this.sourceNodeId = sourceNodeId;

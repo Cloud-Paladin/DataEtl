@@ -87,6 +87,12 @@
             <artifactId>spring-restdocs-mockmvc</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.dataexp</groupId>
+            <artifactId>dispatch-engine</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

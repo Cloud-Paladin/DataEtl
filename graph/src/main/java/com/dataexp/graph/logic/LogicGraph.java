@@ -1,7 +1,6 @@
 package com.dataexp.graph.logic;
 
 import com.dataexp.common.metadata.FieldType;
-import javafx.scene.input.DataFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +42,70 @@ public class LogicGraph {
         return maxPortId++;
     }
 
+    /**
+     * 清理自己，为转换做准备，包括清理无效节点，无效端口等
+     * @return
+     */
+    public boolean cleanGraph() {
+        //清理前进行检查，查看图是否能够运行
+        if (!graphCheck()) {
+            return false;
+        }
+        //TODO:整体检查，删除孤立节点和边,如果grapCheck不允许有孤立节点则不需要做
+
+        for (LogicNode node : getNodeMap().values()) {
+            //TODO:每个节点清理自己的无效端口
+        }
+
+        //清理后进行检查，查看图是否能够运行
+        if (!graphCheck()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 逻辑图检查，判断是否能够运行
+     * @return
+     */
+    public boolean graphCheck() {
+        //单个组件检查
+        if (getGraphExceptions().size() > 0) {
+            return false;
+        }
+        //TODO:整张图检查，检查连通性，孤立节点等
+        return true;
+    }
+
+    /**
+     * 获取整张图的异常
+     * @return
+     */
+    public Map<Integer, List<String>> getGraphExceptions() {
+        Map<Integer,List<String>> exceptionMap = new HashMap<Integer, List<String>>();
+        for (LogicNode node : getNodeMap().values()) {
+            List<String> temp = node.getExceptions();
+            if (temp.size() > 0) {
+                exceptionMap.put(node.getId(), temp);
+            }
+        }
+        return exceptionMap;
+    }
+
+    /**
+     * 获取整张图的警告
+     * @return
+     */
+    public Map<Integer, List<String>> getGraphWarnings() {
+        Map<Integer,List<String>> wariningMap = new HashMap<Integer, List<String>>();
+        for (LogicNode node : getNodeMap().values()) {
+            List<String> temp = node.getWarnings();
+            if (temp.size() > 0) {
+                wariningMap.put(node.getId(), temp);
+            }
+        }
+        return wariningMap;
+    }
 
 
     public LogicNode createNode(String type, int x, int y) {

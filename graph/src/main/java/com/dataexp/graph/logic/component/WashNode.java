@@ -1,7 +1,10 @@
 package com.dataexp.graph.logic.component;
 
+import com.dataexp.common.metadata.InnerMsg;
 import com.dataexp.graph.logic.LogicNode;
+import com.dataexp.graph.logic.component.config.WashTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WashNode extends LogicNode {
@@ -12,6 +15,8 @@ public class WashNode extends LogicNode {
     public WashNode(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
+
+    private WashTemplate template = new WashTemplate();
 
     @Override
     public int defaultInputPortNumber() {
@@ -47,5 +52,54 @@ public class WashNode extends LogicNode {
     @Override
     public List<String> getWarnings() {
         return null;
+    }
+
+    @Override
+    /**
+     * 清洗节点的第一个输出端口是默认的数据出口，不可删除
+     */
+    public List<Integer> getForcedPortId() {
+        ArrayList<Integer> result = new ArrayList<>();
+        result.add(getNormalOutputPort());
+        return result;
+    }
+
+    /**
+     * 获取清洗节点正常数据出口端口号
+     * @return
+     */
+    public int getNormalOutputPort() {
+        return getOutputPortMap().keySet().iterator().next();
+    }
+
+
+
+    public WashTemplate getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(WashTemplate template) {
+        this.template = template;
+    }
+
+    /**
+     * 过滤处理函数
+     * @param input
+     * @return
+     */
+    public InnerMsg processMsg(InnerMsg input) {
+        input.setCurrentNodeId(getId());
+        input.setMsgContent(washLine(input.getMsgContent()));
+        return input;
+    }
+
+    /**
+     * 处理单行数据
+     * @param data
+     * @return
+     */
+    public String washLine(String data) {
+        //TODO: 清洗数据
+        return data;
     }
 }

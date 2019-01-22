@@ -12,8 +12,14 @@ public class LogicJobGraphGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(LogicJobGraphGenerator.class);
 
     public static JobGraph createJobGraph(LogicGraph logicGraph) {
+        if (!logicGraph.cleanGraph()) {
+            return null;
+        }
+
+
 
         return null;
     }
+
 
 }

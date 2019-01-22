@@ -1,5 +1,6 @@
 package com.dataexp.graph.logic;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dataexp.common.metadata.BaseType;
 import com.dataexp.common.metadata.FieldType;
 import org.slf4j.Logger;
@@ -204,6 +205,5 @@ public class LogicEnviroment {
         lg.createEdge(n1.getOutputPortMap().keySet().iterator().next(), n3.getInputPortMap().keySet().iterator().next());
         lg.createEdge(n3.getOutputPortMap().keySet().iterator().next(), n2.getInputPortMap().keySet().iterator().next());
         System.out.println("Well donw!");
-
     }
 }
