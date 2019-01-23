@@ -1,25 +1,27 @@
 package com.dataexp.tasknode.task;
 
 import com.dataexp.common.metadata.InnerMsg;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
- * @description:  任务流和外部的接口
+ * 任务流和外部的接口
  * 将处理完毕数据写入kafka队列
  * @author: Bing.Li
  * @create: 2019-01-23 14:17
- **/
-public class SinkTask implements Runnable{
+ */
+public class OuterSinkTask implements Runnable{
 
-    private static final Logger LOG = LoggerFactory.getLogger(SinkTask.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OuterSinkTask.class);
 
     /**
      * 数据消费kafka队列名称
      */
-    private String targetTopicName;
+    private KafkaProducer targetTopic;
 
     /**
      * 数据sink来源队列
@@ -29,14 +31,14 @@ public class SinkTask implements Runnable{
     /**
      * 状态控制
      */
-    private boolean cancle;
+    private boolean cancle = true;
 
-    public String getTargetTopicName() {
-        return targetTopicName;
+    public KafkaProducer getTargetTopic() {
+        return targetTopic;
     }
 
-    public void setTargetTopicName(String targetTopicName) {
-        this.targetTopicName = targetTopicName;
+    public void setTargetTopic(KafkaProducer targetTopic) {
+        this.targetTopic = targetTopic;
     }
 
     public ArrayBlockingQueue<InnerMsg> getSourceQueue() {
@@ -61,7 +63,7 @@ public class SinkTask implements Runnable{
         InnerMsg message;
         while(!cancle) {
             try {
-                message = sourceQueue.take();
+                message = sourceQueue.poll(1, TimeUnit.SECONDS);
                 //TODO: 将消息批量内容序列化（JSON）到kafka中
             } catch (InterruptedException e) {
                 LOG.error(e.getStackTrace().toString());

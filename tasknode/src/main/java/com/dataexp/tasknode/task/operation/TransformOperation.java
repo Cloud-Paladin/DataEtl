@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description: 所有操作的基础类
+ *  所有操作的基础类
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
- **/
+ */
 public class TransformOperation extends AbstractOneToOneOperation{
 
     /**

@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @description: 过滤操作
+ *  过滤操作
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
- **/
+ */
 public class FilterOperation extends AbstractOneToOneOperation {
 
     /**
@@ -24,8 +24,8 @@ public class FilterOperation extends AbstractOneToOneOperation {
         super(nodeId, inputPortId, inputType);
     }
 
-    public FilterOperation(int nodeId, int inputPortId, List<FieldType> inputType, int outputPortId, List<OperationFunction> nextOperationList, List<FieldType> outputType) {
-        super(nodeId, inputPortId, inputType, outputPortId, nextOperationList, outputType);
+    public FilterOperation(int nodeId, int inputPortId, List<FieldType> inputType, OutputConfig outputConfig) {
+        super(nodeId, inputPortId, inputType, outputConfig);
     }
 
     public Map<Integer, String> getFilterPattern() {

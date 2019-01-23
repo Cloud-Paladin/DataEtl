@@ -6,10 +6,10 @@ import com.dataexp.common.metadata.InnerMsg;
 import java.util.*;
 
 /**
- * @description: 分支操作
+ *  分支操作
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
- **/
+ */
 public class SplitOperation extends AbstractOnetoMultiOperation {
 
     /**

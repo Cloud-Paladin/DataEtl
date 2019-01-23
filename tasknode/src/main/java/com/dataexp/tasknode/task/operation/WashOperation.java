@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description: 清洗操作
+ *  清洗操作
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
- **/
+ */
 public class WashOperation extends AbstractOnetoMultiOperation{
 
     /**

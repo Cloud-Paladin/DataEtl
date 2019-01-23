@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description: 操作的输入配置
+ *  操作的输入配置
  * @author: Bing.Li
  * @create: 2019-01-23 16:49
- **/
+ */
 public class InputConfig {
     /**
      * 该操作对应逻辑图节点的输入端口

@@ -2,44 +2,108 @@ package com.dataexp.tasknode.task;
 
 import com.dataexp.common.metadata.FieldType;
 import com.dataexp.common.metadata.InnerMsg;
-import com.dataexp.tasknode.task.operation.BaseOperation;
-import com.dataexp.tasknode.task.operation.FilterOperation;
-import com.dataexp.tasknode.task.operation.SinkFunction;
+import com.dataexp.tasknode.task.operation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.List;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @description: JobVertex对应的任务
+ * JobVertex对应的任务
  * @author: Bing.Li
  * @create: 2019-01-23 14:17
- **/
+ */
 public class VertexTask implements Runnable{
 
-    public ArrayBlockingQueue<InnerMsg> testQueue;
+    private static final Logger LOG = LoggerFactory.getLogger(VertexTask.class);
 
-    public BaseOperation head;
+    /**
+     * VertexTask的消息输入队列
+     */
+    private ArrayBlockingQueue<InnerMsg> testQueue;
 
-    public VertexTask() {
+    /**
+     * VertexTask的根操作
+     */
+    private BaseOperation rootOperation;
 
+    /**
+     * 任务所用线程池
+     */
+    private ThreadPoolExecutor pool;
+
+    /**
+     * 线程池大小
+     */
+    private int poolSize;
+
+    /**
+     * 当前创建线程的序号
+     */
+    private AtomicInteger threadSequence;
+
+    public VertexTask(ArrayBlockingQueue<InnerMsg> testQueue, BaseOperation rootOperation, int poolSize) {
+        this.testQueue = testQueue;
+        this.rootOperation = rootOperation;
+        this.poolSize = poolSize;
+        threadSequence = new AtomicInteger(0);
+        this.pool = new ThreadPoolExecutor(poolSize, poolSize, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(1), new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread t = new Thread(r);
+                t.setName("JobVertex nodeId:" + rootOperation.getNodeId() +" portId:"+ rootOperation.getInputPortId()+" sequence:" + threadSequence.incrementAndGet());
+                return t;
+            }
+        });
+    }
+
+    public ArrayBlockingQueue<InnerMsg> getTestQueue() {
+        return testQueue;
+    }
+
+    public void setTestQueue(ArrayBlockingQueue<InnerMsg> testQueue) {
+        this.testQueue = testQueue;
+    }
+
+    public BaseOperation getRootOperation() {
+        return rootOperation;
+    }
+
+    public void setRootOperation(BaseOperation rootOperation) {
+        this.rootOperation = rootOperation;
+    }
+
+    public ThreadPoolExecutor getPool() {
+        return pool;
+    }
+
+    /**
+     * 启动任务
+     */
+    public void startJob(){
+        for(int i=0;i<pool.getCorePoolSize();i++) {
+            pool.execute(this);
+        }
     }
 
     @Override
     public void run() {
 
         while(true) {
-
             try {
                 InnerMsg msg = testQueue.take();
-                head.processMsg(msg);
+                System.out.println(Thread.currentThread().getName()+":" + msg);
+                rootOperation.processMsg(msg);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+               LOG.error(e.getStackTrace().toString());
             }
         }
-
     }
 
     public static void main(String[] args) {
-
         ArrayBlockingQueue<InnerMsg> source = new ArrayBlockingQueue(100);
         ArrayBlockingQueue<InnerMsg> target = new ArrayBlockingQueue(100);
 
@@ -48,15 +112,23 @@ public class VertexTask implements Runnable{
         Thread t1 = new Thread(ts);
         t1.start();
 
-        VertexTask vt = new VertexTask();
-        vt.testQueue = source;
-        FilterOperation fo = new FilterOperation(1,1,new ArrayList<FieldType>());
-        SinkFunction so = new SinkFunction(target);
-        fo.addNextOperation(so);
-        vt.head = fo;
-        Thread t2 = new Thread(vt);
-        t2.start();
 
+
+        SinkFunction so = new SinkFunction(target);
+        List<OperationFunction> ol = new ArrayList<>();
+        ol.add(so);
+        OutputConfig oc = new OutputConfig(2,ol,new ArrayList<>());
+        FilterOperation fo = new FilterOperation(1,1,new ArrayList<>(),oc);
+        fo.addNextOperation(so);
+        VertexTask vt = new VertexTask(source, fo, 4);
+//        Thread t2 = new Thread(vt);
+//        t2.start();
+        vt.startJob();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("End");
     }
 

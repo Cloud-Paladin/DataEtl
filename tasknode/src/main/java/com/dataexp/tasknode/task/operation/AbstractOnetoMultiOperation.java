@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @description: 一个输入多个输出的操作
+ *  一个输入多个输出的操作
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
- **/
+ */
 public abstract class AbstractOnetoMultiOperation extends BaseOperation {
 //    /**
 //     * 该操作对应逻辑图的输出端口

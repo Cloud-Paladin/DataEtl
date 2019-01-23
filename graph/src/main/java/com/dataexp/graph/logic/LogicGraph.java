@@ -7,10 +7,10 @@ import java.util.*;
 
 
 /**
- * @description:  逻辑图,负责维护逻辑图及其组件结构
+ *   逻辑图,负责维护逻辑图及其组件结构
  * @author: Bing.Li
  * @create: 2019-01-23 14:17
- **/
+ */
 public class LogicGraph {
 
     private static final Logger LOG = LoggerFactory.getLogger(LogicGraph.class);

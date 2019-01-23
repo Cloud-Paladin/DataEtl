@@ -2,10 +2,10 @@ package com.dataexp.common.metadata;
 
 
 /**
- * @description:  数据清洗异常类型
+ *   数据清洗异常类型
  * @author: Bing.Li
  * @create: 2019-01-23 14:17
- **/
+ */
 public enum ExceptionType {
 
     /**

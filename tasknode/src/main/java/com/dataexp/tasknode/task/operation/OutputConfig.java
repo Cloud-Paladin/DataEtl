@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description: 操作的输出配置
+ *  操作的输出配置
  * @author: Bing.Li
  * @create: 2019-01-23 16:53
- **/
+ */
 public class OutputConfig {
 
     /**

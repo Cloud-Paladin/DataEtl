@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 
 
 /**
- * @description: 清洗流程内部流转的基础消息格式
+ *  清洗流程内部流转的基础消息格式
  * @author: Bing.Li
  * @create: 2019-01-23 14:17
- **/
+ */
 public class InnerMsg {
 
     /**

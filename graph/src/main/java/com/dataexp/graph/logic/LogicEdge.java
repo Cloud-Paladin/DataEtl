@@ -2,6 +2,11 @@ package com.dataexp.graph.logic;
 
 import java.util.Objects;
 
+/**
+ * 逻辑图的边
+ * @author: Bing.Li
+ * @since: 2019-01-23 14:17
+ */
 public class LogicEdge {
 
     private final int id;

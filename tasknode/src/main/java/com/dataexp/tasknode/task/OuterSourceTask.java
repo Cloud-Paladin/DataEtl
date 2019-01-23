@@ -1,41 +1,44 @@
 package com.dataexp.tasknode.task;
 
 import com.dataexp.common.metadata.InnerMsg;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
- * @description:  任务流和外界数据接口
- *  * 从kafka队列读取数据
+ * 任务流和外界数据接口
+ * 从kafka队列读取数据
  * @author: Bing.Li
  * @create: 2019-01-23 14:17
- **/
-public class SourceTask implements Runnable{
+ */
+public class OuterSourceTask implements Runnable{
 
-    private static final Logger LOG = LoggerFactory.getLogger(SourceTask.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OuterSourceTask.class);
     /**
-     * 数据来源kafka队列名称
+     * 数据来源kafka队列
      */
-    private String sourceTopicName;
+    private KafkaConsumer sourceTopic;
 
     /**
      * 数据源任务输出任务队列
      */
-    private List<ArrayBlockingQueue<InnerMsg>> targetQueueList;
+    private List<ArrayBlockingQueue<InnerMsg>> targetQueueList = new ArrayList<>();
 
     /**
      * 状态控制
      */
-    private boolean cancle;
+    private boolean cancle = true;
 
-    public String getSourceTopicName() {
-        return sourceTopicName;
+    public KafkaConsumer getSourceTopic() {
+        return sourceTopic;
     }
 
-    public void setSourceTopicName(String sourceTopicName) {
-        this.sourceTopicName = sourceTopicName;
+    public void setSourceTopic(KafkaConsumer sourceTopic) {
+        this.sourceTopic = sourceTopic;
     }
 
     public List<ArrayBlockingQueue<InnerMsg>> getTargetQueueList() {

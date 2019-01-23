@@ -3,10 +3,10 @@ package com.dataexp.tasknode.task.operation.function.wash;
 import com.dataexp.common.metadata.InnerMsg;
 
 /**
- * @description: 清洗节点的清洗函数s
+ *  清洗节点的清洗函数s
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
- **/
+ */
 public abstract class WashFunction {
 
     /**

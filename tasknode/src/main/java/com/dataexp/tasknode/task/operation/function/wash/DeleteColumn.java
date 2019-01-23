@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description: 删除一列
+ *  删除一列
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
- **/
+ */
 public class DeleteColumn extends WashFunction{
     @Override
     public void wash(InnerMsg input) {

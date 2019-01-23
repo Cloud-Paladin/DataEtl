@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description: 一个输入一个输出的操作
+ *  一个输入一个输出的操作
  * @author: Bing.Li
  * @create: 2019-01-23 14:17
- **/
+ */
 public abstract class AbstractOneToOneOperation extends BaseOperation{
 
     /**
@@ -20,9 +20,9 @@ public abstract class AbstractOneToOneOperation extends BaseOperation{
         super(nodeId, inputPortId, inputType);
     }
 
-    public AbstractOneToOneOperation(int nodeId, int inputPortId, List<FieldType> inputType, int outputPortId, List<OperationFunction> nextOperationList, List<FieldType> outputType) {
+    public AbstractOneToOneOperation(int nodeId, int inputPortId, List<FieldType> inputType, OutputConfig outputConfig) {
         super(nodeId, inputPortId, inputType);
-        this.outputConfig = new OutputConfig(outputPortId, nextOperationList, outputType);
+        this.outputConfig = outputConfig;
     }
 
     public int getOutputPortId() {
