@@ -1,7 +1,7 @@
 package com.dataexp.dispatch;
 
 import com.dataexp.dispatch.nodeagent.DataInterfaceNodeAgent;
-import com.dataexp.dispatch.nodeagent.ExecNodeAgent;
+import com.dataexp.dispatch.nodeagent.TaskNodeAgent;
 import com.dataexp.graph.job.JobGraph;
 import com.dataexp.graph.logic.LogicGraph;
 import org.slf4j.Logger;
@@ -39,13 +39,13 @@ public class DispatchEngine {
 
     private static Map<Integer, Integer> currentJobStatus = new HashMap<>();
 
-    private static List<ExecNodeAgent> execNodeList = new ArrayList<>();
+    private static List<TaskNodeAgent> taskNodeList = new ArrayList<>();
 
     private static List<DataInterfaceNodeAgent> dataInterfaceNodeList = new ArrayList<>();
 
     public static boolean startJob(int jobId) {
         //TODO:检查LogicGraph的版本是否有更新，如果有要重新更新各节点的配置信息
-        for (ExecNodeAgent ena: execNodeList) {
+        for (TaskNodeAgent ena: taskNodeList) {
             if (!ena.startJob(jobId)) {
                 return false;
             }

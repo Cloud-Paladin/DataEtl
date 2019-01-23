@@ -3,12 +3,14 @@ package com.dataexp.graph.logic;
 import com.dataexp.common.metadata.FieldType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.*;
 
+
 /**
- * 逻辑图,负责维护逻辑图及其组件结构
- */
+ * @description:  逻辑图,负责维护逻辑图及其组件结构
+ * @author: Bing.Li
+ * @create: 2019-01-23 14:17
+ **/
 public class LogicGraph {
 
     private static final Logger LOG = LoggerFactory.getLogger(LogicGraph.class);

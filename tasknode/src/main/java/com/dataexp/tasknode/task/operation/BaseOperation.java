@@ -1,53 +1,29 @@
 package com.dataexp.tasknode.task.operation;
 
 import com.dataexp.common.metadata.FieldType;
-import com.dataexp.common.metadata.InnerMsg;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 /**
- * 所有操作的基础类
- */
-public abstract class BaseOperation {
+ * @description: 所有操作的基础类
+ * @author: Bing.Li
+ * @create: 2019-01-23 14:19
+ **/
+public abstract class BaseOperation implements OperationFunction{
 
     /**
      * 该操作对应逻辑图节点编号
      */
     private int nodeId;
 
-    /**
-     * 该操作对应逻辑图节点的输入端口
-     */
-    private int inputPortId;
+    private InputConfig inputConfig;
 
-    /**
-     * 该操作对应逻辑图的输出端口
-     */
-    private int outputPortId;
-
-    /**
-     * 该操作的后续操作列表
-     */
-    private List<BaseOperation> nexOperationList = new ArrayList<>();
-
-    /**
-     * 操作的输入数据格式
-     */
-    private List<FieldType> inputType = new ArrayList<>();
-    /**
-     * 操作的输出数据格式
-     */
-    private List<FieldType> outputType = new ArrayList<>();
-
-    public BaseOperation() {
-
-    }
-
-    public BaseOperation(int nodeId, int inputPortId, int outputPortId) {
+    public BaseOperation(int nodeId, int inputPortId, List<FieldType> inputType) {
         this.nodeId = nodeId;
-        this.inputPortId = inputPortId;
-        this.outputPortId = outputPortId;
+        this.inputConfig = new InputConfig(inputPortId, inputType);
     }
 
     public int getNodeId() {
@@ -59,46 +35,18 @@ public abstract class BaseOperation {
     }
 
     public int getInputPortId() {
-        return inputPortId;
+        return inputConfig.getInputPortId();
     }
 
     public void setInputPortId(int inputPortId) {
-        this.inputPortId = inputPortId;
+       inputConfig.setInputPortId(inputPortId);
     }
 
-    public int getOutputPortId() {
-        return outputPortId;
+    public List<FieldType> getInputType() {
+        return inputConfig.getInputType();
     }
 
-    public void setOutputPortId(int outputPortId) {
-        this.outputPortId = outputPortId;
+    public void setInputType(List<FieldType> inputType) {
+        inputConfig.setInputType(inputType);
     }
-
-    public List<BaseOperation> getNexOperationList() {
-        return nexOperationList;
-    }
-
-    public void setNexOperationList(List<BaseOperation> nexOperationList) {
-        this.nexOperationList = nexOperationList;
-    }
-
-    public void addNextOperation(BaseOperation operation) {
-        getNexOperationList().add(operation);
-    }
-
-    /**
-     * 具体的清洗操作处理函数
-     * @param input
-     * @return
-     */
-    public abstract  void processMsg(InnerMsg input);
-
-    /**
-     *  获取操作的下一步操作
-     * @return
-     */
-    public List<BaseOperation> getNextOperation(){
-        return nexOperationList;
-    }
-
 }

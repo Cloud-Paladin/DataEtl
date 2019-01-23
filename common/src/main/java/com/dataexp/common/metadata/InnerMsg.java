@@ -2,42 +2,60 @@ package com.dataexp.common.metadata;
 
 import java.time.LocalDateTime;
 
-//清洗流程内部流转的基础消息格式
+
+/**
+ * @description: 清洗流程内部流转的基础消息格式
+ * @author: Bing.Li
+ * @create: 2019-01-23 14:17
+ **/
 public class InnerMsg {
 
-    //任务id
-    private int taskId;
+    /**
+     * 消息对应的任务id
+     */
+    private int jobId;
 
-    //消息获取时间
+    /**
+     * 消息获取时间
+     */
     private LocalDateTime produceTime;
 
-    //该数据入口组件（jobGraph）节点Id
+    /**
+     * 该消息入口组件节点Id
+     */
     private int sourceNodeId;
 
-    //当前处理组件（jobGraph）节节点Id
+    /**
+     * 当前处理组件Id
+     */
     private int currentNodeId;
 
-    //清洗流经路线组件掩码
+    /**
+     * 清洗刘静路线组件掩码
+     */
     private int flowMask;
 
     /**
-     * 当出现split-select操作时，记录split操作产生的分支name
-     * 用于后续的select选择
+     * 异常产生时，如果是清洗节点，清洗模板的版本号
      */
-    private String selectName;
+    private int exceptionWashTemplateVersion = -1;
 
-    //异常定义
-    private ExceptionContent exceptionContent;
+    /**
+     *  异常类型
+     */
+    private ExceptionType exceptionType = ExceptionType.NORMAL;
 
-    //消息体
+    /**
+     * 消息体
+     */
     private String msgContent;
 
     public InnerMsg(){
 
     }
 
-    public InnerMsg(int taskId, LocalDateTime produceTime, int sourceNodeId, int currentNodeId, int flowMask, String msgContent) {
-        this.taskId = taskId;
+    public InnerMsg(int jobId, LocalDateTime produceTime, int sourceNodeId, int currentNodeId, int flowMask, String msgContent) {
+        this.jobId = jobId;
         this.produceTime = produceTime;
         this.sourceNodeId = sourceNodeId;
         this.currentNodeId = currentNodeId;
@@ -53,12 +71,12 @@ public class InnerMsg {
         this.msgContent = msgContent;
     }
 
-    public int getTaskId() {
-        return taskId;
+    public int getJobId() {
+        return jobId;
     }
 
-    public void setTaskId(int taskId) {
-        this.taskId = taskId;
+    public void setJobId(int jobId) {
+        this.jobId = jobId;
     }
 
     public LocalDateTime getProduceTime() {
@@ -93,13 +111,30 @@ public class InnerMsg {
         this.flowMask = flowMask;
     }
 
-    public ExceptionContent getExceptionContent() {
-        return exceptionContent;
+
+    public int getExceptionWashTemplateVersion() {
+        return exceptionWashTemplateVersion;
     }
 
-    public void setExceptionContent(ExceptionContent exceptionContent) {
-        this.exceptionContent = exceptionContent;
+    public void setExceptionWashTemplateVersion(int exceptionWashTemplateVersion) {
+        this.exceptionWashTemplateVersion = exceptionWashTemplateVersion;
     }
 
+
+    public ExceptionType getExceptionType() {
+        return exceptionType;
+    }
+
+    public void setExceptionType(ExceptionType exceptionType) {
+        this.exceptionType = exceptionType;
+    }
+
+    /**
+     * 清空该消息的异常信息
+     */
+    public void clearException() {
+        setExceptionWashTemplateVersion(-1);
+        setExceptionType(ExceptionType.NORMAL);
+    }
 
 }

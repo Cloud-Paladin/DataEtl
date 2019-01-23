@@ -7,9 +7,11 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
- * 任务流和外部的接口
+ * @description:  任务流和外部的接口
  * 将处理完毕数据写入kafka队列
- */
+ * @author: Bing.Li
+ * @create: 2019-01-23 14:17
+ **/
 public class SinkTask implements Runnable{
 
     private static final Logger LOG = LoggerFactory.getLogger(SinkTask.class);

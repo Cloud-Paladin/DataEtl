@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
- * 任务流和外界数据接口
- * 从kafka队列读取数据
- */
+ * @description:  任务流和外界数据接口
+ *  * 从kafka队列读取数据
+ * @author: Bing.Li
+ * @create: 2019-01-23 14:17
+ **/
 public class SourceTask implements Runnable{
 
     private static final Logger LOG = LoggerFactory.getLogger(SourceTask.class);

@@ -1,15 +1,19 @@
 package com.dataexp.tasknode.task;
 
+import com.dataexp.common.metadata.FieldType;
 import com.dataexp.common.metadata.InnerMsg;
 import com.dataexp.tasknode.task.operation.BaseOperation;
 import com.dataexp.tasknode.task.operation.FilterOperation;
-import com.dataexp.tasknode.task.operation.SinkOpration;
-import java.util.HashMap;
+import com.dataexp.tasknode.task.operation.SinkFunction;
+import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
+/**
+ * @description: JobVertex对应的任务
+ * @author: Bing.Li
+ * @create: 2019-01-23 14:17
+ **/
 public class VertexTask implements Runnable{
-
-    private FakeVertex fakeVertex;
 
     public ArrayBlockingQueue<InnerMsg> testQueue;
 
@@ -17,10 +21,6 @@ public class VertexTask implements Runnable{
 
     public VertexTask() {
 
-    }
-
-    public VertexTask(FakeVertex fakeVertex) {
-        this.fakeVertex = fakeVertex;
     }
 
     @Override
@@ -50,8 +50,8 @@ public class VertexTask implements Runnable{
 
         VertexTask vt = new VertexTask();
         vt.testQueue = source;
-        FilterOperation fo = new FilterOperation(1, 1, 2, new HashMap<Integer, String>());
-        SinkOpration so = new SinkOpration(2,3,4,target);
+        FilterOperation fo = new FilterOperation(1,1,new ArrayList<FieldType>());
+        SinkFunction so = new SinkFunction(target);
         fo.addNextOperation(so);
         vt.head = fo;
         Thread t2 = new Thread(vt);
