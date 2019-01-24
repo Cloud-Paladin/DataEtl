@@ -17,7 +17,7 @@ public class LogicGraph {
     //Chain策略
     private boolean chaining = true;
     //逻辑图包含的节点,key为节点id
-    private Map<Integer, LogicNode> nodeMap = new HashMap<>();
+    private Map<Integer, BaseLogicNode> nodeMap = new HashMap<>();
 
     /**
      * 逻辑图的边Map
@@ -55,7 +55,7 @@ public class LogicGraph {
         }
         //TODO:整体检查，删除孤立节点和边,如果grapCheck不允许有孤立节点则不需要做
 
-        for (LogicNode node : getNodeMap().values()) {
+        for (BaseLogicNode node : getNodeMap().values()) {
             //TODO:每个节点清理自己的无效端口
         }
 
@@ -84,8 +84,8 @@ public class LogicGraph {
      * @return
      */
     public Map<Integer, List<String>> getGraphExceptions() {
-        Map<Integer,List<String>> exceptionMap = new HashMap<Integer, List<String>>();
-        for (LogicNode node : getNodeMap().values()) {
+        Map<Integer,List<String>> exceptionMap = new HashMap<Integer, List<String>>(8);
+        for (BaseLogicNode node : getNodeMap().values()) {
             List<String> temp = node.getExceptions();
             if (temp.size() > 0) {
                 exceptionMap.put(node.getId(), temp);
@@ -99,8 +99,8 @@ public class LogicGraph {
      * @return
      */
     public Map<Integer, List<String>> getGraphWarnings() {
-        Map<Integer,List<String>> wariningMap = new HashMap<Integer, List<String>>();
-        for (LogicNode node : getNodeMap().values()) {
+        Map<Integer,List<String>> wariningMap = new HashMap<Integer, List<String>>(8);
+        for (BaseLogicNode node : getNodeMap().values()) {
             List<String> temp = node.getWarnings();
             if (temp.size() > 0) {
                 wariningMap.put(node.getId(), temp);
@@ -110,21 +110,21 @@ public class LogicGraph {
     }
 
 
-    public LogicNode createNode(String type, int x, int y) {
-        LogicNode node = ComponentFactory.createNode(getNextNodeId(), type, x, y);
+    public BaseLogicNode createNode(String type, int x, int y) {
+        BaseLogicNode node = ComponentFactory.createNode(getNextNodeId(), type, x, y);
         initNodePorts(node);
         addNode(node);
         return node;
     }
 
-    public LogicNode createNode(String type, String name, int x, int y) {
-        LogicNode node = ComponentFactory.createNode(getNextNodeId(), type, name, x, y);
+    public BaseLogicNode createNode(String type, String name, int x, int y) {
+        BaseLogicNode node = ComponentFactory.createNode(getNextNodeId(), type, name, x, y);
         initNodePorts(node);
         addNode(node);
         return node;
     }
 
-    public void initNodePorts(LogicNode node) {
+    public void initNodePorts(BaseLogicNode node) {
         for (int i = 1; i <= node.defaultInputPortNumber(); i++) {
             InputPort port = node.createInputPort(getNextPortId());
         }
@@ -133,15 +133,15 @@ public class LogicGraph {
         }
     }
 
-    public boolean addNode(LogicNode node) {
+    public boolean addNode(BaseLogicNode node) {
         return (nodeMap.put(node.getId(), node) == null);
     }
 
-    public LogicNode findNode(int nodeId) {
+    public BaseLogicNode findNode(int nodeId) {
         return nodeMap.get(nodeId);
     }
 
-    public LogicNode removeNode(int nodeId) {
+    public BaseLogicNode removeNode(int nodeId) {
         return nodeMap.remove(nodeId);
     }
 
@@ -149,7 +149,7 @@ public class LogicGraph {
 
     //TODO:添加节点端口，删除节点端口，修改端口名称
     public InputPort createInputPort(int nodeId) {
-        LogicNode ln = nodeMap.get(nodeId);
+        BaseLogicNode ln = nodeMap.get(nodeId);
         if (ln != null) {
             return ln.createInputPort(getNextPortId());
         }
@@ -157,7 +157,7 @@ public class LogicGraph {
     }
 
     public OutputPort createOutputPort(int nodeId) {
-        LogicNode ln = nodeMap.get(nodeId);
+        BaseLogicNode ln = nodeMap.get(nodeId);
         if (ln != null) {
             return ln.createOutputPort(getNextPortId());
         }
@@ -165,7 +165,7 @@ public class LogicGraph {
     }
 
     public boolean removeInputPort(int nodeId, int portId) {
-        LogicNode ln = nodeMap.get(nodeId);
+        BaseLogicNode ln = nodeMap.get(nodeId);
         if (ln != null) {
             return ln.removeInputPort(portId);
         }
@@ -173,15 +173,15 @@ public class LogicGraph {
     }
 
     public boolean removeOutputPort(int nodeId, int portId) {
-        LogicNode ln = nodeMap.get(nodeId);
+        BaseLogicNode ln = nodeMap.get(nodeId);
         if (ln != null) {
             return ln.removeOutputPort(portId);
         }
         return false;
     }
 
-    public LogicNode getNodeFromPortId(int portId) {
-        for (LogicNode node : getNodeMap().values()) {
+    public BaseLogicNode getNodeFromPortId(int portId) {
+        for (BaseLogicNode node : getNodeMap().values()) {
             if (null != node.getInputPortById(portId)) {
                 return node;
             }
@@ -223,8 +223,8 @@ public class LogicGraph {
         }
 
         //输出端口没有格式则返回错误
-        LogicNode sourceNode = getNodeFromPortId(outputPortId);
-        LogicNode targetNode = getNodeFromPortId(inputPortId);
+        BaseLogicNode sourceNode = getNodeFromPortId(outputPortId);
+        BaseLogicNode targetNode = getNodeFromPortId(inputPortId);
 
         if (null != sourceNode && null != targetNode && sourceNode != targetNode) {
 
@@ -294,7 +294,7 @@ public class LogicGraph {
         this.chaining = chaining;
     }
 
-    public Map<Integer, LogicNode> getNodeMap() {
+    public Map<Integer, BaseLogicNode> getNodeMap() {
         return nodeMap;
     }
 

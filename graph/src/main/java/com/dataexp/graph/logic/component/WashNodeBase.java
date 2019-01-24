@@ -1,18 +1,18 @@
 package com.dataexp.graph.logic.component;
 
 import com.dataexp.common.metadata.InnerMsg;
-import com.dataexp.graph.logic.LogicNode;
+import com.dataexp.graph.logic.BaseLogicNode;
 import com.dataexp.graph.logic.component.config.WashTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WashNode extends LogicNode {
-    public WashNode(int id, int x, int y) {
+public class WashNodeBase extends BaseLogicNode {
+    public WashNodeBase(int id, int x, int y) {
         super(id, x, y);
     }
 
-    public WashNode(int id, String name, int x, int y) {
+    public WashNodeBase(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 

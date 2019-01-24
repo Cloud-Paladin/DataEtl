@@ -7,11 +7,19 @@ import java.util.Objects;
  */
 public class FieldType {
 
-    //字段基础类型
+    /**
+     * 字段基础类型
+     */
     private BaseType baseType;
-    //字段数据类型
+
+    /**
+     * 字段数据类型
+     */
     private String dataType;
-    //字段名称
+
+    /**
+     * 字段名称
+     */
     private String name;
 
     public FieldType(BaseType baseType, String dataType, String name) {

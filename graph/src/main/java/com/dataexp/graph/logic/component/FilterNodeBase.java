@@ -1,21 +1,21 @@
 package com.dataexp.graph.logic.component;
 
-import com.dataexp.graph.logic.LogicNode;
+import com.dataexp.graph.logic.BaseLogicNode;
 
 import java.util.List;
 
-public class UnionNode extends LogicNode {
-    public UnionNode(int id, int x, int y) {
+public class FilterNodeBase extends BaseLogicNode {
+    public FilterNodeBase(int id, int x, int y) {
         super(id, x, y);
     }
 
-    public UnionNode(int id, String name, int x, int y) {
+    public FilterNodeBase(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 
     @Override
     public int defaultInputPortNumber() {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class UnionNode extends LogicNode {
 
     @Override
     public int maxInputPortNumber() {
-        return 8;
+        return 1;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class UnionNode extends LogicNode {
 
     @Override
     public String getDefaultName() {
-        return "合并转换";
+        return "过滤";
     }
 
     @Override
@@ -47,4 +47,7 @@ public class UnionNode extends LogicNode {
     public List<String> getWarnings() {
         return null;
     }
+
+
+
 }

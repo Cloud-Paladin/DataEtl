@@ -1,14 +1,13 @@
 package com.dataexp.graph.logic;
 
-import jdk.internal.util.xml.impl.Input;
 
-public abstract class SourceNode extends LogicNode {
+public abstract class AbstractSourceNode extends BaseLogicNode {
 
-    public SourceNode(int id, String name, int x, int y) {
+    public AbstractSourceNode(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 
-    public SourceNode(int id, int x, int y) {
+    public AbstractSourceNode(int id, int x, int y) {
         super(id, x, y);
     }
 

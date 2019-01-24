@@ -1,21 +1,21 @@
 package com.dataexp.graph.logic.component;
 
-import com.dataexp.graph.logic.LogicNode;
+import com.dataexp.graph.logic.BaseLogicNode;
 
 import java.util.List;
 
-public class FormatterNode extends LogicNode {
-    public FormatterNode(int id, int x, int y) {
+public class UnionNodeBase extends BaseLogicNode {
+    public UnionNodeBase(int id, int x, int y) {
         super(id, x, y);
     }
 
-    public FormatterNode(int id, String name, int x, int y) {
+    public UnionNodeBase(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 
     @Override
     public int defaultInputPortNumber() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class FormatterNode extends LogicNode {
 
     @Override
     public int maxInputPortNumber() {
-        return 1;
+        return 8;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class FormatterNode extends LogicNode {
 
     @Override
     public String getDefaultName() {
-        return "格式转换";
+        return "合并转换";
     }
 
     @Override

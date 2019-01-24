@@ -1,15 +1,15 @@
 package com.dataexp.graph.logic.component;
 
-import com.dataexp.graph.logic.LogicNode;
+import com.dataexp.graph.logic.BaseLogicNode;
 
 import java.util.List;
 
-public class FilterNode extends LogicNode {
-    public FilterNode(int id, int x, int y) {
+public class SplitNodeBase extends BaseLogicNode {
+    public SplitNodeBase(int id, int x, int y) {
         super(id, x, y);
     }
 
-    public FilterNode(int id, String name, int x, int y) {
+    public SplitNodeBase(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 
@@ -20,7 +20,7 @@ public class FilterNode extends LogicNode {
 
     @Override
     public int defaultOutputPorNumber() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -30,12 +30,12 @@ public class FilterNode extends LogicNode {
 
     @Override
     public int maxOutputPortNumber() {
-        return 1;
+        return 8;
     }
 
     @Override
     public String getDefaultName() {
-        return "过滤";
+        return "分支";
     }
 
     @Override
@@ -47,7 +47,4 @@ public class FilterNode extends LogicNode {
     public List<String> getWarnings() {
         return null;
     }
-
-
-
 }

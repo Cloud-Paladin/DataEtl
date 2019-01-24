@@ -1,15 +1,15 @@
 package com.dataexp.graph.logic.component;
 
-import com.dataexp.graph.logic.LogicNode;
+import com.dataexp.graph.logic.BaseLogicNode;
 
 import java.util.List;
 
-public class SplitNode extends LogicNode {
-    public SplitNode(int id, int x, int y) {
+public class FormatterNodeBase extends BaseLogicNode {
+    public FormatterNodeBase(int id, int x, int y) {
         super(id, x, y);
     }
 
-    public SplitNode(int id, String name, int x, int y) {
+    public FormatterNodeBase(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 
@@ -20,7 +20,7 @@ public class SplitNode extends LogicNode {
 
     @Override
     public int defaultOutputPorNumber() {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -30,12 +30,12 @@ public class SplitNode extends LogicNode {
 
     @Override
     public int maxOutputPortNumber() {
-        return 8;
+        return 1;
     }
 
     @Override
     public String getDefaultName() {
-        return "分支";
+        return "格式转换";
     }
 
     @Override

@@ -1,16 +1,16 @@
 package com.dataexp.graph.logic.component;
 
-import com.dataexp.graph.logic.SinkNode;
+import com.dataexp.graph.logic.AbstractSinkNode;
 
 import java.util.List;
 
-public class FileSink extends SinkNode {
+public class FileAbstractSink extends AbstractSinkNode {
 
-    public FileSink(int id, String name, int x, int y) {
+    public FileAbstractSink(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 
-    public FileSink(int id, int x, int y) {
+    public FileAbstractSink(int id, int x, int y) {
         super(id, x, y);
     }
 

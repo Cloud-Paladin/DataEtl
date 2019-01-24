@@ -10,7 +10,7 @@ import java.util.List;
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
  */
-public class DeleteColumn extends WashFunction{
+public class DeleteColumn extends AbstractWashFunction {
     @Override
     public void wash(InnerMsg input) {
         List<String> t = new ArrayList();

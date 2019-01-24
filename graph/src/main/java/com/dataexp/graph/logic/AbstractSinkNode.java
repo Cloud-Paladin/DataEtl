@@ -1,12 +1,12 @@
 package com.dataexp.graph.logic;
 
-public abstract class SinkNode extends LogicNode {
+public abstract class AbstractSinkNode extends BaseLogicNode {
 
-    public SinkNode(int id, int x, int y) {
+    public AbstractSinkNode(int id, int x, int y) {
         super(id, x, y);
     }
 
-    public SinkNode(int id, String name, int x, int y) {
+    public AbstractSinkNode(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 

@@ -7,7 +7,7 @@ import java.util.*;
 public class LogicPort {
 
     //该端口归属节点
-    private final LogicNode parentNode;
+    private final BaseLogicNode parentNode;
 
     //该端口id
     private final int id;
@@ -21,13 +21,13 @@ public class LogicPort {
     //端口绑定的数据格式
     private List<FieldType> portDataFormat = new ArrayList<>();
 
-    public LogicPort(LogicNode parentNode, int id, String name) {
+    public LogicPort(BaseLogicNode parentNode, int id, String name) {
         this.id = id;
         this.parentNode = parentNode;
         this.name = name;
     }
 
-    public LogicNode getParentNode() {
+    public BaseLogicNode getParentNode() {
         return parentNode;
     }
 

@@ -2,7 +2,7 @@ package com.dataexp.tasknode.task.operation;
 
 import com.dataexp.common.metadata.FieldType;
 import com.dataexp.common.metadata.InnerMsg;
-import com.dataexp.tasknode.task.operation.function.wash.WashFunction;
+import com.dataexp.tasknode.task.operation.function.wash.AbstractWashFunction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -65,7 +65,7 @@ public class WashOperation extends AbstractOnetoMultiOperation{
     /**
      * 清洗函数列表
      */
-    private List<WashFunction> functionList = new ArrayList<>();
+    private List<AbstractWashFunction> functionList = new ArrayList<>();
 
     /**
      * 清洗操作的默认正常数据出口
@@ -89,7 +89,7 @@ public class WashOperation extends AbstractOnetoMultiOperation{
     public void processMsg(InnerMsg input) {
 
         String originContent = input.getMsgContent();
-        for (WashFunction wf : functionList) {
+        for (AbstractWashFunction wf : functionList) {
              wf.wash(input);
             switch(input.getExceptionType()){
                 case NORMAL:
@@ -257,11 +257,11 @@ public class WashOperation extends AbstractOnetoMultiOperation{
         this.exceptionSink = exceptionSink;
     }
 
-    public List<WashFunction> getFunctionList() {
+    public List<AbstractWashFunction> getFunctionList() {
         return functionList;
     }
 
-    public void setFunctionList(List<WashFunction> functionList) {
+    public void setFunctionList(List<AbstractWashFunction> functionList) {
         this.functionList = functionList;
     }
 }

@@ -4,43 +4,43 @@ import com.dataexp.graph.logic.component.*;
 
 public class ComponentFactory {
 
-    public static LogicNode createNode(int id, String type, String name, int x, int y) {
+    public static BaseLogicNode createNode(int id, String type, String name, int x, int y) {
         switch (type) {
-            case "FileSink":
-                return new FileSink(id, name, x, y);
-            case "FileSource":
-                return new FileSource(id, name, x, y);
-            case "FilterNode":
-                return new FilterNode(id, name, x, y);
-            case "FormatterNode":
-                return new FormatterNode(id, name, x, y);
-            case "SplitNode":
-                return new SplitNode(id, name, x, y);
-            case "UnionNode":
-                return new UnionNode(id, name, x, y);
-            case "WashNode":
-                return new WashNode(id, name, x, y);
+            case "FileAbstractSink":
+                return new FileAbstractSink(id, name, x, y);
+            case "FileAbstractSource":
+                return new FileAbstractSource(id, name, x, y);
+            case "FilterNodeBase":
+                return new FilterNodeBase(id, name, x, y);
+            case "FormatterNodeBase":
+                return new FormatterNodeBase(id, name, x, y);
+            case "SplitNodeBase":
+                return new SplitNodeBase(id, name, x, y);
+            case "UnionNodeBase":
+                return new UnionNodeBase(id, name, x, y);
+            case "WashNodeBase":
+                return new WashNodeBase(id, name, x, y);
             default:
                 return null;
         }
     }
 
-    public static LogicNode createNode(int id, String type, int x, int y) {
+    public static BaseLogicNode createNode(int id, String type, int x, int y) {
         switch (type) {
-            case "FileSink":
-                return new FileSink(id, x, y);
-            case "FileSource":
-                return new FileSource(id, x, y);
-            case "FilterNode":
-                return new FilterNode(id, x, y);
-            case "FormatterNode":
-                return new FormatterNode(id, x, y);
-            case "SplitNode":
-                return new SplitNode(id, x, y);
-            case "UnionNode":
-                return new UnionNode(id, x, y);
-            case "WashNode":
-                return new WashNode(id, x, y);
+            case "FileAbstractSink":
+                return new FileAbstractSink(id, x, y);
+            case "FileAbstractSource":
+                return new FileAbstractSource(id, x, y);
+            case "FilterNodeBase":
+                return new FilterNodeBase(id, x, y);
+            case "FormatterNodeBase":
+                return new FormatterNodeBase(id, x, y);
+            case "SplitNodeBase":
+                return new SplitNodeBase(id, x, y);
+            case "UnionNodeBase":
+                return new UnionNodeBase(id, x, y);
+            case "WashNodeBase":
+                return new WashNodeBase(id, x, y);
             default:
                 return null;
         }

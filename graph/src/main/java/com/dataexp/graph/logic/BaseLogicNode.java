@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * 通用的流程组件接口，定义组件的通用操作
  */
-public abstract class LogicNode {
+public abstract class BaseLogicNode {
 
     //逻辑流程图中的节点id
     private final int id;
@@ -23,45 +23,77 @@ public abstract class LogicNode {
 
     protected final int maxInput = 1;
 
-    public LogicNode(int id, int x, int y) {
+    public BaseLogicNode(int id, int x, int y) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.name = getDefaultName();
     }
 
-    public LogicNode(int id, String name, int x, int y) {
+    public BaseLogicNode(int id, String name, int x, int y) {
         this.id = id;
         this.name = name;
         this.x = x;
         this.y = y;
     }
 
-    //初始化的输入输出端口数量
+
+
+    /**
+     * 初始化的输入端口数量
+     * @return
+     */
     public abstract int defaultInputPortNumber();
 
+    /**
+     * 初始化的输出端口数量
+     * @return
+     */
     public abstract int defaultOutputPorNumber();
 
-    //最大输入输出端口数量
+    /**
+     * 最大输入端口数量
+     * @return
+     */
     public abstract int maxInputPortNumber();
 
+    /**
+     * 最大输出端口数量
+     * @return
+     */
     public abstract int maxOutputPortNumber();
 
-    //有需要时继承，返回节点不能删除的端口号
+    /**
+     * 有需要时继承，返回节点不能删除的端口号
+     * @return
+     */
     public List<Integer> getForcedPortId() {
         return new ArrayList<Integer>();
     }
 
-    //返回节点的默认名称
+    /**
+     * 返回节点的默认名称
+     * @return
+     */
     public abstract String getDefaultName();
 
-    //返回节点当前异常
+    /**
+     * 返回节点当前异常
+     * @return
+     */
     public abstract List<String> getExceptions();
 
-    //返回节点警告
+    /**
+     * 返回节点警告
+     * @return
+     */
     public abstract List<String> getWarnings();
 
-    //移动节点
+    /**
+     * 移动节点
+     * @param x
+     * @param y
+     */
     public void moveNode(int x, int y) {
         setX(x);
         setY(y);

@@ -7,7 +7,7 @@ import com.dataexp.common.metadata.InnerMsg;
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
  */
-public abstract class WashFunction {
+public abstract class AbstractWashFunction {
 
     /**
      * 清洗函数，一次处理一行
