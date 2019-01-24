@@ -1,28 +1,26 @@
 package com.dataexp.tasknode.task;
 
-import com.dataexp.common.metadata.FieldType;
 import com.dataexp.common.metadata.InnerMsg;
 import com.dataexp.tasknode.task.operation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * JobVertex对应的任务
  * @author: Bing.Li
  * @create: 2019-01-23 14:17
  */
-public class VertexTask implements Runnable{
+public class VertexTask extends BaseTask{
 
     private static final Logger LOG = LoggerFactory.getLogger(VertexTask.class);
 
     /**
      * VertexTask的消息输入队列
      */
-    private ArrayBlockingQueue<InnerMsg> testQueue;
+    private ArrayBlockingQueue<InnerMsg> soourceQueue;
 
     /**
      * VertexTask的根操作
@@ -30,42 +28,38 @@ public class VertexTask implements Runnable{
     private BaseOperation rootOperation;
 
     /**
-     * 任务所用线程池
+     * 当前任务存在探针列表
+     * key：探针端口号
+     * value：探针容器
      */
-    private ThreadPoolExecutor pool;
+    private Map<Integer, PinContainer> currentPinMap = new HashMap<>();
 
-    /**
-     * 线程池大小
-     */
-    private int poolSize;
 
-    /**
-     * 当前创建线程的序号
-     */
-    private AtomicInteger threadSequence;
-
-    public VertexTask(ArrayBlockingQueue<InnerMsg> testQueue, BaseOperation rootOperation, int poolSize) {
-        this.testQueue = testQueue;
+    public VertexTask(int jobId, int rootNodeId, int poolSize, ArrayBlockingQueue<InnerMsg> soourceQueue, BaseOperation rootOperation) {
+        super(jobId, rootNodeId, poolSize);
+        this.soourceQueue = soourceQueue;
         this.rootOperation = rootOperation;
-        this.poolSize = poolSize;
-        threadSequence = new AtomicInteger(0);
-        this.pool = new ThreadPoolExecutor(poolSize, poolSize, 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(1), new ThreadFactory() {
+    }
+
+    @Override
+    public ThreadFactory genThreadFactory() {
+        ThreadFactory result = new ThreadFactory() {
             @Override
             public Thread newThread(Runnable r) {
                 Thread t = new Thread(r);
-                t.setName("JobVertex nodeId:" + rootOperation.getNodeId() +" portId:"+ rootOperation.getInputPortId()+" sequence:" + threadSequence.incrementAndGet());
+                t.setName("JobVertex rootNodeId:" + rootOperation.getNodeId() +" portId:"+ rootOperation.getInputPortId()+" sequence:" + threadSequence.incrementAndGet());
                 return t;
             }
-        });
+        };
+        return result;
     }
 
-    public ArrayBlockingQueue<InnerMsg> getTestQueue() {
-        return testQueue;
+    public ArrayBlockingQueue<InnerMsg> getSoourceQueue() {
+        return soourceQueue;
     }
 
-    public void setTestQueue(ArrayBlockingQueue<InnerMsg> testQueue) {
-        this.testQueue = testQueue;
+    public void setSoourceQueue(ArrayBlockingQueue<InnerMsg> soourceQueue) {
+        this.soourceQueue = soourceQueue;
     }
 
     public BaseOperation getRootOperation() {
@@ -80,25 +74,79 @@ public class VertexTask implements Runnable{
         return pool;
     }
 
-    /**
-     * 启动任务
-     */
-    public void startJob(){
-        for(int i=0;i<pool.getCorePoolSize();i++) {
-            pool.execute(this);
+    @Override
+    public void run() {
+
+        while(!cancle) {
+            try {
+                InnerMsg msg = soourceQueue.take();
+                LOG.debug("get message:{}",msg.getMsgContent());
+                rootOperation.processMsg(msg);
+            } catch (InterruptedException e) {
+               LOG.error(e.getStackTrace().toString());
+            }
         }
     }
 
     @Override
-    public void run() {
+    public boolean canStop() {
+        return soourceQueue.isEmpty();
+    }
 
-        while(true) {
-            try {
-                InnerMsg msg = testQueue.take();
-                System.out.println(Thread.currentThread().getName()+":" + msg);
-                rootOperation.processMsg(msg);
-            } catch (InterruptedException e) {
-               LOG.error(e.getStackTrace().toString());
+    @Override
+    public List<Integer> getInputPortIdList() {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getOutputPortIdList() {
+        return null;
+    }
+
+    @Override
+    public void pinData(int portId, PinContainer container) {
+
+    }
+
+    @Override
+    public List<Integer> pinPortIdList() {
+        List<Integer> result = new ArrayList<>();
+        for (int key : currentPinMap.keySet()) {
+            result.add(key);
+        }
+        return result;
+    }
+
+    @Override
+    public void releasePin(int portId) {
+        if (currentPinMap.containsKey(portId)) {
+            //TODO:通知组件停止端口探针
+
+        }
+    }
+
+    @Override
+    public void clearPin() {
+        for (int portId : currentPinMap.keySet()) {
+            releasePin(portId);
+        }
+    }
+
+    static class TestSource implements Runnable{
+
+        public ArrayBlockingQueue<InnerMsg> testQueue;
+        @Override
+        public void run() {
+            int i=0;
+            while(true) {
+                InnerMsg im = new InnerMsg();
+                im.setMsgContent(++i+":hello world");
+                try {
+                    testQueue.put(im);
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -112,45 +160,28 @@ public class VertexTask implements Runnable{
         Thread t1 = new Thread(ts);
         t1.start();
 
-
-
         SinkFunction so = new SinkFunction(target);
         List<OperationFunction> ol = new ArrayList<>();
         ol.add(so);
         OutputConfig oc = new OutputConfig(2,ol,new ArrayList<>());
         FilterOperation fo = new FilterOperation(1,1,new ArrayList<>(),oc);
-        fo.addNextOperation(so);
-        VertexTask vt = new VertexTask(source, fo, 4);
-//        Thread t2 = new Thread(vt);
-//        t2.start();
-        vt.startJob();
+        VertexTask vt = new VertexTask(1,1,4,source, fo);
+        OuterSinkTask osk = new OuterSinkTask(1,2,2,target,null,3);
+        vt.start();
+        osk.start();
+
         try {
-            Thread.sleep(1000);
+            Thread.sleep(10000);
+            osk.pinData(3, new PinContainer() {
+                @Override
+                public void collect(String data) {
+                    System.out.println("PIN Data:"+data);
+                }
+            });
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("End");
     }
-
 }
-
-class TestSource implements Runnable{
-
-    public ArrayBlockingQueue<InnerMsg> testQueue;
-    @Override
-    public void run() {
-        while(true) {
-            InnerMsg im = new InnerMsg();
-            im.setMsgContent("hello world");
-            try {
-                testQueue.put(im);
-                System.out.println("insert msg now");
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-}
-
 

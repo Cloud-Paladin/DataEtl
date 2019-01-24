@@ -8,7 +8,7 @@ import java.util.Map;
 
 
 /**
- *  所有操作的基础类
+ * 各处理组件对应的基础操作类
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
  */

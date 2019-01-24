@@ -3,6 +3,8 @@ package com.dataexp.tasknode.task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -24,9 +26,10 @@ public abstract class BaseTask implements ManageableTask,Runnable{
     protected int jobId;
 
     /**
-     * 任务归属节点Id
+     * 任务归属节点Id，注意VertexTask包含多个node
+     * 此处代表其入口的nodeId
      */
-    protected int nodeId;
+    protected int rootNodeId;
 
     /**
      * 任务所用线程池
@@ -43,9 +46,14 @@ public abstract class BaseTask implements ManageableTask,Runnable{
      */
     protected AtomicInteger threadSequence;
 
-    public BaseTask(int nodeId, int jobId, int poolSize) {
-        this.nodeId = nodeId;
+    /**
+     * 状态控制
+     */
+    protected boolean cancle = false;
+
+    public BaseTask(int jobId, int rootNodeId, int poolSize) {
         this.jobId = jobId;
+        this.rootNodeId = rootNodeId;
         this.poolSize = poolSize;
         threadSequence = new AtomicInteger(0);
         this.pool = new ThreadPoolExecutor(poolSize, poolSize, 0L, TimeUnit.MILLISECONDS,
@@ -53,22 +61,17 @@ public abstract class BaseTask implements ManageableTask,Runnable{
     }
 
     /**
-     * 获取子任务自定义的线程工厂
+     * 获取任务自定义的线程工厂
      * @return
      */
     public abstract ThreadFactory genThreadFactory();
-
-    /**
-     * 通知子任务准备结束
-     */
-    public abstract void prepareCancle();
 
     @Override
     public TaskStatus getStatus() {
         if (0 == pool.getActiveCount()) {
             return TaskStatus.STOPPED;
         } else if (pool.getActiveCount() < poolSize) {
-            return TaskStatus.PAUSING;
+            return TaskStatus.STOPPING;
         }
         return TaskStatus.RUNNING;
     }
@@ -84,4 +87,33 @@ public abstract class BaseTask implements ManageableTask,Runnable{
             pool.execute(this);
         }
     }
+    @Override
+    public void pause() {
+        //TODO:各任务自己实现
+    }
+
+    public boolean isCancle() {
+        return cancle;
+    }
+
+    public void setCancle(boolean cancle) {
+        this.cancle = cancle;
+    }
+
+    @Override
+    public void prepareCancle() {
+        setCancle(true);
+    }
+
+    /**
+     * 注意,Task的node多于一个的需要覆盖该方法
+     * @return
+     */
+    @Override
+    public List<Integer> getNodeList() {
+        List<Integer> result = new ArrayList<>();
+        result.add(rootNodeId);
+        return result;
+    }
 }
+

@@ -4,12 +4,11 @@ import com.dataexp.common.metadata.InnerMsg;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 
-import static java.lang.Thread.sleep;
 
 /**
  * 任务引擎内部Sink任务，将清洗节点的异常数据导出到
@@ -17,29 +16,12 @@ import static java.lang.Thread.sleep;
  * @author: Bing.Li
  * @create: 2019-01-23 14:17
  */
-public class ExceptionSinkTask extends BaseTask implements Runnable{
+public class ExceptionSinkTask extends BaseSinkTask{
 
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionSinkTask.class);
 
-    /**
-     * 内部异常队列
-     */
-    private ArrayBlockingQueue<InnerMsg> sourceQueue;
-
-    /**
-     * 数据消费kafka队列
-     */
-    private KafkaProducer targetTopic;
-
-    /**
-     * 状态控制
-     */
-    private boolean cancle = true;
-
-    public ExceptionSinkTask(int nodeId, int jobId, int poolSize, ArrayBlockingQueue<InnerMsg> sourceQueue, KafkaProducer targetTopic) {
-        super(nodeId, jobId, poolSize);
-        this.sourceQueue = sourceQueue;
-        this.targetTopic = targetTopic;
+    public ExceptionSinkTask(int jobId, int nodeId, int poolSize, ArrayBlockingQueue<InnerMsg> sourceQueue, KafkaProducer targetTopic) {
+        super(jobId, nodeId, poolSize, sourceQueue, targetTopic);
     }
 
     @Override
@@ -48,58 +30,38 @@ public class ExceptionSinkTask extends BaseTask implements Runnable{
             @Override
             public Thread newThread(Runnable r) {
                 Thread t = new Thread(r);
-                t.setName("JobId:"+ jobId +"ExceptionSinkTask nodeId:" + nodeId + " sequence:" + threadSequence.incrementAndGet());
+                t.setName("JobId:" + jobId + "ExceptionSinkTask rootNodeId:" + rootNodeId + " sequence:" + threadSequence.incrementAndGet());
                 return t;
             }
         };
     }
 
     @Override
-    public void run() {
-        cancle = false;
-        InnerMsg message;
-        while(!cancle) {
-            try {
-                message = sourceQueue.poll(1, TimeUnit.SECONDS);
-                //TODO: 将消息批量内容序列化（JSON）到kafka中
-            } catch (InterruptedException e) {
-                LOG.error(e.getStackTrace().toString());
-            }
-        }
-    }
-
-    public KafkaProducer getTargetTopic() {
-        return targetTopic;
-    }
-
-    public void setTargetTopic(KafkaProducer targetTopic) {
-        this.targetTopic = targetTopic;
-    }
-
-    public ArrayBlockingQueue<InnerMsg> getSourceQueue() {
-        return sourceQueue;
-    }
-
-    public void setSourceQueue(ArrayBlockingQueue<InnerMsg> sourceQueue) {
-        this.sourceQueue = sourceQueue;
-    }
-
-    public boolean isCancle() {
-        return cancle;
-    }
-
-    public void setCancle(boolean cancle) {
-        this.cancle = cancle;
+    public String serializeMsg(InnerMsg input) {
+        //TODO:将innerMsg格式化为JSON字符串
+        return input.getMsgContent();
     }
 
     @Override
-    public void prepareCancle() {
-        setCancle(true);
+    public List<Integer> getInputPortIdList() {
+        return new ArrayList<Integer>();
     }
 
     @Override
-    public boolean canStop() {
-        return sourceQueue.isEmpty();
+    public void pinData(int portId, PinContainer container) {
+    }
+
+    @Override
+    public List<Integer> pinPortIdList() {
+        return new ArrayList<Integer>();
+    }
+
+    @Override
+    public void releasePin(int portId) {
+    }
+
+    @Override
+    public void clearPin() {
     }
 
     public static void main(String[] args) throws InterruptedException {

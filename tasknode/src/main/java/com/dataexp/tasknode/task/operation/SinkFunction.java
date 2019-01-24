@@ -28,7 +28,7 @@ public class SinkFunction implements OperationFunction{
     public void processMsg(InnerMsg input) {
         try {
             targetQueue.put(input);
-            System.out.println("get msg:" + input.getMsgContent());
+            LOG.debug("get msg:{}",input.getMsgContent());
         } catch (InterruptedException e) {
             LOG.error(e.getStackTrace().toString());
         }

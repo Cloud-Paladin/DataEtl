@@ -16,10 +16,6 @@ public abstract class AbstractOneToOneOperation extends BaseOperation{
      */
     private OutputConfig outputConfig;
 
-    public AbstractOneToOneOperation(int nodeId, int inputPortId, List<FieldType> inputType) {
-        super(nodeId, inputPortId, inputType);
-    }
-
     public AbstractOneToOneOperation(int nodeId, int inputPortId, List<FieldType> inputType, OutputConfig outputConfig) {
         super(nodeId, inputPortId, inputType);
         this.outputConfig = outputConfig;

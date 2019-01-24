@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * 任务流和外界数据接口
@@ -15,60 +16,95 @@ import java.util.concurrent.ArrayBlockingQueue;
  * @author: Bing.Li
  * @create: 2019-01-23 14:17
  */
-public class OuterSourceTask implements Runnable{
+public class OuterSourceTask extends BaseSourceTask{
 
     private static final Logger LOG = LoggerFactory.getLogger(OuterSourceTask.class);
-    /**
-     * 数据来源kafka队列
-     */
-    private KafkaConsumer sourceTopic;
 
     /**
-     * 数据源任务输出任务队列
+     * 输出端口
      */
-    private List<ArrayBlockingQueue<InnerMsg>> targetQueueList = new ArrayList<>();
+    private int outputPortId;
 
     /**
-     * 状态控制
+     * 探针正在抽取数据
      */
-    private boolean cancle = true;
+    private boolean isPinData = false;
 
-    public KafkaConsumer getSourceTopic() {
-        return sourceTopic;
-    }
+    /**
+     * 探针
+     */
+    PinContainer container;
 
-    public void setSourceTopic(KafkaConsumer sourceTopic) {
-        this.sourceTopic = sourceTopic;
-    }
-
-    public List<ArrayBlockingQueue<InnerMsg>> getTargetQueueList() {
-        return targetQueueList;
-    }
-
-    public void setTargetQueueList(List<ArrayBlockingQueue<InnerMsg>> targetQueueList) {
-        this.targetQueueList = targetQueueList;
-    }
-
-    public boolean isCancle() {
-        return cancle;
-    }
-
-    public void setCancle(boolean cancle) {
-        this.cancle = cancle;
+    public OuterSourceTask(int jobId, int rootNodeId, int poolSize, KafkaConsumer sourceTopic, List<ArrayBlockingQueue<InnerMsg>> targetQueueList, int outputPortId, boolean isPinData) {
+        super(jobId, rootNodeId, poolSize, sourceTopic, targetQueueList);
+        this.outputPortId = outputPortId;
+        this.isPinData = isPinData;
     }
 
     @Override
-    public void run() {
-        cancle = false;
-        while(!cancle) {
-            //TODO:从kafka队列批量获取数据，对字符串反序列化(JSON)得到MsgFormat对象
-            for (ArrayBlockingQueue<InnerMsg> queue : targetQueueList) {
-                try {
-                    queue.put(new InnerMsg());
-                } catch (InterruptedException e) {
-                   LOG.error(e.getStackTrace().toString());
-                }
+    public ThreadFactory genThreadFactory() {
+        return new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread t = new Thread(r);
+                t.setName("JobId:" + jobId + "OuterSourceTask rootNodeId:" + rootNodeId + " outputPortId: " + outputPortId + " sequence:" + threadSequence.incrementAndGet());
+                return t;
             }
+        };
+    }
+
+    @Override
+    public InnerMsg deSerializeMsg(String content) {
+        InnerMsg msg = new InnerMsg();
+        msg.setMsgContent(content);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("OuterSourceTask get msg:{}", content);
         }
+        if (isPinData && null != container) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("OuterSourceTask pin msg:{}", content);
+            }
+            container.collect(msg.getMsgContent());
+        }
+        return msg;
+    }
+
+    @Override
+    public List<Integer> getOutputPortIdList() {
+        List<Integer> result = new ArrayList<>();
+        result.add(outputPortId);
+        return result;
+    }
+
+    @Override
+    public void pinData(int portId, PinContainer container) {
+        if (portId != outputPortId) {
+            return;
+        }
+        isPinData = true;
+        this.container = container;
+    }
+
+    @Override
+    public List<Integer> pinPortIdList() {
+        List<Integer> result = new ArrayList<>();
+        if (isPinData) {
+            result.add(outputPortId);
+        }
+        return result;
+    }
+
+    @Override
+    public void releasePin(int portId) {
+        if (portId != outputPortId) {
+            return;
+        }
+        clearPin();
+    }
+
+    @Override
+    public void clearPin() {
+        isPinData = false;
+        container = null;
     }
 }

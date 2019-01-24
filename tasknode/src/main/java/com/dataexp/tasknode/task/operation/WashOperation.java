@@ -5,6 +5,7 @@ import com.dataexp.common.metadata.InnerMsg;
 import com.dataexp.tasknode.task.operation.function.wash.WashFunction;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  *  清洗操作
@@ -66,20 +67,35 @@ public class WashOperation extends AbstractOnetoMultiOperation{
      */
     private List<WashFunction> functionList = new ArrayList<>();
 
-    public WashOperation(int nodeId, int inputPortId, List<FieldType> inputType) {
-        super(nodeId, inputPortId, inputType);
+    /**
+     * 清洗操作的默认正常数据出口
+     */
+    private int normalOutputPortId;
+
+    /**
+     * 清洗操作正常的数据出口后续操作列表
+     */
+    private List<OperationFunction> normalOperationFuunctionList = new ArrayList<>();
+
+    public WashOperation(int nodeId, int inputPortId, List<FieldType> inputType, TreeMap<Integer, OutputConfig> outputConfigMap) {
+        super(nodeId, inputPortId, inputType, outputConfigMap);
+        normalOutputPortId = outputConfigMap.keySet().iterator().next();
+        normalOperationFuunctionList = outputConfigMap.get(normalOutputPortId).getNextOperationList();
     }
+
 
 
     @Override
     public void processMsg(InnerMsg input) {
-        //TODO:保留原始的content
-        String originContent = input.getMsgContent();
 
+        String originContent = input.getMsgContent();
         for (WashFunction wf : functionList) {
              wf.wash(input);
             switch(input.getExceptionType()){
                 case NORMAL:
+                    for (OperationFunction op : normalOperationFuunctionList) {
+                        op.processMsg(input);
+                    }
                     break;
                 case FORMAT:
                     input.setMsgContent(originContent);

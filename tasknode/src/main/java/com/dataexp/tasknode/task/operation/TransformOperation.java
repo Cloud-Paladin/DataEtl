@@ -20,8 +20,9 @@ public class TransformOperation extends AbstractOneToOneOperation{
      */
     private List<String> transList = new ArrayList<>();
 
-    public TransformOperation(int nodeId, int inputPortId, List<FieldType> inputType) {
-        super(nodeId, inputPortId, inputType);
+    public TransformOperation(int nodeId, int inputPortId, List<FieldType> inputType, OutputConfig outputConfig, List<String> transList) {
+        super(nodeId, inputPortId, inputType, outputConfig);
+        this.transList = transList;
     }
 
     public List<String> getTransList() {
