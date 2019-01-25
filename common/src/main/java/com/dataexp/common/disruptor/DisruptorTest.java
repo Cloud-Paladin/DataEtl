@@ -96,6 +96,7 @@ public class DisruptorTest {
      */
     public static class MessageEventProducer{
         private RingBuffer<MessageEvent> ringBuffer;
+        EventTranslatorOneArg<MessageEvent,String> translator = new MessageEventTranslator();
 
         public MessageEventProducer(RingBuffer<MessageEvent> ringBuffer) {
             this.ringBuffer = ringBuffer;
@@ -106,7 +107,7 @@ public class DisruptorTest {
          * @param message
          */
         public void onData(String message){
-            EventTranslatorOneArg<MessageEvent,String> translator = new MessageEventTranslator();
+
             ringBuffer.publishEvent(translator,message);
         }
     }
