@@ -39,6 +39,11 @@
             <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.dataexp</groupId>
+            <artifactId>grpc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 

@@ -17,6 +17,7 @@
         <module>algorithm</module>
         <module>data-interface</module>
         <module>graph</module>
+        <module>grpc</module>
     </modules>
 
     <properties>
@@ -48,6 +49,11 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>1.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>2.1.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
