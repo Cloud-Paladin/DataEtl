@@ -4,7 +4,6 @@ import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.ProducerType;
 
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
