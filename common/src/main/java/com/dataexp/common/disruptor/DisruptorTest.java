@@ -66,6 +66,7 @@ public class DisruptorTest {
         @Override
         public void onEvent(MessageEvent messageEvent, long l, boolean b) throws Exception {
             System.out.println(messageEvent.getMessage());
+            Thread.sleep(1000);
         }
     }
 
@@ -114,13 +115,16 @@ public class DisruptorTest {
 
     public static void main(String[] args) {
         String message = "Hello Disruptor!";
-        int ringBufferSize = 1024;
+        int ringBufferSize = 16;
         Disruptor<MessageEvent> disruptor = new Disruptor<MessageEvent>(new MessageEventFactory(),ringBufferSize,new MessageThreadFactory(), ProducerType.SINGLE,new BlockingWaitStrategy());
         disruptor.handleEventsWith(new MessageEventHandler());
         disruptor.setDefaultExceptionHandler(new MessageExceptionHandler());
         RingBuffer<MessageEvent> ringBuffer = disruptor.start();
         MessageEventProducer producer = new MessageEventProducer(ringBuffer);
-        producer.onData(message);
+        for (int i = 0; i < 1024; i++) {
+            producer.onData(message);
+            System.out.println("proruce message :"+i);
+        }
     }
 }
 

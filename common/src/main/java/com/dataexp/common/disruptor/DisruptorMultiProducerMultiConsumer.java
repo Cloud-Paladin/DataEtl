@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DisruptorMultiProducerMultiConsumer {
     public static void main(String[] args) throws Exception {
+        //TODO:实现的太麻烦，不知道为什么这样实现
         //1 创建RingBuffer
         RingBuffer<OrderEvent> ringBuffer = RingBuffer.create(
                 ProducerType.MULTI,

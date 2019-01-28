@@ -80,7 +80,9 @@ public class VertexTask extends BaseTask{
         while(!cancle) {
             try {
                 InnerMsg msg = soourceQueue.take();
-                LOG.debug("get message:{}",msg.getMsgContent());
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("get message:{}",msg.getMsgContent());
+                }
                 rootOperation.processMsg(msg);
             } catch (InterruptedException e) {
                LOG.error(e.getStackTrace().toString());

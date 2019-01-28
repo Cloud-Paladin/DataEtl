@@ -96,6 +96,7 @@ public class DisruptorExecModels {
         Disruptor<LongEvent> disruptor = new Disruptor<LongEvent>(eventFactory,bufferSize, Executors.defaultThreadFactory(),ProducerType.SINGLE,new BlockingWaitStrategy());
         /////////////////////////////////////////////////////////////////////
         //这里是调用各种不同方法的地方.
+        //TODO:实测各种链式处理不起作用
 //        parallel(disruptor);
 //        serial(disruptor);
 //        diamond(disruptor);
