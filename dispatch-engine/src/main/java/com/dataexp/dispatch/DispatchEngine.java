@@ -1,7 +1,5 @@
 package com.dataexp.dispatch;
 
-import com.dataexp.dispatch.nodeagent.DataInterfaceNodeAgent;
-import com.dataexp.dispatch.nodeagent.TaskNodeAgent;
 import com.dataexp.graph.job.JobGraph;
 import com.dataexp.graph.logic.LogicGraph;
 import org.slf4j.Logger;
@@ -22,7 +20,7 @@ import java.util.Map;
  * 8. 数据接口节点状态监控，每节点运行任务统计数据汇总
  * 9. 维护各job的消息topic的生命周期，job第一次运行时创建，修改时保持同步（新增，删除），job删除时删除所有
  * @author: Bing.Li
- * @create: 2019-01-23 14:17
+ * @create: 2019-01-23
  */
 
 public class DispatchEngine {
@@ -38,19 +36,6 @@ public class DispatchEngine {
 
     private static Map<Integer, Integer> currentJobStatus = new HashMap<>();
 
-    private static List<TaskNodeAgent> taskNodeList = new ArrayList<>();
-
-    private static List<DataInterfaceNodeAgent> dataInterfaceNodeList = new ArrayList<>();
-
-    public static boolean startJob(int jobId) {
-        //TODO:检查LogicGraph的版本是否有更新，如果有要重新更新各节点的配置信息
-        for (TaskNodeAgent ena: taskNodeList) {
-            if (!ena.startJob(jobId)) {
-                return false;
-            }
-        }
-            return true;
-    }
 
     public static boolean stopJob(int jobId) {
         return false;

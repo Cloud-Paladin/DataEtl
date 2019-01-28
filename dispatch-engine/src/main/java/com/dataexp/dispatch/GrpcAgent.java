@@ -1,4 +1,4 @@
-package com.dataexp.dispatch.nodeagent;
+package com.dataexp.dispatch;
 
 import com.example.grpc.gencode.HelloRequest;
 import com.example.grpc.gencode.HelloResponse;
@@ -8,7 +8,7 @@ import io.grpc.ManagedChannelBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-public class GrpcClient {
+public class GrpcAgent {
 
     public static class ClientTask implements Runnable{
         @Override

@@ -1,6 +1,7 @@
 package com.dataexp.common.zookeeper.example.part2;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,11 +24,12 @@ public class TestWatch implements Watcher, Runnable {
     private Stat stat = new Stat();
     byte zoo_data[] = null;
     private AtomicInteger count = new AtomicInteger(0);
+    List<String> parentList = new ArrayList<>();
     ZooKeeper zk;
 
     public TestWatch() {
         try {
-            zk = new ZooKeeper(hostPort, 2000, this);
+            zk = new ZooKeeper(hostPort, 10000, this);
             startLock.await();
             if (zk != null) {
                 try {
@@ -58,28 +60,72 @@ public class TestWatch implements Watcher, Runnable {
         }
     }
 
-    public void printData() throws InterruptedException, KeeperException {
-        List<String> list = zk.getChildren(zooDataPath, true, null);
-        for (String child : list) {
-            System.out.println("child:" + child);
+    public List<String> getChanged(List<String> orgin, List<String> current) {
+        List<String> changedList = new ArrayList<>();
+        for (String c : current) {
+            if (!orgin.contains(c)) {
+                changedList.add(c);
+            }
         }
+        return changedList;
     }
 
     @Override
     public void process(WatchedEvent event) {
-        System.out.printf("Event Received: %s\n", event.toString());
-        System.out.println("count:" + count.incrementAndGet());
-        //We will process only events of type NodeDataChanged
+        System.out.printf("Event Received at grandfather watcher: %s\n", event.toString());
         if (event.getState() == Event.KeeperState.SyncConnected && event.getType() == Event.EventType.None) {
             startLock.countDown();
-        } else if (event.getState() == Event.KeeperState.SyncConnected && event.getType() == Event.EventType.NodeChildrenChanged) {
+        } else if (event.getState() == Event.KeeperState.SyncConnected) {
             try {
-                printData();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                List<String> current = zk.getChildren(zooDataPath, this);
+                List<String> increased = getChanged(parentList, current);
+                List<String> deleted = getChanged(current, parentList);
+                parentList = current;
+                for (String parent : increased) {
+                    System.out.println("increased parent:" + parent);
+                    zk.getChildren(zooDataPath + "/" + parent, new ParentWacher());
+                }
+                for (String parent: deleted) {
+                    System.out.println("deleted parent:" + parent);
+                }
             } catch (KeeperException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        }
+    }
+
+    public class ParentWacher implements Watcher {
+        private List<String> childList = new ArrayList<>();
+        @Override
+        public void process(WatchedEvent event) {
+            System.out.printf("Event Received at parent watcher: %s\n", event.toString());
+            try {
+                if(null != zk.exists(event.getPath(),null)){
+                    List<String> current = zk.getChildren(event.getPath(), this);
+                    List<String> increased = getChanged(childList, current);
+                    List<String> deleted = getChanged(current, childList);
+                    childList = current;
+                    for (String child : increased) {
+                        System.out.println("increased children:" + child);
+                    }
+                    for (String child: deleted) {
+                        System.out.println("deleted children:" + child);
+                    }
+                }
+            } catch (KeeperException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class ChildWatcher implements Watcher {
+        @Override
+        public void process(WatchedEvent event) {
+
         }
     }
 
@@ -101,12 +147,6 @@ public class TestWatch implements Watcher, Runnable {
             throws InterruptedException, KeeperException {
         TestWatch testWatcher = new TestWatch();
         new Thread(testWatcher).start();
-        testWatcher.zk.create(zooDataPath + "/child1", "first".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
-        testWatcher.zk.create(zooDataPath + "/child2", "first".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
-        testWatcher.zk.create(zooDataPath + "/child3", "first".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
-//        for (int i = 0; i < 100; i++) {
-//            testWatcher.zk.create(zooDataPath + "/child"+i, "first".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
-//        }
         Thread.sleep(3000);
     }
 }
