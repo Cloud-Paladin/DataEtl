@@ -9,15 +9,12 @@ package com.dataexp.common.zookeeper;
 public class Constant {
 
     public static final String HOSTPORT= "localhost:2181";
-    public static final String ROOT = "/datadistclean";
-    public static final String WORKBEATS = "/workbeats";
-    public static final String JOB = "/jobtask";
-    public static final String INTERFACE = "/interface";
-    public static final String JOB_NODE = "/jobnode";
-    public static final String INTERFACE_NODE = "/interfacenode";
-    public static final String STATUS = "/status";
-    public static final String STATISTICS = "/statistics";
-
-
+    public static final String ROOT = "/data_dist_clean";
+    public static final String JOB_NODE = "/job_node";
+    public static final String JOB_TASK = "/job_task";
+    public static final String JOB_STATUS = "/job_status";
+    public static final String INTERFACE_NODE = "/interface_node";
+    public static final String INTERFACE_TASK = "/interface_task";
+    public static final String INTERFACE_STATUS = "/interface_status";
 
 }

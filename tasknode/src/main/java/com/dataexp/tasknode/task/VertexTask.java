@@ -85,7 +85,7 @@ public class VertexTask extends BaseTask{
                 }
                 rootOperation.processMsg(msg);
             } catch (InterruptedException e) {
-               LOG.error(e.getStackTrace().toString());
+               LOG.error("error occcured:", e);;
             }
         }
     }

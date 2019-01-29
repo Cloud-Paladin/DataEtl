@@ -1,6 +1,5 @@
 package com.dataexp.web.task.service;
 
-import com.dataexp.dispatch.DispatchEngine;
 import com.dataexp.web.task.entity.FlowJob;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,8 @@ public class JobService {
             return false;
         }
         //TODO:远程通信，通知dispatch-engine启动任务
-        return DispatchEngine.startJob(jobId);
+//        return DispatchEngine.startJob(jobId);
+        return true;
     }
 
     public boolean restartJob(int jobId) {
@@ -32,4 +32,3 @@ public class JobService {
     }
 
 }
-

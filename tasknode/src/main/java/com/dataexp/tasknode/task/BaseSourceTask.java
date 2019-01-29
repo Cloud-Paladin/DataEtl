@@ -66,7 +66,7 @@ public abstract class BaseSourceTask extends BaseTask{
                     try {
                          queue.put(input);
                     } catch (InterruptedException e) {
-                         LOG.error(e.getStackTrace().toString());
+                         LOG.error("error occcured:", e);;
                     }
                }
           }

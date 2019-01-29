@@ -30,7 +30,7 @@ public class SinkFunction implements OperationFunction{
             targetQueue.put(input);
             LOG.debug("get msg:{}",input.getMsgContent());
         } catch (InterruptedException e) {
-            LOG.error(e.getStackTrace().toString());
+            LOG.error("error occcured:", e);;
         }
     }
 }

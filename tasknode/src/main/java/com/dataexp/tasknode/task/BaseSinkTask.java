@@ -75,7 +75,7 @@ public abstract class BaseSinkTask extends BaseTask {
                     output = serializeMsg(input);
                 }
             } catch (InterruptedException e) {
-                LOG.error(e.getStackTrace().toString());
+                LOG.error("error occcured:", e);;
             }
         }
     }
@@ -92,7 +92,7 @@ public abstract class BaseSinkTask extends BaseTask {
                     output = serializeMsg(input);
                 }
             } catch (InterruptedException e) {
-                LOG.error(e.getStackTrace().toString());
+                LOG.error("error occcured:", e);;
             }
         }
     }
