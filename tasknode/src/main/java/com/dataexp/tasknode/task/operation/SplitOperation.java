@@ -20,7 +20,7 @@ public class SplitOperation extends AbstractOnetoMultiOperation {
      */
     private SortedMap<Integer, String> splitCondition = new TreeMap<>();
 
-    public SplitOperation(int nodeId, int inputPortId, List<FieldType> inputType, TreeMap<Integer, OutputConfig> outputConfigMap, SortedMap<Integer, String> splitCondition) {
+    public SplitOperation(int nodeId, int inputPortId, List<FieldType> inputType, SortedMap<Integer, OutputConfig> outputConfigMap, SortedMap<Integer, String> splitCondition) {
         super(nodeId, inputPortId, inputType, outputConfigMap);
         this.splitCondition = splitCondition;
     }

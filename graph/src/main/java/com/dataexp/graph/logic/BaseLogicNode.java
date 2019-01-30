@@ -1,5 +1,7 @@
 package com.dataexp.graph.logic;
 
+import com.dataexp.graph.logic.serial.SerialNode;
+
 import java.util.*;
 
 /**
@@ -8,7 +10,7 @@ import java.util.*;
 public abstract class BaseLogicNode {
 
     //逻辑流程图中的节点id
-    private final int id;
+    private int id;
 
     //节点名称
     private String name;
@@ -17,11 +19,13 @@ public abstract class BaseLogicNode {
     private int x, y;
 
     //节点输入端口
-    private Map<Integer, InputPort> inputPortMap = new TreeMap<>();
+    private SortedMap<Integer, InputPort> inputPortMap = new TreeMap<>();
     //节点输出端口
-    private Map<Integer, OutputPort> outputPortMap = new TreeMap<>();
+    private SortedMap<Integer, OutputPort> outputPortMap = new TreeMap<>();
 
-    protected final int maxInput = 1;
+
+    public BaseLogicNode() {
+    }
 
     public BaseLogicNode(int id, int x, int y) {
         this.id = id;
@@ -37,8 +41,43 @@ public abstract class BaseLogicNode {
         this.y = y;
     }
 
+    /**
+     * 得到该节点所有配置属性的String表示
+     * @return
+     */
+    public abstract String getNodeConfig();
+
+    /**
+     * 初始化节点的配置属性
+     * @param config 节点配置属性生成的String表示
+     */
+    public abstract void initNodeConfig(String config);
 
 
+    /**
+     * 根据内容构造自己的SerivalNode
+     * @return
+     */
+    public SerialNode getSerialNode() {
+        SerialNode sn = new SerialNode();
+        sn.setId(id);
+        sn.setName(name);
+        sn.setX(x);
+        sn.setY(y);
+        sn.setInputPortList(Arrays.asList((Integer[])inputPortMap.keySet().toArray()));
+        sn.setInputPortList(Arrays.asList((Integer[])outputPortMap.keySet().toArray()));
+        sn.setConfig(getNodeConfig());
+        return sn;
+    }
+
+    /**
+     * 通过JSON字符串反序列化节点
+     * @return
+     */
+    public SerialNode deSerialNode(String input) {
+        //TODO:
+        return new SerialNode();
+    }
     /**
      * 初始化的输入端口数量
      * @return
@@ -135,6 +174,18 @@ public abstract class BaseLogicNode {
         return getOutputPortMap().get(portId);
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setInputPortMap(SortedMap<Integer, InputPort> inputPortMap) {
+        this.inputPortMap = inputPortMap;
+    }
+
+    public void setOutputPortMap(SortedMap<Integer, OutputPort> outputPortMap) {
+        this.outputPortMap = outputPortMap;
+    }
+
     public InputPort createInputPort(int id) {
         if (getInputPortMap().size() >= maxInputPortNumber()) {
             return null;
@@ -160,9 +211,10 @@ public abstract class BaseLogicNode {
     public boolean removeInputPort(int portId) {
         InputPort ip = getInputPortById(portId);
         if (ip != null && !getForcedPortId().contains(portId) && getInputPortMap().size() > defaultInputPortNumber()) {
-            for (LogicEdge ed : ip.getEdges().values()) {
-                //TODO:删除端口连线
-            }
+            //TODO:和连接端口互删联系
+//            for (LogicEdge ed : ip.getEdges().values()) {
+//                //TODO:删除端口连线
+//            }
             getInputPortMap().remove(portId);
         }
         return false;
@@ -172,9 +224,10 @@ public abstract class BaseLogicNode {
     public boolean removeOutputPort(int portId) {
         OutputPort op = getOutputPortById(portId);
         if (op != null && !getForcedPortId().contains(portId) && getOutputPortMap().size() > defaultOutputPorNumber()) {
-            for (LogicEdge ed : op.getEdges().values()) {
-                //TODO:删除端口连线
-            }
+            //TODO:和连接端口互删
+            //            for (LogicEdge ed : op.getEdges().values()) {
+//                //TODO:删除端口连线
+//            }
             getOutputPortMap().remove(portId);
             return false;
         }

@@ -1,9 +1,18 @@
 package com.dataexp.graph.logic;
 
-public class OutputPort extends LogicPort {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+public class OutputPort extends LogicPort<InputPort> {
 
-    public OutputPort(BaseLogicNode parentNode, int id, String name) {
+    public OutputPort(){
+
+    }
+
+     public OutputPort(BaseLogicNode parentNode, int id, String name) {
         super(parentNode, id, name);
     }
+
 }

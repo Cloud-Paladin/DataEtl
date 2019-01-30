@@ -1,4 +1,4 @@
-package com.dataexp.common.json;
+package com.dataexp.common.json.example;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

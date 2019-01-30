@@ -9,10 +9,14 @@ import java.util.Objects;
  */
 public class LogicEdge {
 
-    private final int id;
+    private int id;
     private String name;
-    private final OutputPort outputPort;
-    private final InputPort inputPort;
+    private OutputPort outputPort;
+    private InputPort inputPort;
+
+    public LogicEdge() {
+    }
+
     public LogicEdge(OutputPort outputPort, InputPort inputPort, int id) {
         this.outputPort = outputPort;
         this.inputPort = inputPort;

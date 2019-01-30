@@ -1,4 +1,4 @@
-package com.dataexp.common.kafka;
+package com.dataexp.common.kafka.example;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;

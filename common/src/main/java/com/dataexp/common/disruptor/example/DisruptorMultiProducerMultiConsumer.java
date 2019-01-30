@@ -1,4 +1,4 @@
-package com.dataexp.common.disruptor;
+package com.dataexp.common.disruptor.example;
 
 import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.ProducerType;

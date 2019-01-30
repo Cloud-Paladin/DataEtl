@@ -1,4 +1,4 @@
-package com.dataexp.common.kafka;
+package com.dataexp.common.kafka.example;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;

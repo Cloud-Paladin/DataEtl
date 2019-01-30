@@ -1,4 +1,4 @@
-package com.dataexp.common.disruptor.multiconsumer;
+package com.dataexp.common.disruptor.example.multiconsumer;
 
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.EventFactory;

@@ -22,6 +22,9 @@ public class FieldType {
      */
     private String name;
 
+    public FieldType() {
+    }
+
     public FieldType(BaseType baseType, String dataType, String name) {
         this.baseType = baseType;
         this.dataType = dataType;

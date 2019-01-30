@@ -19,8 +19,10 @@ public class LogicGraph {
     //逻辑图包含的节点,key为节点id
     private Map<Integer, BaseLogicNode> nodeMap = new HashMap<>();
 
+    private Map<Integer, LogicPort> portMap = new HashMap<>();
+
     /**
-     * 逻辑图的边Map
+     * 逻辑图的边Map,为配置界面虚拟生成，实际不需要
      */
     private Map<Integer, LogicEdge> edgeMap = new HashMap<>();
 
@@ -30,6 +32,12 @@ public class LogicGraph {
     private int maxEdgeId = 1;
 
     public LogicGraph() {
+    }
+
+    public String getSerialResult() {
+        for (BaseLogicNode node : nodeMap.values()) {
+            String tmp = node.getSerialResult();
+        }
     }
 
     private int getNextNodeId() {
@@ -42,6 +50,26 @@ public class LogicGraph {
 
     private int getNextPortId() {
         return maxPortId++;
+    }
+
+    public void setNodeMap(Map<Integer, BaseLogicNode> nodeMap) {
+        this.nodeMap = nodeMap;
+    }
+
+    public void setEdgeMap(Map<Integer, LogicEdge> edgeMap) {
+        this.edgeMap = edgeMap;
+    }
+
+    public void setMaxNodeId(int maxNodeId) {
+        this.maxNodeId = maxNodeId;
+    }
+
+    public void setMaxPortId(int maxPortId) {
+        this.maxPortId = maxPortId;
+    }
+
+    public void setMaxEdgeId(int maxEdgeId) {
+        this.maxEdgeId = maxEdgeId;
     }
 
     /**
@@ -72,7 +100,7 @@ public class LogicGraph {
      */
     public boolean graphCheck() {
         //单个组件检查
-        if (getGraphExceptions().size() > 0) {
+        if (genGraphExceptions().size() > 0) {
             return false;
         }
         //TODO:整张图检查，检查连通性，孤立节点等
@@ -83,7 +111,7 @@ public class LogicGraph {
      * 获取整张图的异常
      * @return
      */
-    public Map<Integer, List<String>> getGraphExceptions() {
+    public Map<Integer, List<String>> genGraphExceptions() {
         Map<Integer,List<String>> exceptionMap = new HashMap<Integer, List<String>>(8);
         for (BaseLogicNode node : getNodeMap().values()) {
             List<String> temp = node.getExceptions();
@@ -98,7 +126,7 @@ public class LogicGraph {
      * 获取整张图的警告
      * @return
      */
-    public Map<Integer, List<String>> getGraphWarnings() {
+    public Map<Integer, List<String>> genGraphWarnings() {
         Map<Integer,List<String>> wariningMap = new HashMap<Integer, List<String>>(8);
         for (BaseLogicNode node : getNodeMap().values()) {
             List<String> temp = node.getWarnings();
@@ -217,50 +245,50 @@ public class LogicGraph {
 
     //TODO：添加端口连线，删除端口连线
     public LogicEdge createEdge(int outputPortId, int inputPortId) {
-        //判断连接添加后是否会出现回环现象，出现回环现象返回错误
-        if (loopBackCheck(outputPortId, inputPortId)) {
-            return null;
-        }
-
-        //输出端口没有格式则返回错误
-        BaseLogicNode sourceNode = getNodeFromPortId(outputPortId);
-        BaseLogicNode targetNode = getNodeFromPortId(inputPortId);
-
-        if (null != sourceNode && null != targetNode && sourceNode != targetNode) {
-
-            OutputPort op = sourceNode.getOutputPortById(outputPortId);
-            InputPort ip = targetNode.getInputPortById(inputPortId);
-
-            //判断两个端口是否已经存在连线
-            for (LogicEdge eg : op.getEdges().values()) {
-                if (outputPortId == eg.getOutputPort().getId() && inputPortId == eg.getInputPort().getId()) {
-                    return null;
-                }
-            }
-
-            //输出端口没格式不允许添加连线
-            if ( op.getPortDataFormat().size() == 0) {
-                return null;
-            }
-            //如果输入端口有格式，则判断两个格式是否一致，如果不一致提示错误,只要格式一致，允许一个输入端口从多个输出端口连线
-            if (ip.getPortDataFormat().size() > 0 && !isDataFormatEqual(op, ip)) {
-                return null;
-            }
-            //如果输入端口无格式，将输入端口的格式赋给输入端口
-            if (0 == ip.getPortDataFormat().size()){
-                ip.setPortDataFormat(op.getPortDataFormat());
-                //TODO:测试代码，默认将ip的所有出口的格式也设置为入口格式，以后删除！
-                for (OutputPort p : targetNode.getOutputPortMap().values()) {
-                    p.setPortDataFormat(op.getPortDataFormat());
-                }
-            }
-            //生成连线
-            LogicEdge eg = new LogicEdge(op, ip, getNextEdgeId());
-            op.addEdge(eg);
-            ip.addEdge(eg);
-            edgeMap.put(eg.getId(), eg);
-            return eg;
-        }
+//        //判断连接添加后是否会出现回环现象，出现回环现象返回错误
+//        if (loopBackCheck(outputPortId, inputPortId)) {
+//            return null;
+//        }
+//
+//        //输出端口没有格式则返回错误
+//        BaseLogicNode sourceNode = getNodeFromPortId(outputPortId);
+//        BaseLogicNode targetNode = getNodeFromPortId(inputPortId);
+//
+//        if (null != sourceNode && null != targetNode && sourceNode != targetNode) {
+//
+//            OutputPort op = sourceNode.getOutputPortById(outputPortId);
+//            InputPort ip = targetNode.getInputPortById(inputPortId);
+//
+//            //判断两个端口是否已经存在连线
+//            for (LogicEdge eg : op.getEdges().values()) {
+//                if (outputPortId == eg.getOutputPort().getId() && inputPortId == eg.getInputPort().getId()) {
+//                    return null;
+//                }
+//            }
+//
+//            //输出端口没格式不允许添加连线
+//            if ( op.getPortDataFormat().size() == 0) {
+//                return null;
+//            }
+//            //如果输入端口有格式，则判断两个格式是否一致，如果不一致提示错误,只要格式一致，允许一个输入端口从多个输出端口连线
+//            if (ip.getPortDataFormat().size() > 0 && !isDataFormatEqual(op, ip)) {
+//                return null;
+//            }
+//            //如果输入端口无格式，将输入端口的格式赋给输入端口
+//            if (0 == ip.getPortDataFormat().size()){
+//                ip.setPortDataFormat(op.getPortDataFormat());
+//                //TODO:测试代码，默认将ip的所有出口的格式也设置为入口格式，以后删除！
+//                for (OutputPort p : targetNode.getOutputPortMap().values()) {
+//                    p.setPortDataFormat(op.getPortDataFormat());
+//                }
+//            }
+//            //生成连线
+//            LogicEdge eg = new LogicEdge(op, ip, getNextEdgeId());
+//            op.addEdge(eg);
+//            ip.addEdge(eg);
+//            edgeMap.put(eg.getId(), eg);
+//            return eg;
+//        }
         return null;
     }
 
@@ -277,12 +305,12 @@ public class LogicGraph {
 
     //TODO:删除边
     public boolean removeEdge(int edgeId) {
-        LogicEdge eg = edgeMap.get(edgeId);
-        if (null == eg) {
-            return false;
-        }
-        eg.getOutputPort().getEdges().remove(edgeId);
-        eg.getInputPort().getEdges().remove(edgeId);
+//        LogicEdge eg = edgeMap.get(edgeId);
+//        if (null == eg) {
+//            return false;
+//        }
+//        eg.getOutputPort().getEdges().remove(edgeId);
+//        eg.getInputPort().getEdges().remove(edgeId);
         return false;
     }
 

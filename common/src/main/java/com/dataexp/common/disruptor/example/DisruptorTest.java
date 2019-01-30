@@ -1,4 +1,4 @@
-package com.dataexp.common.disruptor;
+package com.dataexp.common.disruptor.example;
 
 import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -55,7 +55,7 @@ public class DisruptorTest {
     public static class MessageThreadFactory implements ThreadFactory {
         @Override
         public Thread newThread(Runnable r) {
-            return new Thread(r,"Simple Disruptor Test Thread");
+            return new Thread(r,"Simple Disruptor ComplexTest Thread");
         }
     }
 

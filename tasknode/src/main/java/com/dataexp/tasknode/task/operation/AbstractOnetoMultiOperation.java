@@ -14,9 +14,9 @@ public abstract class AbstractOnetoMultiOperation extends BaseOperation {
      * 输出端口配置列表
      * 保持有序，清洗节点默认第一个端口为正常出口
      */
-    private TreeMap<Integer, OutputConfig> outputConfigMap = new TreeMap<>();
+    private SortedMap<Integer, OutputConfig> outputConfigMap = new TreeMap<>();
 
-    public AbstractOnetoMultiOperation(int nodeId, int inputPortId, List<FieldType> inputType, TreeMap<Integer, OutputConfig> outputConfigMap) {
+    public AbstractOnetoMultiOperation(int nodeId, int inputPortId, List<FieldType> inputType, SortedMap<Integer, OutputConfig> outputConfigMap) {
         super(nodeId, inputPortId, inputType);
         this.outputConfigMap = outputConfigMap;
     }

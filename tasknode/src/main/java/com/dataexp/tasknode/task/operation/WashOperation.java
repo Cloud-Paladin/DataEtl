@@ -5,6 +5,7 @@ import com.dataexp.common.metadata.InnerMsg;
 import com.dataexp.tasknode.task.operation.function.wash.AbstractWashFunction;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
@@ -77,7 +78,7 @@ public class WashOperation extends AbstractOnetoMultiOperation{
      */
     private List<OperationFunction> normalOperationFuunctionList = new ArrayList<>();
 
-    public WashOperation(int nodeId, int inputPortId, List<FieldType> inputType, TreeMap<Integer, OutputConfig> outputConfigMap) {
+    public WashOperation(int nodeId, int inputPortId, List<FieldType> inputType, SortedMap<Integer, OutputConfig> outputConfigMap) {
         super(nodeId, inputPortId, inputType, outputConfigMap);
         normalOutputPortId = outputConfigMap.keySet().iterator().next();
         normalOperationFuunctionList = outputConfigMap.get(normalOutputPortId).getNextOperationList();
