@@ -69,7 +69,7 @@ public class LogicEnviroment {
     //TODO:初始化生成一个只带初始入口节点的逻辑流程
     public static LogicGraph createGraph() {
         LogicGraph lg = new LogicGraph();
-//        lg.createNode("FileAbstractSource", 50, 50);
+//        lg.createNode("FileSource", 50, 50);
         return lg;
     }
 
@@ -98,7 +98,7 @@ public class LogicEnviroment {
     public static String createNode(String sessionId, String type, int sourceNodeId, int x, int y) {
         LogicGraph lg = getSessionLogicGraph(sessionId);
         if (lg != null) {
-            BaseLogicNode node = lg.createNode(type, x, y);
+            BaseLogicNode node = lg.createNode(type,"", x, y);
             //TODO:获取添加节点涉及的节点和端口
             return node.toString();
         }
@@ -187,17 +187,17 @@ public class LogicEnviroment {
     public static void main(String[] args) {
         int jobId = 1;
         String sessionId = initSession(jobId);
-        createNode(sessionId, "FileAbstractSource",-1, 50, 50);
-        createNode(sessionId, "FileAbstractSink", -1, 5, 5);
-        createNode(sessionId, "WashNodeBase", -1, 5, 5);
-//      createNode(sessionId, "FilterNodeBase", -1, 5, 5);
-//      createNode(sessionId, "FormatterNodeBase", -1, 5, 5);
-//      createNode(sessionId, "SplitNodeBase", -1, 5, 5);
-//      createNode(sessionId, "UnionNodeBase", -1, 5, 5);
+        createNode(sessionId, "FileSource",-1, 50, 50);
+        createNode(sessionId, "FileSink", -1, 5, 5);
+        createNode(sessionId, "WashNode", -1, 5, 5);
+//      createNode(sessionId, "FilterNode", -1, 5, 5);
+//      createNode(sessionId, "FormatterNode", -1, 5, 5);
+//      createNode(sessionId, "SplitNode", -1, 5, 5);
+//      createNode(sessionId, "UnionNode", -1, 5, 5);
         LogicGraph lg = createGraph();
-        BaseLogicNode n1 = lg.createNode("FileAbstractSource", 10,10);
-        BaseLogicNode n2 = lg.createNode("FileAbstractSink", 10,10);
-        BaseLogicNode n3 = lg.createNode("WashNodeBase", 10,10);
+        BaseLogicNode n1 = lg.createNode("FileSource", "",10,10);
+        BaseLogicNode n2 = lg.createNode("FileSink", "",10,10);
+        BaseLogicNode n3 = lg.createNode("WashNode", "",10,10);
         lg.createOutputPort(n3.getId());
         List<FieldType> ls = new ArrayList<>();
         ls.add(new FieldType(BaseType.NUMBER, "String", "age"));

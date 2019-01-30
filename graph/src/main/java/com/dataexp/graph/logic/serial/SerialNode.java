@@ -7,6 +7,7 @@ import java.util.List;
  * @create: 2019-01-30
  */
 public class SerialNode {
+    private String type;
     private int id;
     private String name;
     private int x,y;
@@ -17,7 +18,8 @@ public class SerialNode {
     public SerialNode() {
     }
 
-    public SerialNode(int id, String name, int x, int y, List<Integer> inputPortList, List<Integer> outputPortList, String config) {
+    public SerialNode(String type,int id, String name, int x, int y, List<Integer> inputPortList, List<Integer> outputPortList, String config) {
+        this.type = type;
         this.id = id;
         this.name = name;
         this.x = x;
@@ -25,6 +27,14 @@ public class SerialNode {
         this.inputPortList = inputPortList;
         this.outputPortList = outputPortList;
         this.config = config;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getId() {

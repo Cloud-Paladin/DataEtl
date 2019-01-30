@@ -4,12 +4,22 @@ import com.dataexp.graph.logic.AbstractSourceNode;
 
 import java.util.List;
 
-public class FileAbstractSource extends AbstractSourceNode {
-    public FileAbstractSource(int id, String name, int x, int y) {
+public class FileSource extends AbstractSourceNode {
+    public FileSource(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 
-    public FileAbstractSource(int id, int x, int y) {
+    @Override
+    public String genNodeConfig() {
+        return null;
+    }
+
+    @Override
+    public void initNodeConfig(String config) {
+
+    }
+
+    public FileSource(int id, int x, int y) {
         super(id, x, y);
     }
 

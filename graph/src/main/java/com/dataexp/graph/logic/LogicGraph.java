@@ -1,51 +1,81 @@
 package com.dataexp.graph.logic;
 
+import com.alibaba.fastjson.JSON;
 import com.dataexp.common.metadata.FieldType;
+import com.dataexp.graph.logic.component.ComponentFactory;
+import com.dataexp.graph.logic.serial.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.*;
 
-
 /**
- *   逻辑图,负责维护逻辑图及其组件结构
+ *  逻辑图,负责维护逻辑图及其组件结构
+ *  //TODO:注意：逻辑图的操作不是线程安全的,需要前台控制同时只能有一个编辑会话
  * @author: Bing.Li
  * @create: 2019-01-23 14:17
  */
 public class LogicGraph {
 
     private static final Logger LOG = LoggerFactory.getLogger(LogicGraph.class);
-    //Chain策略
-    private boolean chaining = true;
-    //逻辑图包含的节点,key为节点id
-    private Map<Integer, BaseLogicNode> nodeMap = new HashMap<>();
-
-    private Map<Integer, LogicPort> portMap = new HashMap<>();
 
     /**
-     * 逻辑图的边Map,为配置界面虚拟生成，实际不需要
+     * 逻辑图包含的节点,key为节点id
      */
-    private Map<Integer, LogicEdge> edgeMap = new HashMap<>();
+    private Map<Integer, BaseLogicNode> nodeMap = new HashMap<>();
 
-    //节点,边,端口的当前最大id
     private int maxNodeId = 1;
     private int maxPortId = 1;
-    private int maxEdgeId = 1;
 
     public LogicGraph() {
     }
 
-    public String getSerialResult() {
-        for (BaseLogicNode node : nodeMap.values()) {
-            String tmp = node.getSerialResult();
+    /**
+     * 获取逻辑图序列化后的结果
+     * @return
+     */
+    public static String genSerialGraph(LogicGraph lg) {
+        SerialGraph graph = new SerialGraph();
+        graph.setMaxNodeId(lg.getMaxNodeId());
+        graph.setMaxPortId(lg.getMaxPortId());
+        for (BaseLogicNode node : lg.getNodeMap().values()) {
+            SerialNode snode = node.genSerialNode();
+            graph.addNode(snode);
+            List<SerialInputPort> inputPortList = node.genSerialInputPortList();
+            for (SerialInputPort iport : inputPortList) {
+                graph.addInputPort(iport);
+            }
+            List<SerialOutputPort> outputPortList = node.genSerialOutputList();
+            for (SerialOutputPort oport : outputPortList) {
+                graph.addOutputPort(oport);
+            }
         }
+        return JSON.toJSONString(graph);
     }
+
+    /**
+     * 根据序列化内容反序列化生成LogicGraph
+     * @return
+     */
+    public static LogicGraph deSerialGraph(String content) {
+        SerialGraph graph = JSON.parseObject(content, SerialGraph.class);
+        LogicGraph lg = new LogicGraph();
+        lg.setMaxNodeId(graph.getMaxNodeId());
+        lg.setMaxPortId(graph.getMaxPortId());
+
+        return lg;
+    }
+
+    public int getMaxNodeId() {
+        return maxNodeId;
+    }
+
+    public int getMaxPortId() {
+        return maxPortId;
+    }
+
 
     private int getNextNodeId() {
         return maxNodeId++;
-    }
-
-    private int getNextEdgeId() {
-        return maxEdgeId++;
     }
 
     private int getNextPortId() {
@@ -56,9 +86,6 @@ public class LogicGraph {
         this.nodeMap = nodeMap;
     }
 
-    public void setEdgeMap(Map<Integer, LogicEdge> edgeMap) {
-        this.edgeMap = edgeMap;
-    }
 
     public void setMaxNodeId(int maxNodeId) {
         this.maxNodeId = maxNodeId;
@@ -66,10 +93,6 @@ public class LogicGraph {
 
     public void setMaxPortId(int maxPortId) {
         this.maxPortId = maxPortId;
-    }
-
-    public void setMaxEdgeId(int maxEdgeId) {
-        this.maxEdgeId = maxEdgeId;
     }
 
     /**
@@ -137,16 +160,8 @@ public class LogicGraph {
         return wariningMap;
     }
 
-
-    public BaseLogicNode createNode(String type, int x, int y) {
-        BaseLogicNode node = ComponentFactory.createNode(getNextNodeId(), type, x, y);
-        initNodePorts(node);
-        addNode(node);
-        return node;
-    }
-
-    public BaseLogicNode createNode(String type, String name, int x, int y) {
-        BaseLogicNode node = ComponentFactory.createNode(getNextNodeId(), type, name, x, y);
+    public BaseLogicNode createNode(String typeName, String name, int x, int y) {
+        BaseLogicNode node = ComponentFactory.createNode(typeName, getNextNodeId(), name, x, y);
         initNodePorts(node);
         addNode(node);
         return node;
@@ -314,20 +329,10 @@ public class LogicGraph {
         return false;
     }
 
-    public boolean isChaining() {
-        return chaining;
-    }
-
-    public void setChaining(boolean chaining) {
-        this.chaining = chaining;
-    }
 
     public Map<Integer, BaseLogicNode> getNodeMap() {
         return nodeMap;
     }
 
-    public Map<Integer, LogicEdge> getEdgeMap() {
-        return edgeMap;
-    }
 
 }

@@ -1,11 +1,11 @@
 package com.dataexp.graph.logic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.dataexp.graph.logic.serial.SerialInputPort;
+import com.dataexp.graph.logic.serial.SerialOutputPort;
 
-public class OutputPort extends LogicPort<InputPort> {
+import java.util.*;
+
+public class OutputPort extends LogicPort<InputPort, SerialOutputPort> {
 
     public OutputPort(){
 
@@ -13,6 +13,15 @@ public class OutputPort extends LogicPort<InputPort> {
 
      public OutputPort(BaseLogicNode parentNode, int id, String name) {
         super(parentNode, id, name);
+    }
+
+    @Override
+    public SerialOutputPort genSerialPort() {
+        {
+            SerialOutputPort sp = new SerialOutputPort();
+            setSerialPort(sp);
+            return sp;
+        }
     }
 
 }

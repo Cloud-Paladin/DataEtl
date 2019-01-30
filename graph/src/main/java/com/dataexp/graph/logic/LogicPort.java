@@ -1,10 +1,12 @@
 package com.dataexp.graph.logic;
 
 import com.dataexp.common.metadata.FieldType;
+import com.dataexp.graph.logic.serial.SerialInputPort;
+import com.dataexp.graph.logic.serial.SerialPort;
 
 import java.util.*;
 
-public class LogicPort<T extends LogicPort>  {
+public abstract class LogicPort<T extends LogicPort, U extends SerialPort>  {
 
     /**
      * 该端口归属节点
@@ -50,6 +52,25 @@ public class LogicPort<T extends LogicPort>  {
         this.parentNode = parentNode;
         this.name = name;
     }
+
+    /**
+     * 序列化获取SerialPort对象
+     * @return
+     */
+    public abstract U genSerialPort();
+
+    /**
+     * 设置serialPort的基础参数
+     * @return
+     */
+    public void setSerialPort(SerialPort sp){
+        sp.setNodeId(getParentNode().getId());
+        sp.setId(getId());
+        sp.setName(getName());
+        sp.setPortDataFormat(getPortDataFormat());
+        sp.setLinkedPortList(Arrays.asList((Integer[])getLinkedPortMap().keySet().toArray()));
+    }
+
 
     public BaseLogicNode getParentNode() {
         return parentNode;

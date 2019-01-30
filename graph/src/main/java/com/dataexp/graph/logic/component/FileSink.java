@@ -4,13 +4,23 @@ import com.dataexp.graph.logic.AbstractSinkNode;
 
 import java.util.List;
 
-public class FileAbstractSink extends AbstractSinkNode {
+public class FileSink extends AbstractSinkNode {
 
-    public FileAbstractSink(int id, String name, int x, int y) {
+    public FileSink(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 
-    public FileAbstractSink(int id, int x, int y) {
+    @Override
+    public String genNodeConfig() {
+        return null;
+    }
+
+    @Override
+    public void initNodeConfig(String config) {
+
+    }
+
+    public FileSink(int id, int x, int y) {
         super(id, x, y);
     }
 

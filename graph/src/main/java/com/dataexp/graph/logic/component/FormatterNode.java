@@ -4,13 +4,23 @@ import com.dataexp.graph.logic.BaseLogicNode;
 
 import java.util.List;
 
-public class SplitNodeBase extends BaseLogicNode {
-    public SplitNodeBase(int id, int x, int y) {
+public class FormatterNode extends BaseLogicNode {
+    public FormatterNode(int id, int x, int y) {
         super(id, x, y);
     }
 
-    public SplitNodeBase(int id, String name, int x, int y) {
+    public FormatterNode(int id, String name, int x, int y) {
         super(id, name, x, y);
+    }
+
+    @Override
+    public String genNodeConfig() {
+        return null;
+    }
+
+    @Override
+    public void initNodeConfig(String config) {
+
     }
 
     @Override
@@ -20,7 +30,7 @@ public class SplitNodeBase extends BaseLogicNode {
 
     @Override
     public int defaultOutputPorNumber() {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -30,12 +40,12 @@ public class SplitNodeBase extends BaseLogicNode {
 
     @Override
     public int maxOutputPortNumber() {
-        return 8;
+        return 1;
     }
 
     @Override
     public String getDefaultName() {
-        return "分支";
+        return "格式转换";
     }
 
     @Override

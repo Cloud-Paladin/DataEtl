@@ -7,13 +7,23 @@ import com.dataexp.graph.logic.component.config.WashTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WashNodeBase extends BaseLogicNode {
-    public WashNodeBase(int id, int x, int y) {
+public class WashNode extends BaseLogicNode {
+    public WashNode(int id, int x, int y) {
         super(id, x, y);
     }
 
-    public WashNodeBase(int id, String name, int x, int y) {
+    public WashNode(int id, String name, int x, int y) {
         super(id, name, x, y);
+    }
+
+    @Override
+    public String genNodeConfig() {
+        return null;
+    }
+
+    @Override
+    public void initNodeConfig(String config) {
+
     }
 
     private WashTemplate template = new WashTemplate();

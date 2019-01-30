@@ -4,18 +4,28 @@ import com.dataexp.graph.logic.BaseLogicNode;
 
 import java.util.List;
 
-public class FormatterNodeBase extends BaseLogicNode {
-    public FormatterNodeBase(int id, int x, int y) {
+public class UnionNode extends BaseLogicNode {
+    public UnionNode(int id, int x, int y) {
         super(id, x, y);
     }
 
-    public FormatterNodeBase(int id, String name, int x, int y) {
+    public UnionNode(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 
     @Override
+    public String genNodeConfig() {
+        return null;
+    }
+
+    @Override
+    public void initNodeConfig(String config) {
+
+    }
+
+    @Override
     public int defaultInputPortNumber() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -25,7 +35,7 @@ public class FormatterNodeBase extends BaseLogicNode {
 
     @Override
     public int maxInputPortNumber() {
-        return 1;
+        return 8;
     }
 
     @Override
@@ -35,7 +45,7 @@ public class FormatterNodeBase extends BaseLogicNode {
 
     @Override
     public String getDefaultName() {
-        return "格式转换";
+        return "合并转换";
     }
 
     @Override

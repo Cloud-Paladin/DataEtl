@@ -9,6 +9,7 @@ import java.util.List;
  * @create: 2019-01-30
  */
 public class SerialPort {
+    private int nodeId;
     private int id;
     private String name;
     private List<Integer> linkedPortList;
@@ -17,11 +18,20 @@ public class SerialPort {
     public SerialPort() {
     }
 
-    public SerialPort(int id, String name, List<Integer> linkedPortList, List<FieldType> portDataFormat) {
+    public SerialPort(int nodeId,int id, String name, List<Integer> linkedPortList, List<FieldType> portDataFormat) {
+        this.nodeId = nodeId;
         this.id = id;
         this.name = name;
         this.linkedPortList = linkedPortList;
         this.portDataFormat = portDataFormat;
+    }
+
+    public int getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(int nodeId) {
+        this.nodeId = nodeId;
     }
 
     public int getId() {

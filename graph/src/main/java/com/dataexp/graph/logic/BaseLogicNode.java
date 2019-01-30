@@ -1,6 +1,10 @@
 package com.dataexp.graph.logic;
 
+import com.dataexp.graph.logic.component.ComponentType;
+import com.dataexp.graph.logic.serial.SerialInputPort;
 import com.dataexp.graph.logic.serial.SerialNode;
+import com.dataexp.graph.logic.serial.SerialOutputPort;
+import com.dataexp.graph.logic.serial.SerialPort;
 
 import java.util.*;
 
@@ -18,9 +22,13 @@ public abstract class BaseLogicNode {
     //节点坐标
     private int x, y;
 
-    //节点输入端口
+    /**
+     *  节点输入端口
+     */
     private SortedMap<Integer, InputPort> inputPortMap = new TreeMap<>();
-    //节点输出端口
+    /**
+     *  节点输出端口
+     */
     private SortedMap<Integer, OutputPort> outputPortMap = new TreeMap<>();
 
 
@@ -45,7 +53,7 @@ public abstract class BaseLogicNode {
      * 得到该节点所有配置属性的String表示
      * @return
      */
-    public abstract String getNodeConfig();
+    public abstract String genNodeConfig();
 
     /**
      * 初始化节点的配置属性
@@ -58,16 +66,43 @@ public abstract class BaseLogicNode {
      * 根据内容构造自己的SerivalNode
      * @return
      */
-    public SerialNode getSerialNode() {
+    public SerialNode genSerialNode() {
         SerialNode sn = new SerialNode();
+        sn.setType(ComponentType.getComponentTypeName(this.getClass()));
         sn.setId(id);
         sn.setName(name);
         sn.setX(x);
         sn.setY(y);
         sn.setInputPortList(Arrays.asList((Integer[])inputPortMap.keySet().toArray()));
         sn.setInputPortList(Arrays.asList((Integer[])outputPortMap.keySet().toArray()));
-        sn.setConfig(getNodeConfig());
+        sn.setConfig(genNodeConfig());
         return sn;
+    }
+
+    /**
+     * 根据内容构造自己的输入端口SerialPort
+     * @return
+     */
+    public List<SerialInputPort> genSerialInputPortList() {
+        List<SerialInputPort> spList = new ArrayList<>();
+        for (InputPort port : inputPortMap.values()) {
+            SerialInputPort sp = port.genSerialPort();
+            spList.add(sp);
+        }
+        return spList;
+    }
+
+    /**
+     * 根据内容构造自己的输出端口SerialPort
+     * @return
+     */
+    public List<SerialOutputPort> genSerialOutputList() {
+        List<SerialOutputPort> spList = new ArrayList<>();
+        for (OutputPort port : outputPortMap.values()) {
+            SerialOutputPort sp = port.genSerialPort();
+            spList.add(sp);
+        }
+        return spList;
     }
 
     /**

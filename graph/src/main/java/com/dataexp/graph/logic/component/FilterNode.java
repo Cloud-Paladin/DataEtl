@@ -4,13 +4,23 @@ import com.dataexp.graph.logic.BaseLogicNode;
 
 import java.util.List;
 
-public class FilterNodeBase extends BaseLogicNode {
-    public FilterNodeBase(int id, int x, int y) {
+public class FilterNode extends BaseLogicNode {
+    public FilterNode(int id, int x, int y) {
         super(id, x, y);
     }
 
-    public FilterNodeBase(int id, String name, int x, int y) {
+    public FilterNode(int id, String name, int x, int y) {
         super(id, name, x, y);
+    }
+
+    @Override
+    public String genNodeConfig() {
+        return null;
+    }
+
+    @Override
+    public void initNodeConfig(String config) {
+
     }
 
     @Override

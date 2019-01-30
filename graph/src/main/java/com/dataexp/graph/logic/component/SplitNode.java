@@ -4,38 +4,48 @@ import com.dataexp.graph.logic.BaseLogicNode;
 
 import java.util.List;
 
-public class UnionNodeBase extends BaseLogicNode {
-    public UnionNodeBase(int id, int x, int y) {
+public class SplitNode extends BaseLogicNode {
+    public SplitNode(int id, int x, int y) {
         super(id, x, y);
     }
 
-    public UnionNodeBase(int id, String name, int x, int y) {
+    public SplitNode(int id, String name, int x, int y) {
         super(id, name, x, y);
     }
 
     @Override
+    public String genNodeConfig() {
+        return null;
+    }
+
+    @Override
+    public void initNodeConfig(String config) {
+
+    }
+
+    @Override
     public int defaultInputPortNumber() {
-        return 2;
+        return 1;
     }
 
     @Override
     public int defaultOutputPorNumber() {
-        return 1;
+        return 2;
     }
 
     @Override
     public int maxInputPortNumber() {
-        return 8;
-    }
-
-    @Override
-    public int maxOutputPortNumber() {
         return 1;
     }
 
     @Override
+    public int maxOutputPortNumber() {
+        return 8;
+    }
+
+    @Override
     public String getDefaultName() {
-        return "合并转换";
+        return "分支";
     }
 
     @Override
