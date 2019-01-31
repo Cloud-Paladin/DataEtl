@@ -3,6 +3,7 @@ package com.dataexp.graph.logic;
 import com.alibaba.fastjson.JSON;
 import com.dataexp.common.metadata.BaseType;
 import com.dataexp.common.metadata.FieldType;
+import com.dataexp.graph.logic.serial.SerialGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -174,7 +175,7 @@ public class LogicEnviroment {
     public static String createEdge(String sessionId, int outputPortId, int inputPortId) {
         LogicGraph lg = getSessionLogicGraph(sessionId);
         if (lg != null) {
-            lg.createEdge(outputPortId, inputPortId);
+            lg.linkPort(outputPortId, inputPortId);
         }
         return "";
     }
@@ -185,29 +186,35 @@ public class LogicEnviroment {
     }
 
     public static void main(String[] args) {
-        int jobId = 1;
-        String sessionId = initSession(jobId);
-        createNode(sessionId, "FileSource",-1, 50, 50);
-        createNode(sessionId, "FileSink", -1, 5, 5);
-        createNode(sessionId, "WashNode", -1, 5, 5);
+//        int jobId = 1;
+//        String sessionId = initSession(jobId);
+//        createNode(sessionId, "FileSource",-1, 50, 50);
+//        createNode(sessionId, "FileSink", -1, 5, 5);
+//        createNode(sessionId, "WashNode", -1, 5, 5);
 //      createNode(sessionId, "FilterNode", -1, 5, 5);
 //      createNode(sessionId, "FormatterNode", -1, 5, 5);
 //      createNode(sessionId, "SplitNode", -1, 5, 5);
 //      createNode(sessionId, "UnionNode", -1, 5, 5);
+
         LogicGraph lg = createGraph();
         BaseLogicNode n1 = lg.createNode("FileSource", "",10,10);
         BaseLogicNode n2 = lg.createNode("FileSink", "",10,10);
         BaseLogicNode n3 = lg.createNode("WashNode", "",10,10);
         lg.createOutputPort(n3.getId());
         List<FieldType> ls = new ArrayList<>();
+
         ls.add(new FieldType(BaseType.NUMBER, "String", "age"));
         n1.getOutputPortMap().values().iterator().next().setPortDataFormat(ls);
-        lg.createEdge(n1.getOutputPortMap().keySet().iterator().next(), n3.getInputPortMap().keySet().iterator().next());
-        lg.createEdge(n3.getOutputPortMap().keySet().iterator().next(), n2.getInputPortMap().keySet().iterator().next());
 
-        String jString = JSON.toJSONString(lg);
-        System.out.println(jString);
-        LogicGraph lg1 = JSON.parseObject(jString, LogicGraph.class);
-        System.out.println("Well donw!");
+        lg.linkPort(n1.getOutputPortMap().keySet().iterator().next(), n3.getInputPortMap().keySet().iterator().next());
+        lg.linkPort(n3.getOutputPortMap().keySet().iterator().next(), n2.getInputPortMap().keySet().iterator().next());
+
+        SerialGraph serialGraph = LogicGraph.genSerialGraph(lg);
+        String gString = JSON.toJSONString(serialGraph);
+        System.out.println(gString);
+
+        SerialGraph graph1 = JSON.parseObject(gString, SerialGraph.class);
+        LogicGraph lg1 = LogicGraph.deSerialGraph(graph1);
+        System.out.println(lg1);
     }
 }

@@ -63,14 +63,24 @@ public abstract class LogicPort<T extends LogicPort, U extends SerialPort>  {
      * 设置serialPort的基础参数
      * @return
      */
-    public void setSerialPort(SerialPort sp){
+    public void setSerialPortAttr(U sp){
         sp.setNodeId(getParentNode().getId());
         sp.setId(getId());
         sp.setName(getName());
         sp.setPortDataFormat(getPortDataFormat());
-        sp.setLinkedPortList(Arrays.asList((Integer[])getLinkedPortMap().keySet().toArray()));
+        sp.setLinkedPortList(new ArrayList(getLinkedPortMap().keySet()));
     }
 
+    /**
+     * 从Serialport反向序列化端口属性
+     * 注意,与节点的关系以及与其他端口的关系此时无法设置
+     * @param port
+     */
+    public void deSerialPortAttr(U port){
+        setId(port.getId());
+        setName(port.getName());
+        setPortDataFormat(port.getPortDataFormat());
+    }
 
     public BaseLogicNode getParentNode() {
         return parentNode;

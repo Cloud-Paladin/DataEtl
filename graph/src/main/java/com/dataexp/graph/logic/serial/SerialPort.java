@@ -2,6 +2,7 @@ package com.dataexp.graph.logic.serial;
 
 import com.dataexp.common.metadata.FieldType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,8 +13,8 @@ public class SerialPort {
     private int nodeId;
     private int id;
     private String name;
-    private List<Integer> linkedPortList;
-    private List<FieldType> portDataFormat;
+    private List<Integer> linkedPortList = new ArrayList<>();
+    private List<FieldType> portDataFormat = new ArrayList<>();
 
     public SerialPort() {
     }

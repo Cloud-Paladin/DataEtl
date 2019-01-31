@@ -4,7 +4,6 @@ import com.dataexp.graph.logic.component.ComponentType;
 import com.dataexp.graph.logic.serial.SerialInputPort;
 import com.dataexp.graph.logic.serial.SerialNode;
 import com.dataexp.graph.logic.serial.SerialOutputPort;
-import com.dataexp.graph.logic.serial.SerialPort;
 
 import java.util.*;
 
@@ -23,11 +22,11 @@ public abstract class BaseLogicNode {
     private int x, y;
 
     /**
-     *  节点输入端口
+     * 节点输入端口
      */
     private SortedMap<Integer, InputPort> inputPortMap = new TreeMap<>();
     /**
-     *  节点输出端口
+     * 节点输出端口
      */
     private SortedMap<Integer, OutputPort> outputPortMap = new TreeMap<>();
 
@@ -51,12 +50,14 @@ public abstract class BaseLogicNode {
 
     /**
      * 得到该节点所有配置属性的String表示
+     *
      * @return
      */
     public abstract String genNodeConfig();
 
     /**
      * 初始化节点的配置属性
+     *
      * @param config 节点配置属性生成的String表示
      */
     public abstract void initNodeConfig(String config);
@@ -64,23 +65,46 @@ public abstract class BaseLogicNode {
 
     /**
      * 根据内容构造自己的SerivalNode
+     *
      * @return
      */
     public SerialNode genSerialNode() {
         SerialNode sn = new SerialNode();
+        setSerialNodeAttr(sn);
+        return sn;
+    }
+
+    /**
+     * 设置序列化节点属性
+     */
+    public void setSerialNodeAttr(SerialNode sn) {
         sn.setType(ComponentType.getComponentTypeName(this.getClass()));
         sn.setId(id);
         sn.setName(name);
         sn.setX(x);
         sn.setY(y);
-        sn.setInputPortList(Arrays.asList((Integer[])inputPortMap.keySet().toArray()));
-        sn.setInputPortList(Arrays.asList((Integer[])outputPortMap.keySet().toArray()));
+        sn.setInputPortList(new ArrayList(inputPortMap.keySet()));
+        sn.setOutputPortList(new ArrayList(outputPortMap.keySet()));
         sn.setConfig(genNodeConfig());
-        return sn;
+    }
+
+    /**
+     * 反向设置序列化节点基础属性
+     * 注意：与端口的关系此时无法设置
+     *
+     * @param sn 序列化节点
+     */
+    public void deSerialNodeAttr(SerialNode sn) {
+        setId(sn.getId());
+        setName(sn.getName());
+        setX(sn.getX());
+        setY(sn.getY());
+        initNodeConfig(sn.getConfig());
     }
 
     /**
      * 根据内容构造自己的输入端口SerialPort
+     *
      * @return
      */
     public List<SerialInputPort> genSerialInputPortList() {
@@ -94,6 +118,7 @@ public abstract class BaseLogicNode {
 
     /**
      * 根据内容构造自己的输出端口SerialPort
+     *
      * @return
      */
     public List<SerialOutputPort> genSerialOutputList() {
@@ -106,39 +131,36 @@ public abstract class BaseLogicNode {
     }
 
     /**
-     * 通过JSON字符串反序列化节点
-     * @return
-     */
-    public SerialNode deSerialNode(String input) {
-        //TODO:
-        return new SerialNode();
-    }
-    /**
      * 初始化的输入端口数量
+     *
      * @return
      */
     public abstract int defaultInputPortNumber();
 
     /**
      * 初始化的输出端口数量
+     *
      * @return
      */
     public abstract int defaultOutputPorNumber();
 
     /**
      * 最大输入端口数量
+     *
      * @return
      */
     public abstract int maxInputPortNumber();
 
     /**
      * 最大输出端口数量
+     *
      * @return
      */
     public abstract int maxOutputPortNumber();
 
     /**
      * 有需要时继承，返回节点不能删除的端口号
+     *
      * @return
      */
     public List<Integer> getForcedPortId() {
@@ -147,24 +169,28 @@ public abstract class BaseLogicNode {
 
     /**
      * 返回节点的默认名称
+     *
      * @return
      */
     public abstract String getDefaultName();
 
     /**
      * 返回节点当前异常
+     *
      * @return
      */
     public abstract List<String> getExceptions();
 
     /**
      * 返回节点警告
+     *
      * @return
      */
     public abstract List<String> getWarnings();
 
     /**
      * 移动节点
+     *
      * @param x
      * @param y
      */
@@ -227,8 +253,12 @@ public abstract class BaseLogicNode {
         }
         String portName = "输入端口" + (inputPortMap.size() + 1);
         InputPort port = new InputPort(this, id, portName);
-        inputPortMap.put(port.getId(), port);
+        addInputPort(port);
         return port;
+    }
+
+    public void addInputPort(InputPort port) {
+        inputPortMap.put(port.getId(), port);
     }
 
 
@@ -238,31 +268,31 @@ public abstract class BaseLogicNode {
         }
         String portName = "输出端口" + (outputPortMap.size() + 1);
         OutputPort port = new OutputPort(this, id, portName);
-        outputPortMap.put(port.getId(), port);
+        addOutputPort(port);
         return port;
     }
 
-    //TODO: 删除输入端口
+    public void addOutputPort(OutputPort port) {
+        outputPortMap.put(port.getId(), port);
+    }
+
     public boolean removeInputPort(int portId) {
         InputPort ip = getInputPortById(portId);
         if (ip != null && !getForcedPortId().contains(portId) && getInputPortMap().size() > defaultInputPortNumber()) {
-            //TODO:和连接端口互删联系
-//            for (LogicEdge ed : ip.getEdges().values()) {
-//                //TODO:删除端口连线
-//            }
+            if (ip.getLinkedPortMap().size() > 0) {
+                return false;
+            }
             getInputPortMap().remove(portId);
         }
         return false;
     }
 
-    //TODO:删除输出端口
     public boolean removeOutputPort(int portId) {
         OutputPort op = getOutputPortById(portId);
         if (op != null && !getForcedPortId().contains(portId) && getOutputPortMap().size() > defaultOutputPorNumber()) {
-            //TODO:和连接端口互删
-            //            for (LogicEdge ed : op.getEdges().values()) {
-//                //TODO:删除端口连线
-//            }
+            if (op.getLinkedPortMap().size() > 0) {
+                return false;
+            }
             getOutputPortMap().remove(portId);
             return false;
         }

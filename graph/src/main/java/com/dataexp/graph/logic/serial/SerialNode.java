@@ -1,5 +1,6 @@
 package com.dataexp.graph.logic.serial;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,8 +12,8 @@ public class SerialNode {
     private int id;
     private String name;
     private int x,y;
-    private List<Integer> inputPortList;
-    private List<Integer> outputPortList;
+    private List<Integer> inputPortList = new ArrayList<>();
+    private List<Integer> outputPortList = new ArrayList<>();
     private String config;
 
     public SerialNode() {

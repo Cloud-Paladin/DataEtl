@@ -1,9 +1,6 @@
 package com.dataexp.graph.logic;
 
 import com.dataexp.graph.logic.serial.SerialInputPort;
-import com.dataexp.graph.logic.serial.SerialPort;
-
-import java.util.*;
 
 public class InputPort extends LogicPort<OutputPort, SerialInputPort> {
 
@@ -16,10 +13,13 @@ public class InputPort extends LogicPort<OutputPort, SerialInputPort> {
 
     @Override
     public SerialInputPort genSerialPort() {
-        {
-            SerialInputPort sp = new SerialInputPort();
-            setSerialPort(sp);
-            return sp;
-        }
+        SerialInputPort sp = new SerialInputPort();
+        setSerialPortAttr(sp);
+        return sp;
+    }
+
+    @Override
+    public void deSerialPortAttr(SerialInputPort port) {
+        super.deSerialPortAttr(port);
     }
 }

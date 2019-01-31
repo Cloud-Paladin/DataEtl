@@ -1,5 +1,6 @@
 package com.dataexp.graph.logic.serial;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,9 +8,9 @@ import java.util.List;
  * @create: 2019-01-30
  */
 public class SerialGraph {
-    private List<SerialNode> nodeList;
-    private List<SerialInputPort> inputPortList;
-    private List<SerialOutputPort> outputPortList;
+    private List<SerialNode> nodeList = new ArrayList<>();
+    private List<SerialInputPort> inputPortList = new ArrayList<>();
+    private List<SerialOutputPort> outputPortList = new ArrayList<>();
     private int maxNodeId;
     private int maxPortId;
     private int maxEdgeId;
