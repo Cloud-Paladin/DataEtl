@@ -1,6 +1,8 @@
 package com.dataexp.graph.logic.component;
 
 import com.dataexp.graph.logic.BaseLogicNode;
+import com.dataexp.graph.logic.ChainingStrategy;
+import sun.misc.Cache;
 
 import java.util.List;
 
@@ -46,6 +48,11 @@ public class SplitNode extends BaseLogicNode {
     @Override
     public String getDefaultName() {
         return "分支";
+    }
+
+    @Override
+    public ChainingStrategy getChainingStrategy() {
+        return ChainingStrategy.ALWAYS;
     }
 
     @Override

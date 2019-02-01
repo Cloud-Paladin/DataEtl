@@ -1,5 +1,6 @@
 package com.dataexp.jobengine.task;
 
+import com.dataexp.common.metadata.BaseType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,9 +52,17 @@ public abstract class BaseTask implements ManageableTask,Runnable{
      */
     protected boolean cancle = false;
 
-    public BaseTask(int jobId, int rootNodeId, int poolSize) {
+    public BaseTask(){
+
+    }
+
+    public BaseTask(int JobId, int rootNodeId) {
         this.jobId = jobId;
         this.rootNodeId = rootNodeId;
+    }
+
+    public BaseTask(int jobId, int rootNodeId, int poolSize) {
+        this(jobId, rootNodeId);
         this.poolSize = poolSize;
         threadSequence = new AtomicInteger(0);
         this.pool = new ThreadPoolExecutor(poolSize, poolSize, 0L, TimeUnit.MILLISECONDS,

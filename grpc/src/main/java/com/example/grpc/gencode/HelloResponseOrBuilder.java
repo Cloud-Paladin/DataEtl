@@ -10,7 +10,7 @@ public interface HelloResponseOrBuilder extends
   /**
    * <code>string greeting = 1;</code>
    */
-  String getGreeting();
+  java.lang.String getGreeting();
   /**
    * <code>string greeting = 1;</code>
    */

@@ -79,11 +79,10 @@ public class WashOperation extends AbstractOnetoMultiOperation{
 
     public WashOperation(int nodeId, int inputPortId, List<FieldType> inputType, SortedMap<Integer, OutputConfig> outputConfigMap) {
         super(nodeId, inputPortId, inputType, outputConfigMap);
+        //第一个输出端口为正常数据输出端口，要求map必须是有序的
         normalOutputPortId = outputConfigMap.keySet().iterator().next();
         normalOperationFuunctionList = outputConfigMap.get(normalOutputPortId).getNextOperationList();
     }
-
-
 
     @Override
     public void processMsg(InnerMsg input) {

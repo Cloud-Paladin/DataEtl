@@ -2,6 +2,7 @@ package com.dataexp.graph.logic.component;
 
 import com.dataexp.common.metadata.InnerMsg;
 import com.dataexp.graph.logic.BaseLogicNode;
+import com.dataexp.graph.logic.ChainingStrategy;
 import com.dataexp.graph.logic.component.config.WashTemplate;
 
 import java.util.ArrayList;
@@ -52,6 +53,11 @@ public class WashNode extends BaseLogicNode {
     @Override
     public String getDefaultName() {
         return "清洗";
+    }
+
+    @Override
+    public ChainingStrategy getChainingStrategy() {
+        return ChainingStrategy.NEVER;
     }
 
     @Override

@@ -34,5 +34,10 @@
             <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.dataexp</groupId>
+            <artifactId>jobnode</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

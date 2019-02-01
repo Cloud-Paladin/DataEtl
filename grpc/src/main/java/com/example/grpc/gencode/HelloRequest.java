@@ -20,7 +20,7 @@ private static final long serialVersionUID = 0L;
     lastName_ = "";
   }
 
-  @Override
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet
   getUnknownFields() {
     return this.unknownFields;
@@ -31,7 +31,7 @@ private static final long serialVersionUID = 0L;
       throws com.google.protobuf.InvalidProtocolBufferException {
     this();
     if (extensionRegistry == null) {
-      throw new NullPointerException();
+      throw new java.lang.NullPointerException();
     }
     int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
@@ -52,13 +52,13 @@ private static final long serialVersionUID = 0L;
             break;
           }
           case 10: {
-            String s = input.readStringRequireUtf8();
+            java.lang.String s = input.readStringRequireUtf8();
 
             firstName_ = s;
             break;
           }
           case 18: {
-            String s = input.readStringRequireUtf8();
+            java.lang.String s = input.readStringRequireUtf8();
 
             lastName_ = s;
             break;
@@ -80,7 +80,7 @@ private static final long serialVersionUID = 0L;
     return com.example.grpc.gencode.HelloServiceOuterClass.internal_static_com_example_grpc_gencode_HelloRequest_descriptor;
   }
 
-  protected FieldAccessorTable
+  protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
     return com.example.grpc.gencode.HelloServiceOuterClass.internal_static_com_example_grpc_gencode_HelloRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
@@ -88,18 +88,18 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int FIRSTNAME_FIELD_NUMBER = 1;
-  private volatile Object firstName_;
+  private volatile java.lang.Object firstName_;
   /**
    * <code>string firstName = 1;</code>
    */
-  public String getFirstName() {
-    Object ref = firstName_;
-    if (ref instanceof String) {
-      return (String) ref;
+  public java.lang.String getFirstName() {
+    java.lang.Object ref = firstName_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs =
+      com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
+      java.lang.String s = bs.toStringUtf8();
       firstName_ = s;
       return s;
     }
@@ -109,11 +109,11 @@ private static final long serialVersionUID = 0L;
    */
   public com.google.protobuf.ByteString
       getFirstNameBytes() {
-    Object ref = firstName_;
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b =
+    java.lang.Object ref = firstName_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
+              (java.lang.String) ref);
       firstName_ = b;
       return b;
     } else {
@@ -122,18 +122,18 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int LASTNAME_FIELD_NUMBER = 2;
-  private volatile Object lastName_;
+  private volatile java.lang.Object lastName_;
   /**
    * <code>string lastName = 2;</code>
    */
-  public String getLastName() {
-    Object ref = lastName_;
-    if (ref instanceof String) {
-      return (String) ref;
+  public java.lang.String getLastName() {
+    java.lang.Object ref = lastName_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs =
+      com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
+      java.lang.String s = bs.toStringUtf8();
       lastName_ = s;
       return s;
     }
@@ -143,11 +143,11 @@ private static final long serialVersionUID = 0L;
    */
   public com.google.protobuf.ByteString
       getLastNameBytes() {
-    Object ref = lastName_;
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b =
+    java.lang.Object ref = lastName_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
+              (java.lang.String) ref);
       lastName_ = b;
       return b;
     } else {
@@ -192,8 +192,8 @@ private static final long serialVersionUID = 0L;
     return size;
   }
 
-  @Override
-  public boolean equals(final Object obj) {
+  @java.lang.Override
+  public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
      return true;
     }
@@ -211,7 +211,7 @@ private static final long serialVersionUID = 0L;
     return result;
   }
 
-  @Override
+  @java.lang.Override
   public int hashCode() {
     if (memoizedHashCode != 0) {
       return memoizedHashCode;
@@ -309,9 +309,9 @@ private static final long serialVersionUID = 0L;
         ? new Builder() : new Builder().mergeFrom(this);
   }
 
-  @Override
+  @java.lang.Override
   protected Builder newBuilderForType(
-      BuilderParent parent) {
+      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
@@ -327,7 +327,7 @@ private static final long serialVersionUID = 0L;
       return com.example.grpc.gencode.HelloServiceOuterClass.internal_static_com_example_grpc_gencode_HelloRequest_descriptor;
     }
 
-    protected FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return com.example.grpc.gencode.HelloServiceOuterClass.internal_static_com_example_grpc_gencode_HelloRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -340,7 +340,7 @@ private static final long serialVersionUID = 0L;
     }
 
     private Builder(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
@@ -388,7 +388,7 @@ private static final long serialVersionUID = 0L;
     }
     public Builder setField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        Object value) {
+        java.lang.Object value) {
       return (Builder) super.setField(field, value);
     }
     public Builder clearField(
@@ -401,12 +401,12 @@ private static final long serialVersionUID = 0L;
     }
     public Builder setRepeatedField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, Object value) {
+        int index, java.lang.Object value) {
       return (Builder) super.setRepeatedField(field, index, value);
     }
     public Builder addRepeatedField(
         com.google.protobuf.Descriptors.FieldDescriptor field,
-        Object value) {
+        java.lang.Object value) {
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -455,20 +455,20 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private Object firstName_ = "";
+    private java.lang.Object firstName_ = "";
     /**
      * <code>string firstName = 1;</code>
      */
-    public String getFirstName() {
-      Object ref = firstName_;
-      if (!(ref instanceof String)) {
+    public java.lang.String getFirstName() {
+      java.lang.Object ref = firstName_;
+      if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         firstName_ = s;
         return s;
       } else {
-        return (String) ref;
+        return (java.lang.String) ref;
       }
     }
     /**
@@ -476,11 +476,11 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.protobuf.ByteString
         getFirstNameBytes() {
-      Object ref = firstName_;
+      java.lang.Object ref = firstName_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         firstName_ = b;
         return b;
       } else {
@@ -491,11 +491,11 @@ private static final long serialVersionUID = 0L;
      * <code>string firstName = 1;</code>
      */
     public Builder setFirstName(
-        String value) {
+        java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
-
+  
       firstName_ = value;
       onChanged();
       return this;
@@ -504,7 +504,7 @@ private static final long serialVersionUID = 0L;
      * <code>string firstName = 1;</code>
      */
     public Builder clearFirstName() {
-
+      
       firstName_ = getDefaultInstance().getFirstName();
       onChanged();
       return this;
@@ -518,26 +518,26 @@ private static final long serialVersionUID = 0L;
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-
+      
       firstName_ = value;
       onChanged();
       return this;
     }
 
-    private Object lastName_ = "";
+    private java.lang.Object lastName_ = "";
     /**
      * <code>string lastName = 2;</code>
      */
-    public String getLastName() {
-      Object ref = lastName_;
-      if (!(ref instanceof String)) {
+    public java.lang.String getLastName() {
+      java.lang.Object ref = lastName_;
+      if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         lastName_ = s;
         return s;
       } else {
-        return (String) ref;
+        return (java.lang.String) ref;
       }
     }
     /**
@@ -545,11 +545,11 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.protobuf.ByteString
         getLastNameBytes() {
-      Object ref = lastName_;
+      java.lang.Object ref = lastName_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         lastName_ = b;
         return b;
       } else {
@@ -560,11 +560,11 @@ private static final long serialVersionUID = 0L;
      * <code>string lastName = 2;</code>
      */
     public Builder setLastName(
-        String value) {
+        java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
-
+  
       lastName_ = value;
       onChanged();
       return this;
@@ -573,7 +573,7 @@ private static final long serialVersionUID = 0L;
      * <code>string lastName = 2;</code>
      */
     public Builder clearLastName() {
-
+      
       lastName_ = getDefaultInstance().getLastName();
       onChanged();
       return this;
@@ -587,7 +587,7 @@ private static final long serialVersionUID = 0L;
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-
+      
       lastName_ = value;
       onChanged();
       return this;
@@ -630,7 +630,7 @@ private static final long serialVersionUID = 0L;
     return PARSER;
   }
 
-  @Override
+  @java.lang.Override
   public com.google.protobuf.Parser<HelloRequest> getParserForType() {
     return PARSER;
   }

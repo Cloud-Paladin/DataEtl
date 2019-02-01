@@ -12,7 +12,7 @@
     <modules>
         <module>web</module>
         <module>dispatch-engine</module>
-        <module>tasknode</module>
+        <module>job-node</module>
         <module>common</module>
         <module>algorithm</module>
         <module>data-interface</module>

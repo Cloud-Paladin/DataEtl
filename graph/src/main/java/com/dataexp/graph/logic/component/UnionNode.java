@@ -1,6 +1,7 @@
 package com.dataexp.graph.logic.component;
 
 import com.dataexp.graph.logic.BaseLogicNode;
+import com.dataexp.graph.logic.ChainingStrategy;
 
 import java.util.List;
 
@@ -46,6 +47,11 @@ public class UnionNode extends BaseLogicNode {
     @Override
     public String getDefaultName() {
         return "合并转换";
+    }
+
+    @Override
+    public ChainingStrategy getChainingStrategy() {
+        return ChainingStrategy.ALWAYS;
     }
 
     @Override

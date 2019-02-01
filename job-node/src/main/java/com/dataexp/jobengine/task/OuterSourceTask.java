@@ -35,10 +35,24 @@ public class OuterSourceTask extends BaseSourceTask{
      */
     PinContainer container;
 
+    public OuterSourceTask(int outputPortId) {
+        super();
+        this.outputPortId = outputPortId;
+    }
+
+    public OuterSourceTask(int JobId, int rootNodeId, int outputPortId) {
+        super(JobId, rootNodeId);
+        this.outputPortId = outputPortId;
+    }
+
+    public OuterSourceTask(int jobId, int rootNodeId, int poolSize, int outputPortId) {
+        super(jobId, rootNodeId, poolSize);
+        this.outputPortId = outputPortId;
+    }
+
     public OuterSourceTask(int jobId, int rootNodeId, int poolSize, KafkaConsumer sourceTopic, List<ArrayBlockingQueue<InnerMsg>> targetQueueList, int outputPortId, boolean isPinData) {
         super(jobId, rootNodeId, poolSize, sourceTopic, targetQueueList);
         this.outputPortId = outputPortId;
-        this.isPinData = isPinData;
     }
 
     @Override

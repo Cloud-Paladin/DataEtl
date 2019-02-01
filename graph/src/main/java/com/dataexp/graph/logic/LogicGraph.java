@@ -192,11 +192,20 @@ public class LogicGraph {
      * @return
      */
     public boolean graphCheck() {
-        //单个组件检查
-        if (genGraphExceptions().size() > 0) {
+
+        /**
+         *     TODO：单个组件检查
+         *     最小校验规则：各组件只检查满足自己运行条件的最小需要字段，如过滤组件只校验过滤条件相关字段
+         *     严格校验规则：每个接口的格式必须和配置生效时完全一致
+         */
+    if (genGraphExceptions().size() > 0) {
             return false;
         }
-        //TODO:整张图检查，检查连通性，孤立节点等
+        /**
+         * TODO:整张图检查，检查连通性，孤立节点等
+         * 流程为空、流程没有一个有效的输入节点、
+         * 流程回环校验
+         */
         return true;
     }
 

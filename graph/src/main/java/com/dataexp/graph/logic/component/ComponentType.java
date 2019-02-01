@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  */
 public enum ComponentType {
     /**
-     * 文件输出组件,typname为组件名称,compoenentClassName为该组件类名,注意必须BaseLogicNode
+     * 文件输出组件,type为组件名称,compoenentClassName为该组件类名,注意必须BaseLogicNode
      */
     FILE_SINK("FileSink", "com.dataexp.graph.logic.component.FileSink"),
     FILE_SOURCE("FileSource", "com.dataexp.graph.logic.component.FileSource"),
@@ -32,11 +32,11 @@ public enum ComponentType {
         }
     }
 
-    private String typeName;
+    private String type;
     private Class componentClass;
 
-    private ComponentType(String typeName, String componentClassName) {
-        this.typeName = typeName;
+    private ComponentType(String type, String componentClassName) {
+        this.type = type;
         try {
             Class init = Class.forName(componentClassName);
             Class temp = init;
@@ -58,8 +58,8 @@ public enum ComponentType {
         }
     }
 
-    public String getTypeName() {
-        return typeName;
+    public String getType() {
+        return type;
     }
 
     public Class getComponentClass() {
@@ -75,7 +75,7 @@ public enum ComponentType {
     public static ComponentType fromComponentType(String typeName) {
         if (typeName != null) {
             for (ComponentType b : ComponentType.values()) {
-                if (typeName.equalsIgnoreCase(b.getTypeName())) {
+                if (typeName.equalsIgnoreCase(b.getType())) {
                     return b;
                 }
             }
@@ -83,6 +83,21 @@ public enum ComponentType {
         return null;
     }
 
+    /**
+     * 根据组件Class获取组件ENUM
+     * @param T
+     * @return
+     */
+    public static ComponentType fromComponentClass(Class T) {
+        if (T != null) {
+            for (ComponentType b : ComponentType.values()) {
+                if (T == b.getComponentClass()) {
+                    return b;
+                }
+            }
+        }
+        return null;
+    }
     /**
      * 根据传入的组件类，获取组件类型名称
      *
@@ -93,7 +108,7 @@ public enum ComponentType {
         if (T != null) {
             for (ComponentType b : ComponentType.values()) {
                 if (b.getComponentClass() == T) {
-                    return b.getTypeName();
+                    return b.getType();
                 }
             }
         }

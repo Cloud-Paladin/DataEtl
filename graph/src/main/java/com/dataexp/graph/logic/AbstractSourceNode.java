@@ -12,6 +12,11 @@ public abstract class AbstractSourceNode extends BaseLogicNode {
     }
 
     @Override
+    public ChainingStrategy getChainingStrategy() {
+        return ChainingStrategy.HDAD;
+    }
+
+    @Override
     public int defaultInputPortNumber() {
         return 0;
     }

@@ -35,6 +35,17 @@ public abstract class BaseSinkTask extends BaseTask {
      */
     protected boolean cancle = true;
 
+    public BaseSinkTask() {
+    }
+
+    public BaseSinkTask(int JobId, int rootNodeId) {
+        super(JobId, rootNodeId);
+    }
+
+    public BaseSinkTask(int jobId, int rootNodeId, int poolSize) {
+        super(jobId, rootNodeId, poolSize);
+    }
+
     public BaseSinkTask(int jobId, int nodeId, int poolSize, ArrayBlockingQueue<InnerMsg> sourceQueue, KafkaProducer targetTopic) {
         super(jobId, nodeId, poolSize);
         this.sourceQueue = sourceQueue;

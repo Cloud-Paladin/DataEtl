@@ -20,6 +20,18 @@ public class ExceptionSinkTask extends BaseSinkTask{
 
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionSinkTask.class);
 
+    public ExceptionSinkTask() {
+        super();
+    }
+
+    public ExceptionSinkTask(int JobId, int rootNodeId) {
+        super(JobId, rootNodeId);
+    }
+
+    public ExceptionSinkTask(int jobId, int rootNodeId, int poolSize) {
+        super(jobId, rootNodeId, poolSize);
+    }
+
     public ExceptionSinkTask(int jobId, int nodeId, int poolSize, ArrayBlockingQueue<InnerMsg> sourceQueue, KafkaProducer targetTopic) {
         super(jobId, nodeId, poolSize, sourceQueue, targetTopic);
     }

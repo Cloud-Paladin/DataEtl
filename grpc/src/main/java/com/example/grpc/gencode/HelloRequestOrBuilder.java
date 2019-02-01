@@ -10,7 +10,7 @@ public interface HelloRequestOrBuilder extends
   /**
    * <code>string firstName = 1;</code>
    */
-  String getFirstName();
+  java.lang.String getFirstName();
   /**
    * <code>string firstName = 1;</code>
    */
@@ -20,7 +20,7 @@ public interface HelloRequestOrBuilder extends
   /**
    * <code>string lastName = 2;</code>
    */
-  String getLastName();
+  java.lang.String getLastName();
   /**
    * <code>string lastName = 2;</code>
    */

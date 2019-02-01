@@ -10,6 +10,10 @@ public abstract class AbstractSinkNode extends BaseLogicNode {
         super(id, name, x, y);
     }
 
+    @Override
+    public ChainingStrategy getChainingStrategy() {
+        return ChainingStrategy.NEVER;
+    }
 
     @Override
     public int defaultInputPortNumber() {

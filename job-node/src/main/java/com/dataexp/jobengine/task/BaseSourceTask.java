@@ -33,6 +33,17 @@ public abstract class BaseSourceTask extends BaseTask{
       */
      private boolean cancle = true;
 
+     public BaseSourceTask() {
+     }
+
+     public BaseSourceTask(int JobId, int rootNodeId) {
+          super(JobId, rootNodeId);
+     }
+
+     public BaseSourceTask(int jobId, int rootNodeId, int poolSize) {
+          super(jobId, rootNodeId, poolSize);
+     }
+
      public BaseSourceTask(int jobId, int rootNodeId, int poolSize, KafkaConsumer sourceTopic, List<ArrayBlockingQueue<InnerMsg>> targetQueueList) {
           super(jobId, rootNodeId, poolSize);
           this.sourceTopic = sourceTopic;

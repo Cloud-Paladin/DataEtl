@@ -32,7 +32,7 @@ public final class HelloServiceOuterClass {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\022HelloService.proto\022\030com.example.grpc.g" +
       "encode\"3\n\014HelloRequest\022\021\n\tfirstName\030\001 \001(" +
       "\t\022\020\n\010lastName\030\002 \001(\t\"!\n\rHelloResponse\022\020\n\010" +
@@ -58,13 +58,13 @@ public final class HelloServiceOuterClass {
     internal_static_com_example_grpc_gencode_HelloRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_example_grpc_gencode_HelloRequest_descriptor,
-        new String[] { "FirstName", "LastName", });
+        new java.lang.String[] { "FirstName", "LastName", });
     internal_static_com_example_grpc_gencode_HelloResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_com_example_grpc_gencode_HelloResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_example_grpc_gencode_HelloResponse_descriptor,
-        new String[] { "Greeting", });
+        new java.lang.String[] { "Greeting", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

@@ -4,6 +4,7 @@ import com.dataexp.graph.logic.component.ComponentType;
 import com.dataexp.graph.logic.serial.SerialInputPort;
 import com.dataexp.graph.logic.serial.SerialNode;
 import com.dataexp.graph.logic.serial.SerialOutputPort;
+import com.dataexp.jobengine.operation.BaseOperation;
 
 import java.util.*;
 
@@ -130,6 +131,15 @@ public abstract class BaseLogicNode {
         return spList;
     }
 
+
+    /**
+     * 生成节点对应的从输入port开始操作对应的的BaseOperation
+     * 注意：输入和输出节点没有相应的operation
+     * @param port:
+     * @return
+     */
+    public abstract List<BaseOperation> genBaseOperations(InputPort port);
+
     /**
      * 初始化的输入端口数量
      *
@@ -173,6 +183,13 @@ public abstract class BaseLogicNode {
      * @return
      */
     public abstract String getDefaultName();
+
+    /**
+     * 返回该组件的Chain策略
+     *
+     * @return
+     */
+    public abstract ChainingStrategy getChainingStrategy();
 
     /**
      * 返回节点当前异常

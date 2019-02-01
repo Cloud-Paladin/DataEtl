@@ -89,7 +89,7 @@
         </dependency>
         <dependency>
             <groupId>com.dataexp</groupId>
-            <artifactId>dispatch-engine</artifactId>
+            <artifactId>dispatchengine</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>

@@ -47,7 +47,7 @@ public class VertexTask extends BaseTask{
             @Override
             public Thread newThread(Runnable r) {
                 Thread t = new Thread(r);
-                t.setName("JobVertex rootNodeId:" + rootOperation.getNodeId() +" portId:"+ rootOperation.getInputPortId()+" sequence:" + threadSequence.incrementAndGet());
+                t.setName("VertexTask rootNodeId:" + rootOperation.getNodeId() +" portId:"+ rootOperation.getInputPortId()+" sequence:" + threadSequence.incrementAndGet());
                 return t;
             }
         };

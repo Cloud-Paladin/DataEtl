@@ -36,6 +36,21 @@ public class OuterSinkTask extends BaseSinkTask {
      */
     PinContainer container;
 
+    public OuterSinkTask(int inputPortId) {
+        super();
+        this.inputPortId = inputPortId;
+    }
+
+    public OuterSinkTask(int JobId, int rootNodeId, int inputPortId) {
+        super(JobId, rootNodeId);
+        this.inputPortId = inputPortId;
+    }
+
+    public OuterSinkTask(int jobId, int rootNodeId, int poolSize, int inputPortId) {
+        super(jobId, rootNodeId, poolSize);
+        this.inputPortId = inputPortId;
+    }
+
     public OuterSinkTask(int jobId, int nodeId, int poolSize, ArrayBlockingQueue<InnerMsg> sourceQueue, KafkaProducer targetTopic, int inputPortId) {
         super(jobId, nodeId, poolSize, sourceQueue, targetTopic);
         this.inputPortId = inputPortId;

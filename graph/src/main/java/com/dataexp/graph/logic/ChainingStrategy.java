@@ -1,4 +1,4 @@
-package com.dataexp.jobengine.operation;
+package com.dataexp.graph.logic;
 
 /**
  * 定义操作的chianing策略

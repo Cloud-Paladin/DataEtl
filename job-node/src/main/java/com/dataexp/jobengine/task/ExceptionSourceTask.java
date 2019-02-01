@@ -22,6 +22,18 @@ public class ExceptionSourceTask extends BaseSourceTask{
 
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionSourceTask.class);
 
+    public ExceptionSourceTask() {
+        super();
+    }
+
+    public ExceptionSourceTask(int JobId, int rootNodeId) {
+        super(JobId, rootNodeId);
+    }
+
+    public ExceptionSourceTask(int jobId, int rootNodeId, int poolSize) {
+        super(jobId, rootNodeId, poolSize);
+    }
+
     public ExceptionSourceTask(int jobId, int rootNodeId, int poolSize, KafkaConsumer sourceTopic, List<ArrayBlockingQueue<InnerMsg>> targetQueueList) {
         super(jobId, rootNodeId, poolSize, sourceTopic, targetQueueList);
     }

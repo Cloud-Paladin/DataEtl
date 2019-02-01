@@ -24,7 +24,7 @@ public class DisruptorMultiConsumer {
         LongEventFactory eventFactory = new LongEventFactory();
 
         // 创建bufferSize ,也就是RingBuffer大小，必须是2的N次方
-        int ringBufferSize = 1024 * 1024;
+        int ringBufferSize = 1024;
         Disruptor<LongEvent> disruptor = new Disruptor<>(eventFactory, ringBufferSize, producerFactory,
                 ProducerType.MULTI, new BlockingWaitStrategy());
         RingBuffer<LongEvent> ringBuffer = disruptor.getRingBuffer();
@@ -39,12 +39,19 @@ public class DisruptorMultiConsumer {
         disruptor.start();
 
         //多个生产者,ProducerType设置为MULTI,如果设置为SINGLE有的消息会丢弃
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 5; i++) {
             new Thread(new LongEventProducer(ringBuffer)).start();
         }
-        Thread.sleep(2000);
+//        Thread.sleep(2000);
+        System.out.println("Before:" + Consumer.count + ".............................................................");
+        System.out.println("current remaiing:" + (ringBufferSize - (int) disruptor.getRingBuffer().remainingCapacity()));
         disruptor.shutdown();
-        System.out.println(Consumer.count);
+//        disruptor.halt();
+        System.out.println("After:" + Consumer.count + "...............................................................");
+        System.out.println("current remaiing:" + (ringBufferSize - (int) disruptor.getRingBuffer().remainingCapacity()));
+        Thread.sleep(2000);
+        System.out.println("End:" + Consumer.count + "...............................................................");
+        System.out.println("current remaiing:" + (ringBufferSize - (int) disruptor.getRingBuffer().remainingCapacity()));
     }
 }
 
@@ -58,7 +65,7 @@ class LongEventProducer implements Runnable {
 
     @Override
     public void run() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1000; i++) {
             long sequence = ringBuffer.next();  // Grab the next sequence
             try {
                 LongEvent event = ringBuffer.get(sequence); // Get the entry in the Disruptor
@@ -79,7 +86,7 @@ class Consumer implements WorkHandler<LongEvent> {
 
     @Override
     public void onEvent(LongEvent longEvent) throws Exception {
-        System.out.println(Thread.currentThread().getName() + "消费者消费了消息：" + longEvent.getNumber());
+//        System.out.println(Thread.currentThread().getName() + "消费者消费了消息：" + longEvent.getNumber());
         count.incrementAndGet();
     }
 }
