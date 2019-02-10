@@ -22,8 +22,16 @@ public class JobGraph {
 
      private static final Logger LOG = LoggerFactory.getLogger(JobGraph.class);
 
+     private int jobId;
+
+     /**
+      * 中间临时chain，key为输入端口id，value为入口operation
+      */
      private Map<Integer, BaseOperation> tmpOperationChain = new HashMap<>();
 
+     /**
+      * 最终chain
+      */
      private Map<Integer, BaseOperation> finalOperationChain = new HashMap<>();
 
      private List<OuterSourceTask> outerSourceTaskList = new ArrayList<>();
@@ -36,6 +44,14 @@ public class JobGraph {
 
 
      public JobGraph() {
+     }
+
+     public int getJobId() {
+          return jobId;
+     }
+
+     public void setJobId(int jobId) {
+          this.jobId = jobId;
      }
 
      public Map<Integer, BaseOperation> getTmpOperationChain() {

@@ -4,6 +4,7 @@ import com.dataexp.common.metadata.InnerMsg;
 import com.dataexp.graph.logic.BaseLogicNode;
 import com.dataexp.graph.logic.ChainingStrategy;
 import com.dataexp.graph.logic.component.config.WashTemplate;
+import com.dataexp.jobengine.operation.BaseOperation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,11 @@ public class WashNode extends BaseLogicNode {
     @Override
     public void initNodeConfig(String config) {
 
+    }
+
+    @Override
+    public BaseOperation genBaseOperation(int inputPortId) {
+        return null;
     }
 
     private WashTemplate template = new WashTemplate();
@@ -57,7 +63,7 @@ public class WashNode extends BaseLogicNode {
 
     @Override
     public ChainingStrategy getChainingStrategy() {
-        return ChainingStrategy.NEVER;
+        return ChainingStrategy.HEAD;
     }
 
     @Override

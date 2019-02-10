@@ -11,7 +11,7 @@ import java.util.List;
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
  */
-public class TransformOperation extends AbstractOneToOneOperation{
+public class TransformOperation extends BaseOperation{
 
     /**
      * 格式转换操作执行列表
@@ -20,9 +20,11 @@ public class TransformOperation extends AbstractOneToOneOperation{
      */
     private List<String> transList = new ArrayList<>();
 
-    public TransformOperation(int nodeId, int inputPortId, List<FieldType> inputType, OutputConfig outputConfig, List<String> transList) {
-        super(nodeId, inputPortId, inputType, outputConfig);
-        this.transList = transList;
+    public TransformOperation() {
+    }
+
+    public TransformOperation(int nodeId, InputConfig inputConfig, List<OutputConfig> outputConfigList) {
+        super(nodeId, inputConfig, outputConfigList);
     }
 
     public List<String> getTransList() {
@@ -36,8 +38,11 @@ public class TransformOperation extends AbstractOneToOneOperation{
     @Override
     public void processMsg(InnerMsg input) {
         transform(input);
-        for (OperationFunction op : getNextOperationList()) {
-            op.processMsg(input);
+        List<BaseOperation> opList = getFirstPortOperationList();
+        if (null != opList) {
+            for (BaseOperation op : opList) {
+                op.processMsg(input);
+            }
         }
     }
 

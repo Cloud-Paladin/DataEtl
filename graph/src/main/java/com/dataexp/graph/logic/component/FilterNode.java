@@ -2,8 +2,11 @@ package com.dataexp.graph.logic.component;
 
 import com.dataexp.graph.logic.BaseLogicNode;
 import com.dataexp.graph.logic.ChainingStrategy;
+import com.dataexp.jobengine.operation.BaseOperation;
+import com.dataexp.jobengine.operation.FilterOperation;
 
 import java.util.List;
+import java.util.Map;
 
 public class FilterNode extends BaseLogicNode {
     public FilterNode(int id, int x, int y) {
@@ -22,6 +25,23 @@ public class FilterNode extends BaseLogicNode {
     @Override
     public void initNodeConfig(String config) {
 
+    }
+
+    /**
+     * //TODO:获取该过滤组件节点的过滤参数列表
+     *
+     * @return
+     */
+    public Map<Integer, String> genFilterPattern() {
+        return null;
+    }
+
+    @Override
+    public BaseOperation genBaseOperation(int inputPortId) {
+        BaseOperation operation = new FilterOperation();
+        setOperationBaseAttr(operation,inputPortId);
+        ((FilterOperation) operation).setFilterPattern(genFilterPattern());
+        return operation;
     }
 
     @Override
@@ -63,7 +83,4 @@ public class FilterNode extends BaseLogicNode {
     public List<String> getWarnings() {
         return null;
     }
-
-
-
 }

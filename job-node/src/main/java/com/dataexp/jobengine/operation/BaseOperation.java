@@ -1,8 +1,9 @@
 package com.dataexp.jobengine.operation;
 
 import com.dataexp.common.metadata.FieldType;
+import com.dataexp.common.metadata.InnerMsg;
 
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -10,19 +11,40 @@ import java.util.List;
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
  */
-public abstract class BaseOperation implements OperationFunction{
+public abstract class BaseOperation{
 
     /**
      * 该操作对应逻辑图节点编号
      */
     private int nodeId;
 
+    /**
+     * 基础组件只有一个输入端口
+     */
     private InputConfig inputConfig;
 
-    public BaseOperation(int nodeId, int inputPortId, List<FieldType> inputType) {
-        this.nodeId = nodeId;
-        this.inputConfig = new InputConfig(inputPortId, inputType);
+    /**
+     * 输出端口配置列表
+     * //TODO:是在这里进行排序还是组件的配置已经配置了端口id对应的功能需要确认
+     * 保持有序，清洗节点默认第一个端口为正常出口
+     */
+    private List<OutputConfig> outputConfigList = new ArrayList<>();
+
+    public BaseOperation() {
     }
+
+    public BaseOperation(int nodeId, InputConfig inputConfig, List<OutputConfig> outputConfigList) {
+        this.nodeId = nodeId;
+        this.inputConfig = inputConfig;
+        this.outputConfigList = outputConfigList;
+    }
+
+    /**
+     * 具体的清洗操作处理函数
+     * @param input 输入的消息
+     * @return
+     */
+    public abstract void processMsg(InnerMsg input);
 
     public int getNodeId() {
         return nodeId;
@@ -47,4 +69,42 @@ public abstract class BaseOperation implements OperationFunction{
     public void setInputType(List<FieldType> inputType) {
         inputConfig.setInputType(inputType);
     }
+
+    public InputConfig getInputConfig() {
+        return inputConfig;
+    }
+
+    public void setInputConfig(InputConfig inputConfig) {
+        this.inputConfig = inputConfig;
+    }
+
+    public List<OutputConfig> getOutputConfigList() {
+        return outputConfigList;
+    }
+
+    public void setOutputConfigList(List<OutputConfig> outputConfigList) {
+        this.outputConfigList = outputConfigList;
+    }
+
+    public void addOutputConfig(OutputConfig config) {
+        this.outputConfigList.add(config);
+    }
+
+    public List<BaseOperation> getNextOperationListById(int outputPortId) {
+        for (OutputConfig config : outputConfigList) {
+            if (config.getOutputPortId() == outputPortId) {
+                return config.getNextOperationList();
+            }
+        }
+        return null;
+    }
+
+    public List<BaseOperation> getFirstPortOperationList() {
+        OutputConfig first = outputConfigList.get(0);
+        if (null != first) {
+            return first.getNextOperationList();
+        }
+        return null;
+    }
+
 }

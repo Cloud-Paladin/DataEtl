@@ -3,6 +3,8 @@ package com.dataexp.graph.job;
 import com.dataexp.graph.logic.*;
 import com.dataexp.graph.logic.component.WashNode;
 import com.dataexp.jobengine.operation.BaseOperation;
+import com.dataexp.jobengine.operation.OutputConfig;
+import com.dataexp.jobengine.operation.SinkFunction;
 import com.dataexp.jobengine.operation.WashOperation;
 import com.dataexp.jobengine.task.ExceptionSinkTask;
 import com.dataexp.jobengine.task.ExceptionSourceTask;
@@ -11,15 +13,13 @@ import com.dataexp.jobengine.task.OuterSourceTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 /**
  * 将LoigcGraph 转化为JobGraph
  */
 public class JobGraphGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(JobGraphGenerator.class);
 
-    public static JobGraph createJobGraph(LogicGraph logicGraph,int jobId) {
+    public static JobGraph createJobGraph(LogicGraph logicGraph, int jobId) {
         //清理逻辑图，去掉无效节点和端口
         if (!logicGraph.cleanGraph()) {
             return null;
@@ -40,32 +40,66 @@ public class JobGraphGenerator {
          */
 
         JobGraph jobGraph = new JobGraph();
+        jobGraph.setJobId(jobId);
         for (BaseLogicNode logicNode : logicGraph.getNodeMap().values()) {
-            if (logicNode instanceof AbstractSinkNode) {
-                OuterSinkTask outerSinkTask = genOutSinkTask((AbstractSinkNode) logicNode);
-                jobGraph.getOuterSinkTaskList().add(outerSinkTask);
-            } else if (logicNode instanceof AbstractSourceNode) {
-                OuterSourceTask outerSourceTask = genOutSourceTask((AbstractSourceNode) logicNode);
-                jobGraph.getOuterSourceTaskList().add(outerSourceTask);
-            } else {
-                List<BaseOperation> operations;
-                for (InputPort port : logicNode.getInputPortMap().values()) {
-                    operations = logicNode.genBaseOperations(port);
-                    //TODO:operation的输出中获取后续的节点进行判断
-                    if (logicNode instanceof WashNode) {
-                        WashOperation washOperation = (WashOperation)operations.get(0);
-                        //TODO:清洗节点其他异常判断需要提供各类属性判断
-                        if (washOperation.getExceptionConfig() == 2) {
-                            ExceptionSinkTask exceptionSinkTask = new ExceptionSinkTask(jobId,logicNode.getId());
-                            jobGraph.getExceptionSinkTaskList().add(exceptionSinkTask);
+            genOperationChain(logicNode,jobGraph);
+        }
+        return jobGraph;
+    }
+
+    public static BaseOperation genOperationChain(BaseLogicNode logicNode,JobGraph jobGraph) {
+        if (logicNode instanceof AbstractSinkNode) {
+            OuterSinkTask outerSinkTask = genOutSinkTask((AbstractSinkNode) logicNode);
+            jobGraph.getOuterSinkTaskList().add(outerSinkTask);
+        } else if (logicNode instanceof AbstractSourceNode) {
+            OuterSourceTask outerSourceTask = genOutSourceTask((AbstractSourceNode) logicNode);
+            jobGraph.getOuterSourceTaskList().add(outerSourceTask);
+        } else {
+            BaseOperation operation;
+            //每个输入端口都会产生一个operation
+            for (InputPort port : logicNode.getInputPortMap().values()) {
+                if(jobGraph.getTmpOperationChain().containsKey(port.getId())){
+                    //该输入端口已经在临时链中生成过
+                    continue;
+                }
+                operation = logicNode.genBaseOperation(port.getId());
+                if (logicNode.getChainingStrategy() != ChainingStrategy.ALWAYS) {
+                    jobGraph.getFinalOperationChain().put(port.getId(), operation);
+                } else {
+                    jobGraph.getTmpOperationChain().put(port.getId(), operation);
+                }
+                //TODO:生成opearion后续操作列表
+                for (OutputConfig outputConfig : operation.getOutputConfigList()) {
+                    int outputPortId = outputConfig.getOutputPortId();
+                    OutputPort outputPort = logicNode.getOutputPortById(outputPortId);
+                    for (InputPort targetPort : outputPort.getLinkedPortMap().values()) {
+                        if (targetPort.getParentNode().getChainingStrategy() == ChainingStrategy.ALWAYS && (
+                                logicNode.getChainingStrategy() != ChainingStrategy.NEVER)) {
+                            //将后续操作chain起来
+                            outputConfig.addNextOperation(genOperationChain(targetPort.getParentNode(), jobGraph));
+                        } else {
+                            //chain的一个出口，需要标识出口信息
+                            SinkFunction sinkFunction = new SinkFunction();
+                            sinkFunction.setNodeId(logicNode.getId());
                         }
-                        //TODO:清洗节点异常队列回流选项
                     }
+                }
+
+                //TODO:operation的输出中获取后续的节点进行判断
+                if (operation instanceof WashOperation) {
+                    WashOperation washOperation = (WashOperation) operation;
+                    //TODO:清洗节点其他异常判断需要提供各类属性判断
+                    if (washOperation.getExceptionConfig() == 2) {
+                        ExceptionSinkTask exceptionSinkTask = new ExceptionSinkTask(jobGraph.getJobId(), logicNode.getId());
+                        jobGraph.getExceptionSinkTaskList().add(exceptionSinkTask);
+                    }
+                    //TODO:清洗节点异常队列回流选项
                 }
             }
         }
         return null;
     }
+
 
     public static OuterSinkTask genOutSinkTask(AbstractSinkNode node) {
         return null;

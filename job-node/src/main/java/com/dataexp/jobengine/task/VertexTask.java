@@ -154,36 +154,36 @@ public class VertexTask extends BaseTask{
     }
 
     public static void main(String[] args) {
-        ArrayBlockingQueue<InnerMsg> source = new ArrayBlockingQueue(100);
-        ArrayBlockingQueue<InnerMsg> target = new ArrayBlockingQueue(100);
-
-        TestSource ts = new TestSource();
-        ts.testQueue = source;
-        Thread t1 = new Thread(ts);
-        t1.start();
-
-        SinkFunction so = new SinkFunction(target);
-        List<OperationFunction> ol = new ArrayList<>();
-        ol.add(so);
-        OutputConfig oc = new OutputConfig(2,ol,new ArrayList<>());
-        FilterOperation fo = new FilterOperation(1,1,new ArrayList<>(),oc);
-        VertexTask vt = new VertexTask(1,1,4,source, fo);
-        OuterSinkTask osk = new OuterSinkTask(1,2,2,target,null,3);
-        vt.start();
-        osk.start();
-
-        try {
-            Thread.sleep(10000);
-            osk.pinData(3, new PinContainer() {
-                @Override
-                public void collect(String data) {
-                    System.out.println("PIN Data:"+data);
-                }
-            });
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("End");
+//        ArrayBlockingQueue<InnerMsg> source = new ArrayBlockingQueue(100);
+//        ArrayBlockingQueue<InnerMsg> target = new ArrayBlockingQueue(100);
+//
+//        TestSource ts = new TestSource();
+//        ts.testQueue = source;
+//        Thread t1 = new Thread(ts);
+//        t1.start();
+//
+//        SinkFunction so = new SinkFunction(target);
+//        List<OperationFunction> ol = new ArrayList<>();
+//        ol.add(so);
+//        OutputConfig oc = new OutputConfig(2,ol,new ArrayList<>());
+//        FilterOperation fo = new FilterOperation(1,1,new ArrayList<>(),oc);
+//        VertexTask vt = new VertexTask(1,1,4,source, fo);
+//        OuterSinkTask osk = new OuterSinkTask(1,2,2,target,null,3);
+//        vt.start();
+//        osk.start();
+//
+//        try {
+//            Thread.sleep(10000);
+//            osk.pinData(3, new PinContainer() {
+//                @Override
+//                public void collect(String data) {
+//                    System.out.println("PIN Data:"+data);
+//                }
+//            });
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("End");
     }
 }
 

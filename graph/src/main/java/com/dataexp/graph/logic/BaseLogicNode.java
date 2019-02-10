@@ -5,6 +5,9 @@ import com.dataexp.graph.logic.serial.SerialInputPort;
 import com.dataexp.graph.logic.serial.SerialNode;
 import com.dataexp.graph.logic.serial.SerialOutputPort;
 import com.dataexp.jobengine.operation.BaseOperation;
+import com.dataexp.jobengine.operation.FilterOperation;
+import com.dataexp.jobengine.operation.InputConfig;
+import com.dataexp.jobengine.operation.OutputConfig;
 
 import java.util.*;
 
@@ -131,14 +134,31 @@ public abstract class BaseLogicNode {
         return spList;
     }
 
-
     /**
      * 生成节点对应的从输入port开始操作对应的的BaseOperation
+     * operaion的后续operaion在这里不填
      * 注意：输入和输出节点没有相应的operation
-     * @param port:
+     * @param inputPortId: 输入端口端口号
      * @return
      */
-    public abstract List<BaseOperation> genBaseOperations(InputPort port);
+    public abstract BaseOperation genBaseOperation(int inputPortId);
+
+    /**
+     * 对指定输入端口生成的operation填入基础的属性
+     * @param operation
+     */
+    public void setOperationBaseAttr(BaseOperation operation, int inputPortId) {
+        operation.setNodeId(getId());
+        InputPort inputPort = getInputPortMap().get(inputPortId);
+        operation.setInputConfig(new InputConfig(inputPort.getId(),inputPort.getPortDataFormat()));
+        for (OutputPort outputPort : getOutputPortMap().values()) {
+            OutputConfig outputConfig = new OutputConfig();
+            //注意：此处没有生成nextOperationList
+            outputConfig.setOutputPortId(outputPort.getId());
+            outputConfig.setOutputType(outputPort.getPortDataFormat());
+            operation.addOutputConfig(outputConfig);
+        }
+    }
 
     /**
      * 初始化的输入端口数量

@@ -18,16 +18,19 @@ public class OutputConfig {
     private int outputPortId;
 
     /**
-     * 输出端口对应的后续操作列表
-     */
-    private List<OperationFunction> nextOperationList = new ArrayList<>();
-
-    /**
      * 输出端口的输出数据格式
      */
     private List<FieldType> outputType = new ArrayList<>();
 
-    public OutputConfig(int outputPortId, List<OperationFunction> nextOperationList, List<FieldType> outputType) {
+    /**
+     * 输出端口对应的后续操作列表
+     */
+    private List<BaseOperation> nextOperationList = new ArrayList<>();
+
+    public OutputConfig() {
+    }
+
+    public OutputConfig(int outputPortId, List<BaseOperation> nextOperationList, List<FieldType> outputType) {
         this.outputPortId = outputPortId;
         this.nextOperationList = nextOperationList;
         this.outputType = outputType;
@@ -41,15 +44,15 @@ public class OutputConfig {
         this.outputPortId = outputPortId;
     }
 
-    public List<OperationFunction> getNextOperationList() {
+    public List<BaseOperation> getNextOperationList() {
         return nextOperationList;
     }
 
-    public void setNextOperationList(List<OperationFunction> nextOperationList) {
+    public void setNextOperationList(List<BaseOperation> nextOperationList) {
         this.nextOperationList = nextOperationList;
     }
 
-    public void addNextOperation(OperationFunction operationFunction) {
+    public void addNextOperation(BaseOperation operationFunction) {
         nextOperationList.add(operationFunction);
     }
 

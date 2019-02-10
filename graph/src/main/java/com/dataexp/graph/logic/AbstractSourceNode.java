@@ -13,7 +13,7 @@ public abstract class AbstractSourceNode extends BaseLogicNode {
 
     @Override
     public ChainingStrategy getChainingStrategy() {
-        return ChainingStrategy.HDAD;
+        return ChainingStrategy.NEVER;
     }
 
     @Override

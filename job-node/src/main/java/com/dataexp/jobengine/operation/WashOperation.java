@@ -12,7 +12,7 @@ import java.util.SortedMap;
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
  */
-public class WashOperation extends AbstractOnetoMultiOperation{
+public class WashOperation extends BaseOperation{
 
     /**
      * 当前清洗模板的版本号
@@ -75,13 +75,16 @@ public class WashOperation extends AbstractOnetoMultiOperation{
     /**
      * 清洗操作正常的数据出口后续操作列表
      */
-    private List<OperationFunction> normalOperationFuunctionList = new ArrayList<>();
+    private List<BaseOperation> normalOperationFuunctionList = new ArrayList<>();
 
-    public WashOperation(int nodeId, int inputPortId, List<FieldType> inputType, SortedMap<Integer, OutputConfig> outputConfigMap) {
-        super(nodeId, inputPortId, inputType, outputConfigMap);
+    public WashOperation() {
+    }
+
+    public WashOperation(int nodeId, InputConfig inputConfig, List<OutputConfig> outputConfigList) {
+        super(nodeId, inputConfig, outputConfigList);
         //第一个输出端口为正常数据输出端口，要求map必须是有序的
-        normalOutputPortId = outputConfigMap.keySet().iterator().next();
-        normalOperationFuunctionList = outputConfigMap.get(normalOutputPortId).getNextOperationList();
+        normalOutputPortId = outputConfigList.get(0).getOutputPortId();
+        normalOperationFuunctionList = outputConfigList.get(0).getNextOperationList();
     }
 
     @Override
@@ -92,7 +95,7 @@ public class WashOperation extends AbstractOnetoMultiOperation{
              wf.wash(input);
             switch(input.getExceptionType()){
                 case NORMAL:
-                    for (OperationFunction op : normalOperationFuunctionList) {
+                    for (BaseOperation op : normalOperationFuunctionList) {
                         op.processMsg(input);
                     }
                     break;
@@ -167,10 +170,10 @@ public class WashOperation extends AbstractOnetoMultiOperation{
      * @param msg
      */
     public void sendExceptionMsgOut(int outputPortId, InnerMsg msg) {
-        List<OperationFunction> opList = getNextOperationListById(outputPortId);
+        List<BaseOperation> opList = getNextOperationListById(outputPortId);
         if (null != opList) {
             msg.clearException();
-            for (OperationFunction opf : opList) {
+            for (BaseOperation opf : opList) {
                 opf.processMsg(msg);
             }
         }

@@ -7,6 +7,9 @@ import com.dataexp.graph.logic.serial.SerialGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -99,7 +102,7 @@ public class LogicEnviroment {
     public static String createNode(String sessionId, String type, int sourceNodeId, int x, int y) {
         LogicGraph lg = getSessionLogicGraph(sessionId);
         if (lg != null) {
-            BaseLogicNode node = lg.createNode(type,"", x, y);
+            BaseLogicNode node = lg.createNode(type, "", x, y);
             //TODO:获取添加节点涉及的节点和端口
             return node.toString();
         }
@@ -185,6 +188,9 @@ public class LogicEnviroment {
         return "";
     }
 
+
+
+
     public static void main(String[] args) {
 //        int jobId = 1;
 //        String sessionId = initSession(jobId);
@@ -197,9 +203,9 @@ public class LogicEnviroment {
 //      createNode(sessionId, "UnionNode", -1, 5, 5);
 
         LogicGraph lg = createGraph();
-        BaseLogicNode n1 = lg.createNode("FileSource", "",10,10);
-        BaseLogicNode n2 = lg.createNode("FileSink", "",10,10);
-        BaseLogicNode n3 = lg.createNode("WashNode", "",10,10);
+        BaseLogicNode n1 = lg.createNode("FileSource", "", 10, 10);
+        BaseLogicNode n2 = lg.createNode("FileSink", "", 10, 10);
+        BaseLogicNode n3 = lg.createNode("WashNode", "", 10, 10);
         lg.createOutputPort(n3.getId());
         List<FieldType> ls = new ArrayList<>();
 
@@ -216,5 +222,6 @@ public class LogicEnviroment {
         SerialGraph graph1 = JSON.parseObject(gString, SerialGraph.class);
         LogicGraph lg1 = LogicGraph.deSerialGraph(graph1);
         System.out.println(lg1);
+        DrawLogicGraph.drawSelf(lg1);
     }
 }

@@ -194,18 +194,15 @@ public class JobEnv {
         }
     }
 
-
     /**
      * 基于阻塞队列的数据探针容器实现
      */
     public static class QueuePinContainer implements PinContainer {
 
-        private int queueCapacity = 1;
         private ArrayBlockingQueue<String> queue;
         private boolean isFull;
 
         public QueuePinContainer(int queueCapacity) {
-            this.queueCapacity = queueCapacity;
             queue = new ArrayBlockingQueue(queueCapacity);
             isFull = false;
         }
@@ -222,5 +219,4 @@ public class JobEnv {
             }
         }
     }
-
 }

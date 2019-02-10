@@ -2,6 +2,8 @@ package com.dataexp.graph.logic.component;
 
 import com.dataexp.graph.logic.BaseLogicNode;
 import com.dataexp.graph.logic.ChainingStrategy;
+import com.dataexp.graph.logic.InputPort;
+import com.dataexp.jobengine.operation.BaseOperation;
 import sun.misc.Cache;
 
 import java.util.List;
@@ -24,6 +26,12 @@ public class SplitNode extends BaseLogicNode {
     public void initNodeConfig(String config) {
 
     }
+
+    @Override
+    public BaseOperation genBaseOperation(int inputPortId) {
+        return null;
+    }
+
 
     @Override
     public int defaultInputPortNumber() {

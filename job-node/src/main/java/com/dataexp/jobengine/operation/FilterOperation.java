@@ -14,7 +14,7 @@ import java.util.Map;
  * @author: Bing.Li
  * @create: 2019-01-23 14:19
  */
-public class FilterOperation extends AbstractOneToOneOperation {
+public class FilterOperation extends BaseOperation {
 
      private static final Logger LOG = LoggerFactory.getLogger(FilterOperation.class);
     /**
@@ -24,8 +24,11 @@ public class FilterOperation extends AbstractOneToOneOperation {
      */
     private Map<Integer, String> filterPattern;
 
-    public FilterOperation(int nodeId, int inputPortId, List<FieldType> inputType, OutputConfig outputConfig) {
-        super(nodeId, inputPortId, inputType, outputConfig);
+    public FilterOperation() {
+    }
+
+    public FilterOperation(int nodeId, InputConfig inputConfig, List<OutputConfig> outputConfigList) {
+        super(nodeId, inputConfig, outputConfigList);
     }
 
     public Map<Integer, String> getFilterPattern() {
@@ -40,8 +43,11 @@ public class FilterOperation extends AbstractOneToOneOperation {
     public void processMsg(InnerMsg input) {
         LOG.debug("get msg:{}"+input.getMsgContent());
         if (filter(input)) {
-            for (OperationFunction op : getNextOperationList()) {
-                op.processMsg(input);
+            List<BaseOperation> opList = getFirstPortOperationList();
+            if (null != opList) {
+                for (BaseOperation op : opList) {
+                    op.processMsg(input);
+                }
             }
         }
     }

@@ -1,6 +1,8 @@
 package com.dataexp.graph.logic.component;
 
 import com.dataexp.graph.logic.AbstractSourceNode;
+import com.dataexp.graph.logic.InputPort;
+import com.dataexp.jobengine.operation.BaseOperation;
 
 import java.util.List;
 
@@ -17,6 +19,11 @@ public class FileSource extends AbstractSourceNode {
     @Override
     public void initNodeConfig(String config) {
 
+    }
+
+    @Override
+    public BaseOperation genBaseOperation(InputPort port) {
+        return null;
     }
 
     public FileSource(int id, int x, int y) {

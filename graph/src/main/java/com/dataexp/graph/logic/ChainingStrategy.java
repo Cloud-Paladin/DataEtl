@@ -18,5 +18,5 @@ public enum ChainingStrategy {
     /**
      * 可以连接下游
      */
-    HDAD
+    HEAD
 }

@@ -1,6 +1,8 @@
 package com.dataexp.graph.logic.component;
 
 import com.dataexp.graph.logic.AbstractSinkNode;
+import com.dataexp.graph.logic.InputPort;
+import com.dataexp.jobengine.operation.BaseOperation;
 
 import java.util.List;
 
@@ -18,6 +20,11 @@ public class FileSink extends AbstractSinkNode {
     @Override
     public void initNodeConfig(String config) {
 
+    }
+
+    @Override
+    public BaseOperation genBaseOperation(InputPort port) {
+        return null;
     }
 
     public FileSink(int id, int x, int y) {

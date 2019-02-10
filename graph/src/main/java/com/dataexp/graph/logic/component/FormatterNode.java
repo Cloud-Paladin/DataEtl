@@ -2,6 +2,8 @@ package com.dataexp.graph.logic.component;
 
 import com.dataexp.graph.logic.BaseLogicNode;
 import com.dataexp.graph.logic.ChainingStrategy;
+import com.dataexp.graph.logic.InputPort;
+import com.dataexp.jobengine.operation.BaseOperation;
 
 import java.util.List;
 
@@ -23,6 +25,12 @@ public class FormatterNode extends BaseLogicNode {
     public void initNodeConfig(String config) {
 
     }
+
+    @Override
+    public BaseOperation genBaseOperation(int inputPortId) {
+        return null;
+    }
+
 
     @Override
     public int defaultInputPortNumber() {
