@@ -22,7 +22,7 @@ public class FileSource extends AbstractSourceNode {
     }
 
     @Override
-    public BaseOperation genBaseOperation(InputPort port) {
+    public BaseOperation genBaseOperation(int inputPortId) {
         return null;
     }
 

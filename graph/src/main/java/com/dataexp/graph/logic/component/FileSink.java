@@ -23,7 +23,7 @@ public class FileSink extends AbstractSinkNode {
     }
 
     @Override
-    public BaseOperation genBaseOperation(InputPort port) {
+    public BaseOperation genBaseOperation(int inputPortId) {
         return null;
     }
 
